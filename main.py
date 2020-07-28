@@ -6,5 +6,5 @@ from ImageProcessing import binarize_by2filter
 
 if __name__ == '__main__':
     print("init...")
-
+    print("---test---")
     print("ending...")

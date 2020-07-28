@@ -64,7 +64,7 @@ def _bool_checkboard(bool_np):
 if __name__ == '__main__':
     
     # create image
-    im = Image.open('image\\2_ideal.jpeg').resize((120, 120))
+    im = Image.open('image/2_ideal.jpeg').resize((120, 120))
     im.show()
 
     # white and black filter color

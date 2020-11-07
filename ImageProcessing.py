@@ -4,7 +4,7 @@ import os
 
 def _binarize_by2filter(np_image, filter, offset, with_bin_image=False):
     """
-    riceve un immagine e ritorna un array di pixel binarizzati in base a due filtri
+    riceve l'np.array di un immagine e ritorna un array di pixel binarizzati in base a due filtri
     """
     filter = np.array(filter)
     # False -> 0 -> nero
@@ -28,10 +28,8 @@ def _binarize_by2filter(np_image, filter, offset, with_bin_image=False):
 
 def _bool_checkboard(bool_np,dim):
     """
-    riceve bool_np della scacchiera con ogni singolo pixel binarizzato
-    e ritorna bool_np_checkboard come se fosse una scacchiera quindi
-    divide bool_np ricevuto come parametro in un 8x8 e se in una casella è presente anche un solo pixel True la casella 
-    corrispondente di bool_np_checkboard diventa True
+    riceve un l'np.array di una sezione della scacchiera (grid o pn) e la dimensione ( (8,8), (8,2) )
+    ritorna un array di quella dimensione con True dove c'è una pedina e False dove non c'è 
     """
 
     size = [int(bool_np.shape[0]), int(bool_np.shape[1])]
@@ -45,7 +43,8 @@ def _bool_checkboard(bool_np,dim):
         for j in range(0, size[1], step):
             x = [j, j+step]
 
-            cube = np.array( [i[x[0]:x[1]] for i in bool_np[y[0]:y[1]]] )
+            cube = np.array( [i[x[0]:x[1]] for i in bool_np[y[0]:y[1]]] ) # è la sezione della casella
+
             # TODO modificare questo if per mettere il controllo di quanti True ci devono essere per far essere tutta True la casella
             if True in cube:
                 bool_np_checkboard[count_y][count_x] = True

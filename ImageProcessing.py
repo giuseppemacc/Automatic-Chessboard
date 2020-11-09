@@ -26,60 +26,127 @@ def _binarize_by2filter(np_image, filter, offset, with_bin_image=False):
     else:
         return np_bin
 
-def _bool_checkboard(bool_np,dim):
+def _bool_chessboard(bool_np,dim):
     """
-    riceve un l'np.array di una sezione della scacchiera (grid o pn) e la dimensione ( (8,8), (8,2) )
+    riceve un l'np.array di una sezione della scacchiera (grid o pn) e la dimensione ( (8,8) o (8,2) )
     ritorna un array di quella dimensione con True dove c'è una pedina e False dove non c'è 
     """
 
-    size = [int(bool_np.shape[0]), int(bool_np.shape[1])]
-    bool_np_checkboard = np.full(dim, None)         
+    bool_np_chessboard = np.full(dim, None)         
 
-    step = int(size[0]/8) # considerando come shape[0] l'altezza
-    count_x = 0
-    count_y = 0
-    for i in range(0, size[0], step):
-        y = [i, i+step]
-        for j in range(0, size[1], step):
-            x = [j, j+step]
+    step = int(bool_np.shape[0]/8)
+    
+    y_pixel = 0
+    x_pixel = 0
 
-            cube = np.array( [i[x[0]:x[1]] for i in bool_np[y[0]:y[1]]] ) # è la sezione della casella
+    for y in range(dim[0]):
+        y_section_range = [y_pixel, y_pixel+step] 
+        for x in range(dim[1]):
+            x_section_range = [x_pixel, x_pixel+step]
 
-            # TODO modificare questo if per mettere il controllo di quanti True ci devono essere per far essere tutta True la casella
-            if True in cube:
-                bool_np_checkboard[count_y][count_x] = True
+            section = np.array( [i[x_section_range[0]:x_section_range[1]] for i in bool_np[y_section_range[0]:y_section_range[1]]] )
+
+            if True in section:
+                bool_np_chessboard[y][x] = True
             else:
-                bool_np_checkboard[count_y][count_x] = False
+                bool_np_chessboard[y][x] = False
 
-            count_x += 1
-        count_x = 0
-        count_y += 1
+            x_pixel += step
+        x_pixel = 0
+        y_pixel += step
+            
 
-    return bool_np_checkboard
+    return bool_np_chessboard
+
+def get_dicbool_chessboard(image, offset, filter):
+    top = offset["top"]
+    bottom = offset["bottom"]
+    left_int = offset["left_int"]
+    right_int = offset["right_int"]
+    left_ext = offset["left_ext"]
+    right_ext = offset["right_ext"]
+    
+    dicbool_chessboard = {
+        "bpn": [],
+        "wpn": [],
+        "grid": []
+    }
+
+
+    np_chessboard = np.array(image)
+    square = int((image.height - (top + bottom)) / 8) 
+    # "bpn"
+    np_bpn = np.array( [i[left_ext:left_ext+square*2] for i in np_chessboard[top:image.height-bottom]] )
+
+    im_bpn = Image.fromarray(np.uint8(np_bpn))
+    im_bpn.show()
+
+    dic_bin_bpn = _binarize_by2filter(np_bpn, filter, [10, 10], with_bin_image=True)
+    dic_bin_bpn["image"].show()
+    dicbool_chessboard["bpn"] = _bool_chessboard(dic_bin_bpn["np"],(8,2))
+    
+    # "wpn"
+    np_wpn = np.array( [i[-square*2:-right_ext] for i in np_chessboard[top:image.height-bottom]] )
+
+    im_wpn = Image.fromarray(np.uint8(np_wpn))
+    im_wpn.show()
+
+    dic_bin_wpn = _binarize_by2filter(np_wpn, filter, [10, 10], with_bin_image=True)
+    dic_bin_wpn["image"].show()
+    dicbool_chessboard["wpn"] = _bool_chessboard(dic_bin_wpn["np"],(8,2))
+
+    # "grid"
+    np_grid = np.array( [i[(left_ext+left_int)+square*2:-(right_ext+right_int)-square*2] for i in np_chessboard[top:image.height-bottom]] )
+
+    im_grid = Image.fromarray(np.uint8(np_grid))
+    im_grid.show()
+
+    dic_bin_grid = _binarize_by2filter(np_grid, filter, [10, 10], with_bin_image=True)
+    dic_bin_grid["image"].show()
+    dicbool_chessboard["grid"] = _bool_chessboard(dic_bin_grid["np"],(8,8))
+
+    return dicbool_chessboard
 
 """ Esempio di utilizzo """
 if __name__ == '__main__':
     
     # create image
-    im_pn = Image.open('image/2_ideal_pn.jpeg').resize((30, 120))
-    im_pn.show()
-    im_np_pn = np.array(im_pn)
+    #im_pn = Image.open('image/2_ideal_pn.jpeg').resize((30, 120))
+    ##im_pn.show()
+    #im_np_pn = np.array(im_pn)
 
-    im_grid = Image.open('image/2_ideal.jpeg').resize((120, 120))
-    im_grid.show()
-    im_np_grid = np.array(im_grid)
+    #im_grid = Image.open('image/2_ideal.jpeg').resize((120, 120))
+    ##im_grid.show()
+    #im_np_grid = np.array(im_grid)
 
     # white and black filter color
-    white = [239,228,176]
-    black = [113,71,47] 
+    white = [255,255,255]
+    black = [34,177,76] #[113,71,47] 
 
     # dic_bin è un dizionario contenente l'image binarizzata (bianco e nero) e un array booleano
     # posso anche scegliere di ritornare solo la schacchiera in bool mettendo with_bin_image=False (che lo è già di default) 
-    dic_bin_pn = _binarize_by2filter(im_np_pn, [white,black], [10, 10], with_bin_image=True)
-    dic_bin_pn["image"].show()
+    #dic_bin_pn = _binarize_by2filter(im_np_pn, [white,black], [10, 10], with_bin_image=True)
+    #dic_bin_pn["image"].show()
 
-    dic_bin_grid = _binarize_by2filter(im_np_grid, [white,black], [10, 10], with_bin_image=True)
-    dic_bin_grid["image"].show()
+    #dic_bin_grid = _binarize_by2filter(im_np_grid, [white,black], [10, 10], with_bin_image=True)
+    #dic_bin_grid["image"].show()
 
-    print(_bool_checkboard(dic_bin_pn["np"],(8,2)))
-    print(_bool_checkboard(dic_bin_grid["np"],(8,8)))
+    #print(_bool_chessboard(dic_bin_pn["np"],(8,2)))
+    #print(_bool_chessboard(dic_bin_grid["np"],(8,8)))
+
+    # with full chessboard
+    im_chessboard = Image.open("image/1_real_pn.jpg").resize((500,375))
+    offset = {
+        "top": 29,
+        "bottom": 28,
+        "left_int": 17,
+        "right_int": 15,
+        "left_ext": 3,
+        "right_ext":3
+    }
+
+    dicbool_chessboard = get_dicbool_chessboard(im_chessboard,offset,[white,black])
+
+    print(dicbool_chessboard["bpn"])
+    print(dicbool_chessboard["wpn"])
+    print(dicbool_chessboard["grid"])

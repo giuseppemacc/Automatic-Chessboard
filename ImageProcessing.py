@@ -58,52 +58,49 @@ def _bool_chessboard(bool_np,dim):
 
     return bool_np_chessboard
 
-def get_dicbool_chessboard(image, offset, filter):
+def get_dicbool_chessboard(image, offset, filter, show_image=False):
     top = offset["top"]
     bottom = offset["bottom"]
     left_int = offset["left_int"]
     right_int = offset["right_int"]
     left_ext = offset["left_ext"]
     right_ext = offset["right_ext"]
-    
+    color = offset["color"]
+
     dicbool_chessboard = {
         "bpn": [],
         "wpn": [],
         "grid": []
     }
 
-
     np_chessboard = np.array(image)
     square = int((image.height - (top + bottom)) / 8) 
+
     # "bpn"
     np_bpn = np.array( [i[left_ext:left_ext+square*2] for i in np_chessboard[top:image.height-bottom]] )
-
-    im_bpn = Image.fromarray(np.uint8(np_bpn))
-    im_bpn.show()
-
-    dic_bin_bpn = _binarize_by2filter(np_bpn, filter, [10, 10], with_bin_image=True)
-    dic_bin_bpn["image"].show()
+    dic_bin_bpn = _binarize_by2filter(np_bpn, filter, color, with_bin_image=True)
     dicbool_chessboard["bpn"] = _bool_chessboard(dic_bin_bpn["np"],(8,2))
     
     # "wpn"
     np_wpn = np.array( [i[-square*2:-right_ext] for i in np_chessboard[top:image.height-bottom]] )
-
-    im_wpn = Image.fromarray(np.uint8(np_wpn))
-    im_wpn.show()
-
-    dic_bin_wpn = _binarize_by2filter(np_wpn, filter, [10, 10], with_bin_image=True)
-    dic_bin_wpn["image"].show()
+    dic_bin_wpn = _binarize_by2filter(np_wpn, filter, color, with_bin_image=True)
     dicbool_chessboard["wpn"] = _bool_chessboard(dic_bin_wpn["np"],(8,2))
 
     # "grid"
     np_grid = np.array( [i[(left_ext+left_int)+square*2:-(right_ext+right_int)-square*2] for i in np_chessboard[top:image.height-bottom]] )
-
-    im_grid = Image.fromarray(np.uint8(np_grid))
-    im_grid.show()
-
-    dic_bin_grid = _binarize_by2filter(np_grid, filter, [10, 10], with_bin_image=True)
-    dic_bin_grid["image"].show()
+    dic_bin_grid = _binarize_by2filter(np_grid, filter, color, with_bin_image=True)
     dicbool_chessboard["grid"] = _bool_chessboard(dic_bin_grid["np"],(8,8))
+
+    if show_image:
+        im_grid = Image.fromarray(np.uint8(np_grid))
+        im_grid.show()
+        dic_bin_grid["image"].show()
+        im_wpn = Image.fromarray(np.uint8(np_wpn))
+        im_wpn.show()
+        dic_bin_wpn["image"].show()
+        im_bpn = Image.fromarray(np.uint8(np_bpn))
+        im_bpn.show()
+        dic_bin_bpn["image"].show()
 
     return dicbool_chessboard
 
@@ -145,7 +142,7 @@ if __name__ == '__main__':
         "right_ext":3
     }
 
-    dicbool_chessboard = get_dicbool_chessboard(im_chessboard,offset,[white,black])
+    dicbool_chessboard = get_dicbool_chessboard(im_chessboard,offset,[white,black],show_image=True)
 
     print(dicbool_chessboard["bpn"])
     print(dicbool_chessboard["wpn"])

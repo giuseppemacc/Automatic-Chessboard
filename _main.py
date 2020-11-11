@@ -15,14 +15,15 @@ ser.write(b"BT")
 print("Connessione accetata da: ",address)
 try:
     while True:
-        recv = client_sock.recv(1024)
-        print("input: ",recv)
+        #recv = client_sock.recv(1024)
+        #print("input: ",recv)
 
-        serial_value = str(ser.readline())
+        serial_value = str(ser.readline())[2:-1]
         print(serial_value)
 
         if serial_value == str("SHOOT"):
             print("SHHOOOUTOOOOOO")
+
         #send = input()
         #client_sock.send(str(send))
 

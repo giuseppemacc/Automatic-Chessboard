@@ -1,7 +1,7 @@
 import bluetooth
 import serial
 
-ser = serial.Serial('/dev/ttyACM0',9600)
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 server_sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 
 port = 1
@@ -17,9 +17,13 @@ try:
     while True:
         recv = client_sock.recv(1024)
         print("input: ",recv)
+
+        serial_value = ser.readline()
+        if serial_value == str("SHOOT"):
+            print("SHHOOOUTOOOOOO")
         #send = input()
         #client_sock.send(str(send))
-        #ser.write(str(send).encode())
+
 except:
     ser.write(b"BF")
     print("Connessione scaduta")

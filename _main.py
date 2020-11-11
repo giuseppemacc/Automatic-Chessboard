@@ -18,7 +18,9 @@ try:
         recv = client_sock.recv(1024)
         print("input: ",recv)
 
-        serial_value = ser.readline()
+        serial_value = str(ser.readline())
+        print(serial_value)
+
         if serial_value == str("SHOOT"):
             print("SHHOOOUTOOOOOO")
         #send = input()
@@ -29,3 +31,4 @@ except:
     print("Connessione scaduta")
     client_sock.close()
     server_sock.close()
+    ser.close()

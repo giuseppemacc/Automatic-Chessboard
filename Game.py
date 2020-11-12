@@ -17,8 +17,8 @@ class Game():
 
     async def ser_io(self):
         while True:
-            #await asyncio.sleep(1/10)
-            serial_value = await str(self.ser_arduino.readline())[2:-1]
+            await asyncio.sleep(1/2)
+            serial_value = str(self.ser_arduino.readline())[2:-1]
             if serial_value == "SHOOT":
                 print("SHOOT")
 
@@ -28,7 +28,7 @@ class Game():
             await asyncio.sleep(1)
             print("f")
             try:
-                recv = await self.client_sock.recv(1024)
+                recv = self.client_sock.recv(1024)
                 print("input: ",recv)
             except:
                 self.ser_arduino.write(b"BF")

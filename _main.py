@@ -14,6 +14,12 @@ client_sock,address = server_sock.accept()
 
 ser.write(b"BT")
 print("Connessione accetata da: ",address)
+
+def serial_flow(dt):
+    serial_value = str(ser.readline())[2:-1]
+    if serial_value == str("SHOOT"):
+        print("SHOOT------------------------------------------------------------")
+        
 Clock.schedule_interval(serial_flow,1)
 try:
     while True:
@@ -29,8 +35,3 @@ except:
     client_sock.close()
     server_sock.close()
     ser.close()
-
-def serial_flow(dt):
-    serial_value = str(ser.readline())[2:-1]
-    if serial_value == str("SHOOT"):
-        print("SHOOT------------------------------------------------------------")

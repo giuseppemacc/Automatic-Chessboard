@@ -1,19 +1,26 @@
 import asyncio
 import time
+import concurrent
 
 class Obj():
     def __init__(self):
         self.a = [0,0]
 
+def sync_(n):
+    time.sleep(n)
 
 async def ser_io(obj):
     while True:
-        await asyncio.sleep(1)
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(executor, sync_, 1)
         obj.a[0] += 1
 
 async def ble_io(obj):
     while True:
-        await asyncio.sleep(5)
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(executor, sync_, 5)
         obj.a[1] += 1
 
 async def state(obj):

@@ -17,23 +17,25 @@ class Game():
 
     async def ser_io(self):
         while True:
-            #await asyncio.sleep(1/2)
-            serial_value = str(self.ser_arduino.readline())[2:-1]
-            if serial_value == "SHOOT":
-                print("SHOOT")
+            await asyncio.sleep(1)
+            print("1")
+            #serial_value = str(self.ser_arduino.readline())[2:-1]
+            #if serial_value == "SHOOT":
+            #    print("SHOOT")
 
 
     async def ble_io(self):
         while True:
-            #await asyncio.sleep(1)
-            try:
-                recv = self.client_sock.recv(1024)
-                print("input: ",recv)
-            except:
-                self.ser_arduino.write(b"BF")
-                print("Connessione scaduta")
-                self.client_sock.close()
-                self.server_sock.close()
+            await asyncio.sleep(3)
+            print("3")
+            #try:
+            #    recv = self.client_sock.recv(1024)
+            #    print("input: ",recv)
+            #except:
+            #    self.ser_arduino.write(b"BF")
+            #    print("Connessione scaduta")
+            #    self.client_sock.close()
+            #    self.server_sock.close()
 
     def stop(self):
         self.ser_arduino.close()

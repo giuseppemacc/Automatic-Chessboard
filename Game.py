@@ -57,6 +57,8 @@ class Game():
         #system("shutdown now")
 
     def close_connection(self):
+        self.ser_arduino.write(b"BF")
+        time.sleep(1/60)
         self.ser_arduino.close()
         self.client_sock.close()
         self.server_sock.close()

@@ -33,10 +33,8 @@ class Game():
             if ser_val == "SHOOT":
                 print("SHOOT")
             elif ser_val == "SHUTDOWN":
-                print("Spegnimento...")
-                self.stop()
-                time.sleep(5)
-                system("shutdown now")
+                self.close_connection()
+                self.shutdown
 
     async def ble_io(self):
         while True:
@@ -52,8 +50,13 @@ class Game():
                 self.server_sock.close()
                 
 
+    def shutdown(self):
+        print("Spegnimento...")
+        time.sleep(5)
+        quit()
+        #system("shutdown now")
 
-    def stop(self):
+    def close_connection(self):
         self.ser_arduino.close()
         self.client_sock.close()
         self.server_sock.close()

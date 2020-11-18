@@ -7,7 +7,7 @@ from os import system
 from shoot import shoot
 from Chessboard import Chessboard
 
-class Game():
+class Game_connection():
     def __init__(self):
         # variabili di connessione
         self.ser_arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
@@ -74,4 +74,9 @@ class Game():
         self.ser_arduino.close()
         self.client_sock.close()
         self.server_sock.close()
+
+
+class Game(Game_connection):
+    def __init__(self):
+        super().__init__()
 

@@ -30,6 +30,8 @@ class Connection():
     
     def do_on_serval(self,ser_val):
         pass
+    def do_on_bleval(self, bleval):
+        pass
 
     async def ser_io(self):
         while True:
@@ -37,23 +39,14 @@ class Connection():
             loop = asyncio.get_event_loop()
             ser_val = await loop.run_in_executor(executor, self.get_ser_val)
             self.do_on_serval(ser_val)
-            #if ser_val == "SHOOT":
-            #    print("SHOOT")
-            #    shoot()
-
-            #elif ser_val == "SHUTDOWN":
-            #    print("Spegnimento...")
-            #    self.close_connection()
-            #    time.sleep(5)
-            #    quit() #system("shutdown now")
 
     async def ble_io(self):
         while True:
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
             loop = asyncio.get_event_loop()
             try:
-                recv = await loop.run_in_executor(executor, self.get_ble_val)
-                print("input: ",recv)
+                ble_val = await loop.run_in_executor(executor, self.get_ble_val)
+                self.do_on_bleval(ble_val)
             except:
                 self.ser_arduino.write(b"BF")
                 print("Connessione scaduta")

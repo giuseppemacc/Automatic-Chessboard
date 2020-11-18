@@ -24,6 +24,12 @@ class Game():
     def get_ser_val(self):
         return str(self.ser_arduino.readline())[2:-1]
 
+    def send_ble(self,value):
+        self.client_sock.send(value)
+    
+    def send_ser(self,value):
+        self.ser_arduino.write(value)
+
 
     async def ser_io(self):
         while True:

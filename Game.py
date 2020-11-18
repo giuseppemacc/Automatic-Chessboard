@@ -4,14 +4,18 @@ import asyncio
 import concurrent
 import time
 from os import system
+from shoot import shoot
+from Chessboard import Chessboard
 
 class Game():
     def __init__(self):
+        # variabili di connessione
         self.ser_arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
         self.server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
         self.server_sock.bind(("",1))
         self.server_sock.listen(1)
 
+        # inizializza connessione
         print("In attesa di una connessione")
         self.client_sock,self.address = self.server_sock.accept()
 
@@ -38,6 +42,8 @@ class Game():
             ser_val = await loop.run_in_executor(executor, self.get_ser_val)
             if ser_val == "SHOOT":
                 print("SHOOT")
+                shoot()
+
             elif ser_val == "SHUTDOWN":
                 self.close_connection()
                 self.shutdown

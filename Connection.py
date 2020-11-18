@@ -57,7 +57,7 @@ class Connection():
 
     # ===== Funzioni sync da rendere async ================
     def get_ble_val(self):
-        return self.client_sock.recv(1024)
+        return str(self.client_sock.recv(1024))[2:-1]
 
     def get_ser_val(self):
         return str(self.ser_arduino.readline())[2:-1]

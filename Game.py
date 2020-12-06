@@ -6,6 +6,15 @@ import time
 from os import system
 from shoot import shoot
 
+offset = {
+    "top": 29,
+    "bottom": 28,
+    "left_int": 17,
+    "right_int": 15,
+    "left_ext": 3,
+    "right_ext":3
+}
+
 class Game(Connection):
     def __init__(self):
         super().__init__()
@@ -39,16 +48,9 @@ class Game(Connection):
         # fare see_move
         # modificare scacchiera
         # inviare la scacchiera tramite ble
-
+        
         shoot()
-        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)),{
-        "top": 29,
-        "bottom": 28,
-        "left_int": 17,
-        "right_int": 15,
-        "left_ext": 3,
-        "right_ext":3
-        },[[255,255,255],[34,177,76]],show_image=True)
+        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)),offset,[[255,255,255],[34,177,76]],show_image=True)
 
         print(dicbool_chessboard["grid"])
 

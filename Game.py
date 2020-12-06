@@ -31,7 +31,6 @@ class Game(Connection):
         print(ble_val)
 
         if ble_val == "GP-FREE":
-            print("looooooooool")
             self.ser_val_SHOOT = self.PosizionamentoLibero
     
     def PosizionamentoLibero(self):
@@ -41,8 +40,7 @@ class Game(Connection):
         # modificare scacchiera
         # inviare la scacchiera tramite ble
 
-        print("AOOOOO")
-        # shoot()
+        shoot()
         # dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)),{
         # "top": 29,
         # "bottom": 28,

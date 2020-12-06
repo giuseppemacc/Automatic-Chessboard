@@ -23,7 +23,7 @@ class Game(Connection):
             quit()
             #system("shutdown now")
         elif ser_val == "SHOOT":
-            if not(type(self.ser_val_SHOOT) == None):
+            if not(self.ser_val_SHOOT == None):
                 self.ser_val_SHOOT()
     
     # @Override

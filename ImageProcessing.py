@@ -24,7 +24,7 @@ def _binarize_by2filter(np_image, filter, offset, with_bin_image=False):
         return {"image": Image.fromarray(np.uint8(np_bin * 255)),
                 "np": np_bin}
     else:
-        return np_bin
+        return {"np":np_bin}
 
 def _bool_chessboard(bool_np,dim):
     """
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     }
 
     im_chessboard = Image.open("image/confoglio.jpg").resize((500,375))
-    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=True) 
+    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black]) 
     
     print(dicbool_chessboard["grid"])
     print(dicbool_chessboard["bpn"])

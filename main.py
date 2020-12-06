@@ -18,13 +18,18 @@ offset = {
 
 if __name__ == '__main__':
     print("init...")
-    
+
+
+    chessboard = Chessboard() 
     im_chessboard = Image.open("image/confoglio.jpg").resize((500,375))
-    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=True) 
+    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=False) 
     
     print(dicbool_chessboard["grid"])
     print(dicbool_chessboard["bpn"])
     print(dicbool_chessboard["wpn"])
+
+    move = chessboard.see_move(dicbool_chessboard)
+    print(move)
 
 
 

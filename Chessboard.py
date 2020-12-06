@@ -131,6 +131,8 @@ class Chessboard():
             "grid": [ [is_notEmpty(j) for j in i] for i in self.chessboard["grid"]],
         }
 
+        print(bool_current_chessboard)
+
         
         def compare(first, second):
             if first == second:
@@ -139,6 +141,7 @@ class Chessboard():
                 return "-"
             else:
                 return "+"
+                
         bool_new_chessboard = {
             "wpn":  [ [compare(bool_current_chessboard["wpn"][i][j], dicbool["wpn"][i][j]) for j in range(8)] for i in range(2)],
             "bpn":  [ [compare(bool_current_chessboard["bpn"][i][j], dicbool["bpn"][i][j]) for j in range(8)] for i in range(2)],

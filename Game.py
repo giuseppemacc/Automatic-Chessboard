@@ -31,6 +31,7 @@ class Game(Connection):
         print(ble_val)
 
         if ble_val == "GP-FREE":
+            print("looooooooool")
             self.ser_val_SHOOT = self.PosizionamentoLibero
     
     def PosizionamentoLibero(self):

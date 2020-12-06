@@ -41,14 +41,16 @@ class Game(Connection):
         # inviare la scacchiera tramite ble
 
         shoot()
-        # dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)),{
-        # "top": 29,
-        # "bottom": 28,
-        # "left_int": 17,
-        # "right_int": 15,
-        # "left_ext": 3,
-        # "right_ext":3
-        # },[[255,255,255],[34,177,76]],show_image=True)
+        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)),{
+        "top": 29,
+        "bottom": 28,
+        "left_int": 17,
+        "right_int": 15,
+        "left_ext": 3,
+        "right_ext":3
+        },[[255,255,255],[34,177,76]],show_image=True)
+
+        print(dicbool_chessboard["grid"])
 
         # time.sleep(1)
 

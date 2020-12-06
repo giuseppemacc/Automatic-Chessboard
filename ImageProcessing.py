@@ -116,9 +116,6 @@ if __name__ == '__main__':
     ##im_grid.show()
     #im_np_grid = np.array(im_grid)
 
-    # white and black filter color
-    white = [255,255,255]
-    black = [34,177,76] #[113,71,47] 
 
     # dic_bin è un dizionario contenente l'image binarizzata (bianco e nero) e un array booleano
     # posso anche scegliere di ritornare solo la schacchiera in bool mettendo with_bin_image=False (che lo è già di default) 
@@ -132,18 +129,23 @@ if __name__ == '__main__':
     #print(_bool_chessboard(dic_bin_grid["np"],(8,8)))
 
     # with full chessboard
-    im_chessboard = Image.open("image/1_real_pn.jpg").resize((500,375))
+
+    white = [126,110,84]
+    black = [27,27,27]
     offset = {
         "top": 29,
         "bottom": 28,
         "left_int": 17,
         "right_int": 15,
         "left_ext": 3,
-        "right_ext":3
+        "right_ext":3,
+        "color": [10,10]
     }
 
-    dicbool_chessboard = get_dicbool_chessboard(im_chessboard,offset,[white,black],show_image=True)
-
+    im_chessboard = Image.open("image/confoglio.jpg").resize((500,375))
+    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=True) 
+    
+    print(dicbool_chessboard["grid"])
     print(dicbool_chessboard["bpn"])
     print(dicbool_chessboard["wpn"])
-    print(dicbool_chessboard["grid"])
+    

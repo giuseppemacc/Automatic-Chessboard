@@ -6,13 +6,16 @@ import time
 from os import system
 from shoot import shoot
 
+white = [126,110,84]
+black = [27,27,27]
 offset = {
     "top": 29,
     "bottom": 28,
     "left_int": 17,
     "right_int": 15,
     "left_ext": 3,
-    "right_ext":3
+    "right_ext":3,
+    "color": [10,10]
 }
 
 class Game(Connection):
@@ -50,7 +53,7 @@ class Game(Connection):
         # inviare la scacchiera tramite ble
         
         shoot()
-        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)),offset,[[255,255,255],[34,177,76]],show_image=True)
+        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] )
 
         print(dicbool_chessboard["grid"])
 

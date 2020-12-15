@@ -44,7 +44,7 @@ class Game(Connection):
     def do_on_bleval(self, ble_val):
         print(ble_val)
 
-        if ble_val == "GP-FREE":
+        if ble_val == "GPFREE":
             self.shoot_OnServal = self.PosizionamentoLibero
     
     def PosizionamentoLibero(self):
@@ -68,7 +68,7 @@ class Game(Connection):
         self.send_ble_Chessboard()
 
     def send_ble_Chessboard(self):
-        # TODO: verificare che la scacchiera nell app viene modificata inviando più ("//CB-0-0-wK\r\n") in momenti diversi
+        # TODO: capire perch+ inviando questo ("//CB-0-0-wK\r\n") la pedina wK non viene riconosciuta e mette uno spazio bianco
         print(self.a,"    ",self.b)
         self.send_ble(f"CB-{self.a}-{self.b}-wk")
         

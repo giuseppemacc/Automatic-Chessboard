@@ -23,7 +23,9 @@ class Game(Connection):
         super().__init__()
         self.init_connection()
         self.chessboard = Chessboard()
-        self.ser_val_SHOOT = None 
+        self.shoot_OnServal = None # function
+        self.a = 0
+        self.b = 0
 
     # @Override
     def do_on_serval(self, ser_val):
@@ -35,32 +37,47 @@ class Game(Connection):
             quit()
             #system("shutdown now")
         elif ser_val == "SHOOT":
-            if not(self.ser_val_SHOOT == None):
-                self.ser_val_SHOOT()
+            if not(self.shoot_OnServal == None):
+                self.shoot_OnServal()
     
     # @Override
     def do_on_bleval(self, ble_val):
         print(ble_val)
 
         if ble_val == "GP-FREE":
-            self.ser_val_SHOOT = self.PosizionamentoLibero
+            self.shoot_OnServal = self.PosizionamentoLibero
     
     def PosizionamentoLibero(self):
-        # deve scattare l'immagine
-        # boolizzarla
-        # fare see_move
+        # scatta l'immagine
+        # boolizza
+        # fa see_move
         # modificare scacchiera
         # inviare la scacchiera tramite ble
         
-        shoot()
-        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] )
+        # shoot()
+        # dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] )
 
-        print(dicbool_chessboard["grid"])
+        # print(dicbool_chessboard["grid"])
 
-        time.sleep(0.5)
+        # time.sleep(0.5)
 
-        move = self.chessboard.see_move(dicbool_chessboard)
-        self.chessboard.move(move)
-        print(self.chessboard)
+        # move = self.chessboard.see_move(dicbool_chessboard)
+        # # TODO: si verifica un bug che bho non lo so; da provare con il giusto setup iniziale delle pedine
+        # self.chessboard.move(move)
+        # print(self.chessboard)
+        self.send_ble_Chessboard()
+
+    def send_ble_Chessboard(self):
+        # TODO: verificare che la scacchiera nell app viene modificata inviando più ("//CB-0-0-wK\r\n") in momenti diversi
+        self.send_ble(f"CB-{self.a}-{self.b}-wk")
+        if self.b == 7:
+            if self.a == 7:
+                self.a = 0
+                self.b = 0
+            self.a += 1
+        else:
+            self.b += 1
+
+        
 
         

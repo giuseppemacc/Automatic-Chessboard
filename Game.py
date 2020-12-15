@@ -71,13 +71,15 @@ class Game(Connection):
         # TODO: verificare che la scacchiera nell app viene modificata inviando più ("//CB-0-0-wK\r\n") in momenti diversi
         print(self.a,"    ",self.b)
         self.send_ble(f"CB-{self.a}-{self.b}-wk")
-        if self.b == 7:
-            if self.a == 7:
-                self.a = 0
-                self.b = 0
+        
+        if self.b >= 7:
+            self.b = 0
             self.a += 1
-        else:
-            self.b += 1
+
+        if self.a > 7:
+            self.a = 0
+
+        self.b +=1
 
         
 

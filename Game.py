@@ -69,6 +69,7 @@ class Game(Connection):
 
     def send_ble_Chessboard(self):
         # TODO: verificare che la scacchiera nell app viene modificata inviando più ("//CB-0-0-wK\r\n") in momenti diversi
+        print(self.a,"    ",self.b)
         self.send_ble(f"CB-{self.a}-{self.b}-wk")
         if self.b == 7:
             if self.a == 7:
@@ -77,6 +78,8 @@ class Game(Connection):
             self.a += 1
         else:
             self.b += 1
+
+        
 
         
 

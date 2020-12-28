@@ -79,19 +79,19 @@ class Game(Connection):
                 for _y in range(8):
                     piece = self.chessboard.chessboard["grid"][_y][_x]
                     if piece == "░░" or piece == "██":
-                        piece = "  "
+                        piece = "ll"
                     self.send_ble(f"CB-grid-{_y}-{_x}-{piece}")
             for _y in range(2):
                 for _x in range(8):
                     piece = self.chessboard.chessboard["bpn"][_y][_x]
                     if piece == "░░" or piece == "██":
-                        piece = "  "
+                        piece = "ll"
                     self.send_ble(f"CB-bpn-{_y}-{_x}-{piece}")
             for _y in range(2):
                 for _x in range(8):
                     piece = self.chessboard.chessboard["wpn"][_y][_x]
                     if piece == "░░" or piece == "██":
-                        piece = "  "
+                        piece = "ll"
                     self.send_ble(f"CB-wpn-{_y}-{_x}-{piece}")
         else:
             self.send_ble(f"CB-{string_type}-{y}-{x}-{piece}")

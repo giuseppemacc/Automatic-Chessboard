@@ -48,11 +48,17 @@ def _bool_chessboard(bool_np,dim):
             x_section_range = [x_pixel, x_pixel+step]
 
             section = np.array( [i[x_section_range[0]:x_section_range[1]] for i in bool_np[y_section_range[0]:y_section_range[1]]] )
+            
+            count = 0
+            for i in section:
+                for j in i:
+                    if j==[True,True,True]:
+                        count+=1
 
-            if True in section:
+            if count > 20:
                 bool_np_chessboard[y][x] = True
             else:
-                bool_np_chessboard[y][x] = False
+                bool_np_chessboard[y][x] = False 
 
             x_pixel += step
         x_pixel = 0

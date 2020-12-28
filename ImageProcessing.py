@@ -52,7 +52,7 @@ def _bool_chessboard(bool_np,dim):
             count = 0
             for i in section:
                 for j in i:
-                    if j==[True,True,True]:
+                    if True in j:
                         count+=1
 
             if count > 20:

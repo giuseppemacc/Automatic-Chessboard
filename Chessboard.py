@@ -18,8 +18,8 @@ class Chessboard():
                 ["wQ","wQ","wR","wB","wN","wP","wP","wP"]
             ],
             "bpn": [
-                ["bQ","bK","bR","bB","bN","bP","bP","bP","bP"],
-                ["bQ","bQ","bR","bB","bN","bP","bP","bP","bP"]
+                ["bQ","bK","bR","bB","bN","bP","bP","bP"],
+                ["bQ","bQ","bR","bB","bN","bP","bP","bP"]
             ],
             "grid": [
                 ["██","░░","██","░░","██","░░","██","░░" ],

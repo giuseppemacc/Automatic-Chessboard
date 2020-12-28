@@ -38,7 +38,7 @@ class Game(Connection):
             #system("shutdown now")
         elif ser_val == "SHOOT":
             if not(self.shoot_OnServal == None):
-                self.shoot_OnServal()
+                self.shoot_OnServal(all_chessboard=True)
     
     # @Override
     def do_on_bleval(self, ble_val):
@@ -73,18 +73,34 @@ class Game(Connection):
         print(self.chessboard)
         #self.send_ble_Chessboard()
 
-    def send_ble_Chessboard(self, all_chessboard = False):
-        # TODO: capire perchè inviando questo ("//CB-0-0-wK\r\n") la pedina wK non viene riconosciuta e mette uno spazio bianco
-        print(self.a,"    ",self.b)
-        self.send_ble(f"CB-grid-{self.a}-{self.b}-bK")
-        
-        if self.b >= 7:
-            self.b = 0
-            self.a += 1
+    def send_ble_Chessboard(self, string_type="", x=0, y=0, piece="", all_chessboard = False):
+        if all_chessboard == True:
+            for _x in range(8):
+                for _y in range(8):
+                    piece = self.chessboard.chessboard["grid"][_y][_x]
+                    #if piece == "░░" or piece == "██"
+                    self.send_ble(f"CB-grid-{_y}-{_x}-{piece}")
+            for _y in range(2):
+                for _x in range(8):
+                    piece = self.chessboard.chessboard["bpn"][_y][_x]
+                    self.send_ble(f"CB-bpn-{_y}-{_x}-{piece}")
+            for _y in range(2):
+                for _x in range(8):
+                    piece = self.chessboard.chessboard["wpn"][_y][_x]
+                    self.send_ble(f"CB-wpn-{_y}-{_x}-{piece}")
         else:
-            self.b +=1
+            self.send_ble(f"CB-{string_type}-{y}-{x}-{piece}")
 
-        if self.a > 7:
-            self.a = 0
+        # print(self.a,"    ",self.b)
+        # self.send_ble(f"CB-grid-{self.a}-{self.b}-bK")
+        
+        # if self.b >= 7:
+        #     self.b = 0
+        #     self.a += 1
+        # else:
+        #     self.b +=1
+
+        # if self.a > 7:
+        #     self.a = 0
 
 

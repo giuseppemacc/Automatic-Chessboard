@@ -45,7 +45,7 @@ class Game(Connection):
         print(ble_val)
 
         if ble_val == "GPFREE":
-            self.shoot_OnServal = self.PosizionamentoLibero
+            self.shoot_OnServal = self.send_ble_Chessboard#self.PosizionamentoLibero
     
     def PosizionamentoLibero(self):
         # scatta l'immagine

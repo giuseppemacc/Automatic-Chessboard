@@ -76,7 +76,7 @@ class Game(Connection):
     def send_ble_Chessboard(self, all_chessboard = False):
         # TODO: capire perchè inviando questo ("//CB-0-0-wK\r\n") la pedina wK non viene riconosciuta e mette uno spazio bianco
         print(self.a,"    ",self.b)
-        self.send_ble(f"CB-{self.a}-{self.b}-bK")
+        self.send_ble(f"CB-grid-{self.a}-{self.b}-bK")
         
         if self.b >= 7:
             self.b = 0
@@ -88,10 +88,3 @@ class Game(Connection):
             self.a = 0
 
 
-        
-
-        
-
-        
-
-        

@@ -28,9 +28,10 @@ def _binarize_by2filter(np_image, filter, offset, with_bin_image=False):
 
 def _bool_chessboard(bool_np,dim):
     """
-    riceve un l'np.array di una sezione della scacchiera (grid o pn) e la dimensione ( (8,8) o (8,2) )
+    riceve un l'np.array di una sezione della scacchiera (grid o pn) e la dimensione ( (8,8) o (2,8) )
     ritorna un array di quella dimensione con True dove c'è una pedina e False dove non c'è 
-    """
+    """ 
+
 
     bool_np_chessboard = np.full(dim, None)         
 
@@ -40,8 +41,10 @@ def _bool_chessboard(bool_np,dim):
     x_pixel = 0
 
     for y in range(dim[0]):
-        y_section_range = [y_pixel, y_pixel+step] 
+        y_section_range = [y_pixel, y_pixel+step]
+        
         for x in range(dim[1]):
+            
             x_section_range = [x_pixel, x_pixel+step]
 
             section = np.array( [i[x_section_range[0]:x_section_range[1]] for i in bool_np[y_section_range[0]:y_section_range[1]]] )
@@ -76,15 +79,17 @@ def get_dicbool_chessboard(image, offset, filter, show_image=False):
     np_chessboard = np.array(image)
     square = int((image.height - (top + bottom)) / 8) 
 
+    # dicbool_chessboard["bpn"/"wpn"] la matrice va ruotata di 90 gradi (perchè è di shape (8,2) ma a noi serve (2,8))
+
     # "bpn"
     np_bpn = np.array( [i[left_ext:left_ext+square*2] for i in np_chessboard[top:image.height-bottom]] )
     dic_bin_bpn = _binarize_by2filter(np_bpn, filter, color, with_bin_image=show_image)
-    dicbool_chessboard["bpn"] = _bool_chessboard(dic_bin_bpn["np"],(2,8))
+    dicbool_chessboard["bpn"] = np.rot90(_bool_chessboard(dic_bin_bpn["np"],(8,2)))
     
     # "wpn"
     np_wpn = np.array( [i[-square*2:-right_ext] for i in np_chessboard[top:image.height-bottom]] )
     dic_bin_wpn = _binarize_by2filter(np_wpn, filter, color, with_bin_image=show_image)
-    dicbool_chessboard["wpn"] = _bool_chessboard(dic_bin_wpn["np"],(2,8))
+    dicbool_chessboard["wpn"] = np.rot90(_bool_chessboard(dic_bin_wpn["np"],(8,2)))
 
     # "grid"
     np_grid = np.array( [i[(left_ext+left_int)+square*2:-(right_ext+right_int)-square*2] for i in np_chessboard[top:image.height-bottom]] )
@@ -130,8 +135,8 @@ if __name__ == '__main__':
 
     # with full chessboard
 
-    white = [126,110,84]
-    black = [27,27,27]
+    white = [88,85,52] #[98,92,58] 
+    black = [11,13,8] #[3,8,4]
     offset = {
         "top": 29,
         "bottom": 28,
@@ -142,10 +147,12 @@ if __name__ == '__main__':
         "color": [10,10]
     }
 
-    im_chessboard = Image.open("image/confoglio.jpg").resize((500,375))
-    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black]) 
+    im_chessboard = Image.open("image/shoot1.jpg").resize((500,375))
+    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=True) 
     
     print(dicbool_chessboard["grid"])
+    print("")
     print(dicbool_chessboard["bpn"])
+    print("")
     print(dicbool_chessboard["wpn"])
     

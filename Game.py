@@ -6,8 +6,8 @@ import time
 from os import system
 from shoot import shoot
 
-white = [126,110,84]
-black = [27,27,27]
+white = [88,85,52]
+black = [11,13,8]
 offset = {
     "top": 29,
     "bottom": 28,
@@ -54,23 +54,27 @@ class Game(Connection):
         # modificare scacchiera
         # inviare la scacchiera tramite ble
         
-        # shoot()
-        # dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] )
+        shoot()
+        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] )
 
-        # print(dicbool_chessboard["grid"])
+        print(dicbool_chessboard["grid"])
+        print("")
+        print(dicbool_chessboard["bpn"])
+        print("")
+        print(dicbool_chessboard["wpn"])
 
-        # time.sleep(0.5)
+        time.sleep(0.5)
 
-        # move = self.chessboard.see_move(dicbool_chessboard)
-        # # TODO: si verifica un bug che bho non lo so; da provare con il giusto setup iniziale delle pedine
-        # self.chessboard.move(move)
-        # print(self.chessboard)
-        self.send_ble_Chessboard()
+        move = self.chessboard.see_move(dicbool_chessboard)
+        print(move)
+        self.chessboard.move(move)
+        print(self.chessboard)
+        #self.send_ble_Chessboard()
 
-    def send_ble_Chessboard(self):
-        # TODO: capire perch+ inviando questo ("//CB-0-0-wK\r\n") la pedina wK non viene riconosciuta e mette uno spazio bianco
+    def send_ble_Chessboard(self, all_chessboard = False):
+        # TODO: capire perchè inviando questo ("//CB-0-0-wK\r\n") la pedina wK non viene riconosciuta e mette uno spazio bianco
         print(self.a,"    ",self.b)
-        self.send_ble(f"CB-{self.a}-{self.b}-bk")
+        self.send_ble(f"CB-{self.a}-{self.b}-bK")
         
         if self.b >= 7:
             self.b = 0
@@ -80,6 +84,7 @@ class Game(Connection):
 
         if self.a > 7:
             self.a = 0
+
 
         
 

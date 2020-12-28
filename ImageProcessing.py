@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
     # with full chessboard
 
-    white = [88,85,52] #[98,92,58] 
+    white = [68,65,30] #[98,92,58] 
     black = [11,13,8] #[3,8,4]
     offset = {
         "top": 29,

@@ -6,7 +6,7 @@ import time
 from os import system
 from shoot import shoot
 
-white = [88,85,52]
+white = [68,65,30]
 black = [11,13,8]
 offset = {
     "top": 29,
@@ -57,6 +57,8 @@ class Game(Connection):
         shoot()
         dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] )
 
+        print("New Chessboard:")
+        print("")
         print(dicbool_chessboard["grid"])
         print("")
         print(dicbool_chessboard["bpn"])

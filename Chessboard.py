@@ -130,8 +130,13 @@ class Chessboard():
             "bpn": [ [is_notEmpty(j) for j in i] for i in self.chessboard["bpn"]],
             "grid": [ [is_notEmpty(j) for j in i] for i in self.chessboard["grid"]],
         }
-
-        print(bool_current_chessboard)
+        print("Old Chessboard:")
+        print("")
+        print(bool_current_chessboard["grid"])
+        print("")
+        print(bool_current_chessboard["bpn"])
+        print("")
+        print(bool_current_chessboard["wpn"])
 
         
         def compare(first, second):

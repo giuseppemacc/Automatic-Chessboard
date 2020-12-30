@@ -38,7 +38,8 @@ class Game(Connection):
             #system("shutdown now")
         elif ser_val == "SHOOT":
             if not(self.shoot_OnServal == None):
-                self.shoot_OnServal(all_chessboard=True)
+                self.send_ble_Chessboard(string_type="grid",x=0,y=0,piece="xx")
+                #self.shoot_OnServal()
     
     # @Override
     def do_on_bleval(self, ble_val):

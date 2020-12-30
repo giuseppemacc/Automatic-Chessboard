@@ -29,7 +29,8 @@ class Game(Connection):
 
     # @Override
     def do_on_serval(self, ser_val):
-        print(ser_val)
+        if (ser_val != "") or (ser_val != None) 
+            print(ser_val)
 
         if ser_val == "SHUTDOWN":
             print("Spegnimento...")
@@ -82,6 +83,7 @@ class Game(Connection):
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-grid-{_y}-{_x}-{piece}")
+                    time.sleep(0.1)
 
             for _y in range(2):
                 for _x in range(8):
@@ -89,6 +91,7 @@ class Game(Connection):
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-bpn-{_y}-{_x}-{piece}")
+                    time.sleep(0.1)
 
             for _y in range(2):
                 for _x in range(8):
@@ -96,9 +99,11 @@ class Game(Connection):
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-wpn-{_y}-{_x}-{piece}")
+                    time.sleep(0.1)
 
         else:
             self.send_ble(f"CB-{string_type}-{y}-{x}-{piece}")
+            time.sleep(0.1)
 
         # print(self.a,"    ",self.b)
         # self.send_ble(f"CB-grid-{self.a}-{self.b}-bK")

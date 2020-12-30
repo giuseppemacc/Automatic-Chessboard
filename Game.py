@@ -29,7 +29,7 @@ class Game(Connection):
 
     # @Override
     def do_on_serval(self, ser_val):
-        if (ser_val != "") or (ser_val != None) 
+        if (ser_val != "") or (ser_val != None):
             print(ser_val)
 
         if ser_val == "SHUTDOWN":

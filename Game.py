@@ -37,7 +37,7 @@ class Game(Connection):
             quit()
             #system("shutdown now")
         elif ser_val == "SHOOT":
-            self.send_ble_Chessboard(all_chessboard=True)
+            self.send_ble_Chessboard(string_type="bpn",x=0,y=0,piece="xx")
             if not(self.shoot_OnServal == None):
                 self.shoot_OnServal()
     
@@ -83,21 +83,21 @@ class Game(Connection):
                         print("yes")
                         piece = "xx"
                     self.send_ble(f"CB-grid-{_y}-{_x}-{piece}")
-                    time.sleep(0.5)
+
             for _y in range(2):
                 for _x in range(8):
                     piece = self.chessboard.chessboard["bpn"][_y][_x]
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-bpn-{_y}-{_x}-{piece}")
-                    time.sleep(0.5)
+
             for _y in range(2):
                 for _x in range(8):
                     piece = self.chessboard.chessboard["wpn"][_y][_x]
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-wpn-{_y}-{_x}-{piece}")
-                    time.sleep(0.5)
+
         else:
             self.send_ble(f"CB-{string_type}-{y}-{x}-{piece}")
             time.sleep(0.5)

@@ -22,19 +22,20 @@ class Game(Connection):
     def __init__(self):
         super().__init__()
         self.init_connection()
+        self.initGame()
         self.chessboard = Chessboard()
         self.shoot_OnServal = None # function
 
     # @Override
     def do_on_serval(self, ser_val):
+        if (ser_val != "") and (type(ser_val) == str):
+            print(ser_val)
         if ser_val == "SHUTDOWN":
             print("Spegnimento...")
             time.sleep(5)
             quit()
             #system("shutdown now")
         elif ser_val == "SHOOT":
-            print(ser_val)
-            self.send_ble_Chessboard(all_chessboard=True)
             if not(self.shoot_OnServal == None):
                 self.shoot_OnServal()
     
@@ -44,6 +45,9 @@ class Game(Connection):
 
         if ble_val == "GPFREE":
             self.shoot_OnServal = self.PosizionamentoLibero
+    
+    def initGame(self):
+        self.send_ble_Chessboard(all_chessboard=True)
     
     def PosizionamentoLibero(self):
         # scatta l'immagine

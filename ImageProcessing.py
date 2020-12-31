@@ -2,6 +2,18 @@ import numpy as np
 from PIL import Image
 import os
 
+white = [68,65,30] #[98,92,58] 
+black = [11,13,8] #[3,8,4]
+offset = {
+    "top": 29,
+    "bottom": 28,
+    "left_int": 17,
+    "right_int": 15,
+    "left_ext": 3,
+    "right_ext":3,
+    "color": [10,10]
+}
+
 def _binarize_by2filter(np_image, filter, offset, with_bin_image=False):
     """
     riceve l'np.array di un immagine e ritorna un array di pixel binarizzati in base a due filtri
@@ -67,7 +79,34 @@ def _bool_chessboard(bool_np,dim):
 
     return bool_np_chessboard
 
-def get_dicbool_chessboard(image, offset, filter, show_image=False):
+def get_dicbool_chessboard(image):
+    top = offset["top"]
+    bottom = offset["bottom"]
+    left_int = offset["left_int"]
+    right_int = offset["right_int"]
+    left_ext = offset["left_ext"]
+    right_ext = offset["right_ext"]
+    color = offset["color"]
+    np_chessboard = np.array(image)
+    square = int((image.height - (top + bottom)) / 8) 
+    dicbool_chessboard = {
+        "bpn": np.full((2,8),None),
+        "wpn": np.full((2,8),None),
+        "grid": np.full((8,8),None),
+    }
+    
+    """ritaglia l'immagine"""
+
+    # "bpn"
+    np_bpn = np.array( [i[left_ext:left_ext+square*2] for i in np_chessboard[top:image.height-bottom]] )
+    # "wpn"
+    np_wpn = np.array( [i[-square*2:-right_ext] for i in np_chessboard[top:image.height-bottom]] )
+    # "grid"
+    np_grid = np.array( [i[(left_ext+left_int)+square*2:-(right_ext+right_int)-square*2] for i in np_chessboard[top:image.height-bottom]] )
+
+    return dicbool_chessboard
+
+""" def get_dicbool_chessboard(image, offset, filter, show_image=False):
     top = offset["top"]
     bottom = offset["bottom"]
     left_int = offset["left_int"]
@@ -113,48 +152,36 @@ def get_dicbool_chessboard(image, offset, filter, show_image=False):
         im_bpn.show()
         dic_bin_bpn["image"].show()
 
-    return dicbool_chessboard
+    return dicbool_chessboard """
 
 """ Esempio di utilizzo """
 if __name__ == '__main__':
     
-    # create image
-    #im_pn = Image.open('image/2_ideal_pn.jpeg').resize((30, 120))
-    ##im_pn.show()
-    #im_np_pn = np.array(im_pn)
+    """     # create image
+        #im_pn = Image.open('image/2_ideal_pn.jpeg').resize((30, 120))
+        ##im_pn.show()
+        #im_np_pn = np.array(im_pn)
 
-    #im_grid = Image.open('image/2_ideal.jpeg').resize((120, 120))
-    ##im_grid.show()
-    #im_np_grid = np.array(im_grid)
+        #im_grid = Image.open('image/2_ideal.jpeg').resize((120, 120))
+        ##im_grid.show()
+        #im_np_grid = np.array(im_grid)
 
 
-    # dic_bin è un dizionario contenente l'image binarizzata (bianco e nero) e un array booleano
-    # posso anche scegliere di ritornare solo la schacchiera in bool mettendo with_bin_image=False (che lo è già di default) 
-    #dic_bin_pn = _binarize_by2filter(im_np_pn, [white,black], [10, 10], with_bin_image=True)
-    #dic_bin_pn["image"].show()
+        # dic_bin è un dizionario contenente l'image binarizzata (bianco e nero) e un array booleano
+        # posso anche scegliere di ritornare solo la schacchiera in bool mettendo with_bin_image=False (che lo è già di default) 
+        #dic_bin_pn = _binarize_by2filter(im_np_pn, [white,black], [10, 10], with_bin_image=True)
+        #dic_bin_pn["image"].show()
 
-    #dic_bin_grid = _binarize_by2filter(im_np_grid, [white,black], [10, 10], with_bin_image=True)
-    #dic_bin_grid["image"].show()
+        #dic_bin_grid = _binarize_by2filter(im_np_grid, [white,black], [10, 10], with_bin_image=True)
+        #dic_bin_grid["image"].show()
 
-    #print(_bool_chessboard(dic_bin_pn["np"],(8,2)))
-    #print(_bool_chessboard(dic_bin_grid["np"],(8,8)))
+        #print(_bool_chessboard(dic_bin_pn["np"],(8,2)))
+        #print(_bool_chessboard(dic_bin_grid["np"],(8,8)))
 
-    # with full chessboard
-
-    white = [68,65,30] #[98,92,58] 
-    black = [11,13,8] #[3,8,4]
-    offset = {
-        "top": 29,
-        "bottom": 28,
-        "left_int": 17,
-        "right_int": 15,
-        "left_ext": 3,
-        "right_ext":3,
-        "color": [10,10]
-    }
+        # with full chessboard """
 
     im_chessboard = Image.open("image/shoot1.jpg").resize((500,375))
-    dicbool_chessboard = get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=True) 
+    dicbool_chessboard = get_dicbool_chessboard(im_chessboard) #get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=True) 
     
     print(dicbool_chessboard["grid"])
     print("")

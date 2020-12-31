@@ -22,8 +22,8 @@ class Game(Connection):
     def __init__(self):
         super().__init__()
         self.init_connection()
-        self.initGame()
         self.chessboard = Chessboard()
+        self.initGame()
         self.shoot_OnServal = None # function
 
     # @Override

@@ -24,20 +24,16 @@ class Game(Connection):
         self.init_connection()
         self.chessboard = Chessboard()
         self.shoot_OnServal = None # function
-        self.a = 0
-        self.b = 0
 
     # @Override
     def do_on_serval(self, ser_val):
-        if (ser_val != "") or (ser_val != None):
-            print(ser_val)
-
         if ser_val == "SHUTDOWN":
             print("Spegnimento...")
             time.sleep(5)
             quit()
             #system("shutdown now")
         elif ser_val == "SHOOT":
+            print(ser_val)
             self.send_ble_Chessboard(all_chessboard=True)
             if not(self.shoot_OnServal == None):
                 self.shoot_OnServal()
@@ -47,7 +43,7 @@ class Game(Connection):
         print(ble_val)
 
         if ble_val == "GPFREE":
-            self.shoot_OnServal = self.send_ble_Chessboard#self.PosizionamentoLibero
+            self.shoot_OnServal = self.PosizionamentoLibero
     
     def PosizionamentoLibero(self):
         # scatta l'immagine
@@ -83,7 +79,7 @@ class Game(Connection):
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-grid-{_y}-{_x}-{piece}")
-                    time.sleep(0.1)
+                    time.sleep(0.01)
 
             for _y in range(2):
                 for _x in range(8):
@@ -91,7 +87,7 @@ class Game(Connection):
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-bpn-{_y}-{_x}-{piece}")
-                    time.sleep(0.1)
+                    time.sleep(0.01)
 
             for _y in range(2):
                 for _x in range(8):
@@ -99,22 +95,9 @@ class Game(Connection):
                     if piece == "░░" or piece == "██":
                         piece = "xx"
                     self.send_ble(f"CB-wpn-{_y}-{_x}-{piece}")
-                    time.sleep(0.1)
+                    time.sleep(0.01)
 
         else:
             self.send_ble(f"CB-{string_type}-{y}-{x}-{piece}")
-            time.sleep(0.1)
-
-        # print(self.a,"    ",self.b)
-        # self.send_ble(f"CB-grid-{self.a}-{self.b}-bK")
-        
-        # if self.b >= 7:
-        #     self.b = 0
-        #     self.a += 1
-        # else:
-        #     self.b +=1
-
-        # if self.a > 7:
-        #     self.a = 0
-
+            time.sleep(0.01)
 

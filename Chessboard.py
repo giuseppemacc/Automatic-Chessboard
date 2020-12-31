@@ -192,9 +192,6 @@ class Chessboard():
             
         return move
         
-        
-
-    
     def __str__(self):
         string = "==================\n"
         for i in self.chessboard["bpn"]:

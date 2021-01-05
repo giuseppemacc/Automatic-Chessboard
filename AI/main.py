@@ -1,51 +1,66 @@
 import random as rd
 import math as mt
 
-def sig( x): 
-	return 1 / (1 + mt.exp(-x))
 
 def RN(m1,m2):
-	return sig(m1*w1+m2*w2+b)
+    t=m1*w1+m2*w2+b 
+    return sigmoide(t)
 
+def sigmoide(t):
+    return 1/(1+mt.exp(-t))
 
-def derivata(previsione,obiettivo,n):
-	return 2 * (previsione - obiettivo) * previsione*(1 - previsione) *n
-
-def costo(previsione, obiettivo):
-	return pow(previsione - obiettivo, 2)
-
-data_set=[
+#dataset 
+dataset=[
 	[1,1,0],
-	[1,2,0],
-	[2,2,0],
-	[3,2,0],
-	[3,3,0],
-	[10,10,1],
-	[10,9,1],
+	[2,1,0],
+	[1,4,0],
+	[2,3,0],
+	[4,3,0],
 	[9,9,1],
-	[9,8,1],
-	[8,8,1]
-]
+	[7,8,1],
+	[6,7,1],
+	[9,6,1],
+	[9,7,1],
+]    
+	
+def train():
 
+    #pesi inizializzati inizialmente in modo casuale
+    w1 = rd.random()
+    w2 = rd.random()
+    b = rd.random()     
 
-rd.seed(1)
+    iterazioni = 10000  #numero di iterazioni 10000
+    learning_rate = 0.1 #imposto il learning rate 0.1
+    
+    for i in range(iterazioni):
+       
+        point = dataset[rd.randint(0,len(dataset)-1)]
+        
+        z = point[0] * w1 + point[1] * w2 + b
+        pred = sigmoide(point[0] * w1 + point[1] * w2 + b) # previsione della rete
+        
+        target = point[2] #il mio valore obiettivo
+        
+        #aggiornamento dei pesi e del bias
+        w1 = w1 - learning_rate * 2 * (pred - target) * sigmoide(z)*(1 - sigmoide(z))  * point[0]
+        w2 = w2 - learning_rate * 2 * (pred - target) * sigmoide(z)*(1 - sigmoide(z))  * point[1]
+        b = b - learning_rate * 2 * (pred - target) * sigmoide(z)*(1 - sigmoide(z))  * 1
+        
+    return w1, w2, b
 
-w1 = rd.random()
-w2 = rd.random()
-b = rd.random() 
-LR = 0.1
+#carichiamo i pesi e il bias 
+w1, w2, b = train()
 
-for i in range(10000):
-  r = rd.randint(0,len(data_set)-1)
-  point=data_set[r]
-  m1 = point[0]
-  m2 = point[1]
+pred=[] #array vuoto che conterrà le previsioni
 
-  obiettivo = point[2]
-  previsione = RN(m1, m2)
+for gatto in dataset:  #per ogni gatto nel dataset
+    z = w1 * gatto[0] + w2 * gatto[1] + b
+    prediction=sigmoide(z)    #previsione della rete
+    if prediction <= 0.5: #se la previsione è minore o uguale a 0.5
+        pred.append('0') #aggiungi la stringa "giungla" all'array pred
+    else: 
+        pred.append('1') #altrimenti aggiungi la stringa "sabbie" all'arrat pred
 
-  w1 = w1 - LR * derivata(previsione,obiettivo,m1)
-  w2 = w2 - LR * derivata(previsione, obiettivo, m2)
-  b = b - LR * derivata(previsione, obiettivo, 1)
-
-print(RN(10,10))
+print(pred) #stampa a schermo l'array pred
+print(RN(5,5))

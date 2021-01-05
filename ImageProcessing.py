@@ -1,16 +1,17 @@
 import numpy as np
 from PIL import Image
 import os
+from AI.isPiece import isPiece
 
 white = [68,65,30] #[98,92,58] 
 black = [11,13,8] #[3,8,4]
 offset = {
-    "top": 29,
-    "bottom": 28,
-    "left_int": 17,
-    "right_int": 15,
-    "left_ext": 3,
-    "right_ext":3,
+    "top": 80,
+    "bottom": 68,
+    "left_int": 35,
+    "right_int": 30,
+    "left_ext": 20,
+    "right_ext":8,
     "color": [10,10]
 }
 
@@ -79,6 +80,39 @@ def _bool_chessboard(bool_np,dim):
 
     return bool_np_chessboard
 
+def bool_squares(np_squares, dim):
+    
+    bool_np_chessboard = np.full(dim, None)         
+    step = int(np_squares.shape[0]/8)
+
+    y_pixel = 0
+    x_pixel = 0
+
+    for y in range(dim[0]):
+        y_section_range = [y_pixel, y_pixel+step]
+        
+        for x in range(dim[1]):
+            
+            x_section_range = [x_pixel, x_pixel+step]
+
+            section = np.array( [i[x_section_range[0]:x_section_range[1]] for i in np_squares[y_section_range[0]:y_section_range[1]]] )
+            
+            # bool_np_chessboard[y][x] = True#
+            # image = Image.fromarray(np.uint8(section))
+            # image.save(f"AI/imageDataSetTest/{string_type}-{y}-{x}.jpg")
+
+            if isPiece(section):
+               bool_np_chessboard[y][x] = True
+            else:
+               bool_np_chessboard[y][x] = False 
+
+            x_pixel += step
+        x_pixel = 0
+        y_pixel += step
+
+    return bool_np_chessboard
+
+
 def get_dicbool_chessboard(image):
     top = offset["top"]
     bottom = offset["bottom"]
@@ -89,22 +123,40 @@ def get_dicbool_chessboard(image):
     color = offset["color"]
     np_chessboard = np.array(image)
     square = int((image.height - (top + bottom)) / 8) 
-    dicbool_chessboard = {
-        "bpn": np.full((2,8),None),
-        "wpn": np.full((2,8),None),
-        "grid": np.full((8,8),None),
-    }
     
     """ritaglia l'immagine"""
 
     # "bpn"
     np_bpn = np.array( [i[left_ext:left_ext+square*2] for i in np_chessboard[top:image.height-bottom]] )
+    Image.fromarray(np.uint8(np_bpn)).show()
     # "wpn"
     np_wpn = np.array( [i[-square*2:-right_ext] for i in np_chessboard[top:image.height-bottom]] )
+    Image.fromarray(np.uint8(np_wpn)).show()
     # "grid"
     np_grid = np.array( [i[(left_ext+left_int)+square*2:-(right_ext+right_int)-square*2] for i in np_chessboard[top:image.height-bottom]] )
+    Image.fromarray(np.uint8(np_grid)).show()
 
-    return dicbool_chessboard
+    return {
+        "bpn":  np.rot90(bool_squares(np_bpn,(8,2))),
+        "wpn":  np.rot90(bool_squares(np_wpn,(8,2))),
+        "grid": bool_squares(np_grid,(8,8)),
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 """ def get_dicbool_chessboard(image, offset, filter, show_image=False):
     top = offset["top"]
@@ -180,12 +232,12 @@ if __name__ == '__main__':
 
         # with full chessboard """
 
-    im_chessboard = Image.open("image/shoot1.jpg").resize((500,375))
+    im_chessboard = Image.open("AI/shoots_test/shoot6.jpg")#.resize((500,375))
     dicbool_chessboard = get_dicbool_chessboard(im_chessboard) #get_dicbool_chessboard(im_chessboard, offset, [white,black], show_image=True) 
     
-    print(dicbool_chessboard["grid"])
+    """ print(dicbool_chessboard["grid"])
     print("")
     print(dicbool_chessboard["bpn"])
     print("")
-    print(dicbool_chessboard["wpn"])
+    print(dicbool_chessboard["wpn"]) """
     

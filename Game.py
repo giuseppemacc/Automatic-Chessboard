@@ -57,7 +57,7 @@ class Game(Connection):
         # inviare la scacchiera tramite ble
         
         shoot()
-        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375))) #get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] ) 
+        dicbool_chessboard = get_dicbool_chessboard(Image.open("image/shoot.jpg"))#.resize((500,375))) #get_dicbool_chessboard(Image.open("image/shoot.jpg").resize((500,375)), offset, [white,black] ) 
 
         print("New Chessboard:")
         print("")

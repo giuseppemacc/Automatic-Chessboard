@@ -9,12 +9,12 @@ from shoot import shoot
 white = [68,65,30]
 black = [11,13,8]
 offset = {
-    "top": 29,
-    "bottom": 28,
-    "left_int": 17,
-    "right_int": 15,
-    "left_ext": 3,
-    "right_ext":3,
+    "top": 80,
+    "bottom": 68,
+    "left_int": 35,
+    "right_int": 30,
+    "left_ext": 20,
+    "right_ext":8,
     "color": [10,10]
 }
 

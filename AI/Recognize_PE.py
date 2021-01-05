@@ -11,7 +11,7 @@ from PIL import Image, ImageOps
 
 BUILD_DATA = True
 TRAIN = False
-TEST = False
+TEST = True
 
 IMG_SIZE = 50
 EPOCHS = 300
@@ -110,7 +110,7 @@ def train(model, training_dataset):
 
         print(f"Epoch: {epoch}. Loss: {loss}")
     
-    torch.save(model.state_dict(), "model2.pt")
+    torch.save(model.state_dict(), "model3.pt", _use_new_zipfile_serialization=False)
 
 
 def calc(np_img, model):
@@ -151,14 +151,14 @@ if __name__ == "__main__":
 
     if TRAIN or TEST:
         recognize_PE = Recognize_PE()
-        recognize_PE.load_state_dict(torch.load("model1000.pt"))
 
-        training_dataset = np.load("test_dataset.npy", allow_pickle=True)
+        training_dataset = np.load("training_dataset.npy", allow_pickle=True)
         np.random.shuffle(training_dataset)
         
 
         if TRAIN:
             train(recognize_PE, training_dataset)
         if TEST:
+            recognize_PE.load_state_dict(torch.load("model1000.pt"))
             test(recognize_PE, training_dataset)
     

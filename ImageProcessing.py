@@ -1,5 +1,5 @@
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 import os
 from AI.isPiece import isPiece
 
@@ -100,6 +100,8 @@ def bool_squares(np_squares, dim):
             # bool_np_chessboard[y][x] = True#
             # image = Image.fromarray(np.uint8(section))
             # image.save(f"AI/imageDataSetTest/{string_type}-{y}-{x}.jpg")
+
+            section = np.array(ImageOps.grayscale(Image.fromarray(np.uint8(section)).resize((50,50))))
 
             if isPiece(section):
                bool_np_chessboard[y][x] = True

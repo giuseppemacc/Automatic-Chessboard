@@ -41,8 +41,8 @@ class Connection():
                 ser_val = await loop.run_in_executor(executor, self.get_ser_val)
                 self.do_on_serval(ser_val)
             except:
-                pass
-            
+                break
+
     async def ble_io(self):
         while True:
             try:
@@ -55,6 +55,7 @@ class Connection():
                 print("Connessione scaduta")
                 self.client_sock.close()
                 self.server_sock.close()
+                break
         
 
 

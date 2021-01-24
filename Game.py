@@ -6,18 +6,6 @@ import time
 from os import system
 from shoot import shoot
 
-white = [68,65,30]
-black = [11,13,8]
-offset = {
-    "top": 80,
-    "bottom": 68,
-    "left_int": 35,
-    "right_int": 30,
-    "left_ext": 20,
-    "right_ext":8,
-    "color": [10,10]
-}
-
 class Game(Connection):
     def __init__(self):
         super().__init__()

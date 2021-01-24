@@ -7,7 +7,7 @@ from os.path import isfile, join
 import torch
 from tqdm import tqdm
 from matplotlib import pyplot as plt
-from .Recognize_PE import Recognize_PE, calc
+from .PieceRecognition import Recognize_PE, calc
 
 recognize_PE = Recognize_PE()
 recognize_PE.load_state_dict(torch.load("model3.pt"))

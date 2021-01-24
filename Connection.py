@@ -35,20 +35,23 @@ class Connection():
 
     async def ser_io(self):
         while True:
-            executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
-            loop = asyncio.get_event_loop()
-            ser_val = await loop.run_in_executor(executor, self.get_ser_val)
-            self.do_on_serval(ser_val)
-
+            try:
+                executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
+                loop = asyncio.get_event_loop()
+                ser_val = await loop.run_in_executor(executor, self.get_ser_val)
+                self.do_on_serval(ser_val)
+            except:
+                pass
+            
     async def ble_io(self):
         while True:
-            executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
-            loop = asyncio.get_event_loop()
             try:
+                executor = concurrent.futures.ThreadPoolExecutor(max_workers=3)
+                loop = asyncio.get_event_loop()
                 ble_val = await loop.run_in_executor(executor, self.get_ble_val)
                 self.do_on_bleval(ble_val)
             except:
-                self.ser_arduino.write(b"BF")
+                #self.ser_arduino.write(b"BF")
                 print("Connessione scaduta")
                 self.client_sock.close()
                 self.server_sock.close()

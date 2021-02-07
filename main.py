@@ -11,4 +11,4 @@ if __name__ == "__main__":
         loop.run_forever()
     except:
         loop.stop()
-        #game.close_connection()
+        loop.close()

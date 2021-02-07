@@ -22,12 +22,24 @@ class Connection():
         print("Connessione accetata da: ",self.address)
     
     def close_connection(self):
-        self.ser_arduino.write(b"BF")
-        time.sleep(1)
-        self.ser_arduino.close()
-        self.client_sock.close()
-        self.server_sock.close()
+        try:
+            self.ser_arduino.close()
+        except:
+            pass
+        
+        try:
+            self.client_sock.close()
+        except:
+            pass
+
+        try:
+            self.server_sock.close()
+        except:
+            pass
     
+    def reload(self):
+        pass
+
     def do_on_serval(self,ser_val):
         pass
     def do_on_bleval(self, bleval):
@@ -41,7 +53,7 @@ class Connection():
                 ser_val = await loop.run_in_executor(executor, self.get_ser_val)
                 self.do_on_serval(ser_val)
             except:
-                break
+                self.reload()
 
     async def ble_io(self):
         while True:
@@ -51,12 +63,7 @@ class Connection():
                 ble_val = await loop.run_in_executor(executor, self.get_ble_val)
                 self.do_on_bleval(ble_val)
             except:
-                #self.ser_arduino.write(b"BF")
-                print("Connessione scaduta")
-                self.client_sock.close()
-                self.server_sock.close()
-                break
-        
+                self.reload()
 
 
     # ===== Funzioni sync da rendere async ================
@@ -67,8 +74,14 @@ class Connection():
         return str(self.ser_arduino.readline())[2:-1]
 
     def send_ble(self,value):
-        self.client_sock.send(value)
-    
+        try:
+            self.client_sock.send(value)
+        except:
+            self.reload()
+
     def send_ser(self,value):
-        self.ser_arduino.write(value)
+        try:
+            self.ser_arduino.write(value)
+        except:
+            self.reload()
     # ====================================================

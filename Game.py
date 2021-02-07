@@ -15,6 +15,12 @@ class Game(Connection):
         self.shoot_OnServal = None # function
 
     # @Override
+    def reload(self):
+        # chiude le connessioni se ci sono e riavvia tutto
+        self.close_connection()
+        self.__init__()
+
+    # @Override
     def do_on_serval(self, ser_val):
         if (ser_val != "") and (type(ser_val) == str):
             print(ser_val)

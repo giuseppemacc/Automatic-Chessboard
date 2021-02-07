@@ -18,6 +18,7 @@ class Game(Connection):
     def reload(self):
         # chiude le connessioni se ci sono e riavvia tutto
         self.close_connection()
+        time.sleep(0.5)
         self.__init__()
 
     # @Override

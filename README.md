@@ -1,2 +1,10 @@
 # Automatic-Chessboard
- this is a project whose goal is to have an interactive chessboard that allows you to play games, or particular positions, of chess against an artificial intelligence.
+
+Is a prototype that allows a user to play chess, in its complete way possible, on a physical chessboard in an automatic way
+
+The choice of game mode and parameters is controlled by a graphic mobile application.
+
+![plot](./readme_images/example1.jpg)
+
+
+* **Work in progress**

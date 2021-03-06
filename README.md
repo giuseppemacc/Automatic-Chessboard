@@ -2,7 +2,7 @@
 
 Is a prototype that allows a user to play chess, in its complete way possible, on a physical chessboard in an automatic way
 
-** Game Mode**:
+**Game Mode**:
 * Against the **Computer** (StockFish).
 * **Multiplayer** against a friend, from a distance (distance limited by Bluetooth for now)
 * **Chess Problems**

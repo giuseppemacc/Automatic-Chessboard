@@ -6,7 +6,7 @@ The choice of game mode and parameters is controlled by a graphic mobile applica
 
 The pieces are recognized through a Machine Learning algorithm like this: https://github.com/giuseppemacc/Image-Recognition-PyTorch
 
-![plot](./readme_images/example1.jpg)
+![plot](./readme_images/example1.jpeg)
 
 
 * **Work in progress . . .**

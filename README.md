@@ -4,7 +4,7 @@ Is a prototype that allows a user to play chess, in its complete way possible, o
 
 The choice of game mode and parameters is controlled by a graphic mobile application.
 
-![plot](./readme_images/example1.jpg)
+![plot](./readme_images/example1.jpeg)
 
 
 * **Work in progress**

@@ -8,7 +8,7 @@ Is a prototype that allows a user to play chess, in its complete way possible, o
 * **Chess Problems**.
 * **Specific Position** determined by the player.
 
-The choice of game mode and parameters is controlled by a mobile graphics application connected via Bluetooth.
+The choice of game mode and parameters is controlled by a mobile graphics application connected via Bluetooth.(https://github.com/giuseppemacc/ChessApp)
 
 The pieces are recognized through a Machine Learning algorithm like this: https://github.com/giuseppemacc/Image-Recognition-PyTorch
 

@@ -31,11 +31,11 @@ def warpChessboard(path):
     for x in range(0,4):
         cv2.circle(img, (pts1[x][0], pts1[x][1]), 1, (0,0,255), cv2.FILLED)
     
-    cv2.imshow("Marked Shoot",img)
-    cv2.imwrite("images\marked_shoot.jpg",img)
-
-    cv2.imshow("Warped Image",warp_img)
-    cv2.imwrite("images\warped_img.jpg",warp_img)
+    # cv2.imshow("Marked Shoot",img)
+    # cv2.imwrite("images\marked_shoot.jpg",img)
+# 
+    # cv2.imshow("Warped Image",warp_img)
+    # cv2.imwrite("images\warped_img.jpg",warp_img)
     
 
     return warp_img
@@ -50,15 +50,15 @@ def cropImage(img):
     img_rpn = img_cropped[  0:HEIGHT , RIGHT_EXT_BORDER:WIDTH  ]
     img_grid = img_cropped[ 0:HEIGHT , LEFF_INT_BORDER:RIGHT_INT_BORDER ]
 
-    cv2.imshow("Cropped Image",img_cropped)
-    cv2.imwrite("images\cropped_img.jpg",img_cropped)
+    # cv2.imshow("Cropped Image",img_cropped)
+    # cv2.imwrite("images\cropped_img.jpg",img_cropped)
 
-    cv2.imshow("Left Side Image",img_lpn)
-    cv2.imwrite("images\img_lpn.jpg",img_lpn)
-    cv2.imshow("Right Side Image",img_rpn)
-    cv2.imwrite("images\img_rpn.jpg",img_rpn)
-    cv2.imshow("Grid Image",img_grid)
-    cv2.imwrite("images\img_grid.jpg",img_grid)
+    # cv2.imshow("Left Side Image",img_lpn)
+    # cv2.imwrite("images\img_lpn.jpg",img_lpn)
+    # cv2.imshow("Right Side Image",img_rpn)
+    # cv2.imwrite("images\img_rpn.jpg",img_rpn)
+    # cv2.imshow("Grid Image",img_grid)
+    # cv2.imwrite("images\img_grid.jpg",img_grid)
 
 
     #-----crop left side----
@@ -115,7 +115,7 @@ def binarizes(dic_images):
     }
 
 def see_Chessboard():
-    warped_img = warpChessboard("ImageProcessing/images/shoot.jpg")
+    warped_img = warpChessboard("shoot.jpg")
     crop_img = cropImage(warped_img)
     dic_bin_chessboard = binarizes(crop_img)
 

@@ -58,15 +58,15 @@ class Game(Connection):
         # inviare la scacchiera tramite ble
         
         shoot()
-        # dicbool_chessboard = self.see_Chessboard()
+        dicbool_chessboard = self.see_Chessboard()
 
-        # print("New Chessboard:")
-        # print("")
-        # print(dicbool_chessboard["grid"])
-        # print("")
-        # print(dicbool_chessboard["bpn"])
-        # print("")
-        # print(dicbool_chessboard["wpn"])
+        print("New Chessboard:")
+        print("")
+        print(dicbool_chessboard["grid"])
+        print("")
+        print(dicbool_chessboard["bpn"])
+        print("")
+        print(dicbool_chessboard["wpn"])
 
         # time.sleep(0.5)
 
@@ -108,7 +108,7 @@ class Game(Connection):
             time.sleep(0.01)
 
     def see_Chessboard(self):
-        warped_img = warpChessboard("ImageProcessing/images/shoot.jpg")
+        warped_img = warpChessboard("shoot.jpg")
         crop_img = cropImage(warped_img)
         dic_bin_chessboard = binarizes(crop_img)
 

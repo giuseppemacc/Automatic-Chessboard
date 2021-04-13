@@ -1,4 +1,4 @@
-from type.t_cord import t_cord
+from  Chessboard.type.t_cord import t_cord
 
 class t_move():
     """type of move:\n

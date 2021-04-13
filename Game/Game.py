@@ -4,7 +4,7 @@ from ImageProcesssing.ImageProcessing import binarizes, see_Chessboard
 from PIL import Image
 import time
 from os import system
-from shoot import shoot
+from ImageProcesssing.shoot import shoot
 
 class Game(Connection):
     def __init__(self):

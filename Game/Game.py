@@ -5,6 +5,7 @@ from PIL import Image
 import time
 from os import system
 from ImageProcessing.shoot import shoot
+import numpy as np
 
 class Game(Connection):
     def __init__(self):
@@ -60,15 +61,16 @@ class Game(Connection):
         shoot()
         dicbool_chessboard = self.see_Chessboard()
 
-        # print("New Chessboard:")
-        # print("")
-        # print(dicbool_chessboard["grid"])
-        # print("")
-        # print(dicbool_chessboard["bpn"])
-        # print("")
-        # print(dicbool_chessboard["wpn"])
+        print("----New Chessboard----")
+        
+        print("GRID:")
+        print(np.array(dicbool_chessboard["grid"]))
+        print("BPN (RIGHT):")
+        print(np.array(dicbool_chessboard["bpn"]))
+        print("WPN (LEFT):")
+        print(np.array(dicbool_chessboard["wpn"]))
 
-        # time.sleep(0.5)
+        time.sleep(0.5)
 
         # move = self.chessboard.see_move(dicbool_chessboard)
         # print(move)

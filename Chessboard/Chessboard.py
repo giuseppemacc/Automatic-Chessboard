@@ -1,5 +1,5 @@
-from type.t_cord import t_cord
-from type.t_move import t_move
+from Chessboard.type.t_cord import t_cord
+from Chessboard.type.t_move import t_move
 import numpy as np
 
 class Chessboard():

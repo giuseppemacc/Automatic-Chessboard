@@ -1,4 +1,4 @@
-from Game import Game
+from Game.Game import Game
 import asyncio
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
-from .Connection import Connection
-from Chessboard import Chessboard
+from Game.Connection import Connection
+from Chessboard.Chessboard import Chessboard
 from ImageProcesssing.ImageProcessing import binarizes, see_Chessboard
 from PIL import Image
 import time

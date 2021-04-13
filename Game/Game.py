@@ -60,13 +60,13 @@ class Game(Connection):
         shoot()
         dicbool_chessboard = self.see_Chessboard()
 
-        print("New Chessboard:")
-        print("")
-        print(dicbool_chessboard["grid"])
-        print("")
-        print(dicbool_chessboard["bpn"])
-        print("")
-        print(dicbool_chessboard["wpn"])
+        # print("New Chessboard:")
+        # print("")
+        # print(dicbool_chessboard["grid"])
+        # print("")
+        # print(dicbool_chessboard["bpn"])
+        # print("")
+        # print(dicbool_chessboard["wpn"])
 
         # time.sleep(0.5)
 

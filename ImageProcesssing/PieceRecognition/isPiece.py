@@ -11,7 +11,7 @@ def isPiece(img):
     # cv2.waitKey()
 
     neural_net = PieceRecognition()
-    neural_net.load_state_dict(torch.load("PieceRecognition/models/model50.pt"))
+    neural_net.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
 
     pattern = getPattern(img, neural_net)
     print(pattern)

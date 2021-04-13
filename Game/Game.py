@@ -50,6 +50,7 @@ class Game(Connection):
         self.send_ble_Chessboard(all_chessboard=True)
     
     def PosizionamentoLibero(self):
+        
         # scatta l'immagine
         # binarizza
         # fa see_move
@@ -57,22 +58,22 @@ class Game(Connection):
         # inviare la scacchiera tramite ble
         
         shoot()
-        dicbool_chessboard = self.see_Chessboard()
+        # dicbool_chessboard = self.see_Chessboard()
 
-        print("New Chessboard:")
-        print("")
-        print(dicbool_chessboard["grid"])
-        print("")
-        print(dicbool_chessboard["bpn"])
-        print("")
-        print(dicbool_chessboard["wpn"])
+        # print("New Chessboard:")
+        # print("")
+        # print(dicbool_chessboard["grid"])
+        # print("")
+        # print(dicbool_chessboard["bpn"])
+        # print("")
+        # print(dicbool_chessboard["wpn"])
 
-        time.sleep(0.5)
+        # time.sleep(0.5)
 
-        move = self.chessboard.see_move(dicbool_chessboard)
-        print(move)
-        self.chessboard.move(move)
-        print(self.chessboard)
+        # move = self.chessboard.see_move(dicbool_chessboard)
+        # print(move)
+        # self.chessboard.move(move)
+        # print(self.chessboard)
 
         #self.send_ble_Chessboard()
 

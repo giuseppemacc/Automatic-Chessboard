@@ -5,5 +5,5 @@ c = PiCamera()
 c.start_preview()
 def shoot():
     sleep(0.2)
-    c.capture("ImageProcessing/images/shoot.jpg")
+    c.capture("shoot.jpg")
     #c.stop_preview()

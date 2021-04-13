@@ -1,10 +1,10 @@
 from Game.Connection import Connection
 from Chessboard.Chessboard import Chessboard
-from ImageProcesssing.ImageProcessing import binarizes, warpChessboard, cropImage
+from ImageProcessing.ImageProcessing import binarizes, warpChessboard, cropImage
 from PIL import Image
 import time
 from os import system
-from ImageProcesssing.shoot import shoot
+from ImageProcessing.shoot import shoot
 
 class Game(Connection):
     def __init__(self):

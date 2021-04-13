@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from matplotlib import pyplot as plt
 from .PieceRecognition import PieceRecognition, getPattern
+from ImageProcessing.PieceRecognition.PieceRecognition import PieceRecognition, getPattern
 import cv2
 
 def isPiece(img):

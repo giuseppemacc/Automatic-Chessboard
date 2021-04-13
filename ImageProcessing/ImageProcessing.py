@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from ImageProcesssing.PieceRecognition.isPiece import isPiece
+from ImageProcessing.PieceRecognition.isPiece import isPiece
 #from PieceRecognition.isPiece import isPiece
 
 WIDTH, HEIGHT = 1024,652

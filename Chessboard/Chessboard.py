@@ -179,12 +179,12 @@ class Chessboard():
         count_changes("grid") 
 
         # caso di una mossa normale
-        if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["-"])==0 ):
+        if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==0 ):
             piece = self.get_piece( changes["-"][0] )
             self.set_piece( changes["-"][0], None )
             self.set_piece( changes["+"][0], piece )
 
-        elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["-"])==1 ):
+        elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==1 ):
             
             pusher_piece = self.get_piece( changes["-"][0] )
             pushed_piece = self.get_piece( changes["/"][0] )

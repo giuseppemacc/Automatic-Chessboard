@@ -72,8 +72,8 @@ class Game(Connection):
 
         time.sleep(0.5)
 
-        move = self.chessboard.see_move(dicbool_chessboard)
-        print(move)
+        self.chessboard.see_move(dicbool_chessboard)
+        print(self.chessboard)
         
         # self.chessboard.move(move)
         # print(self.chessboard)

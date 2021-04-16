@@ -144,7 +144,7 @@ class Chessboard():
             else:
                 if second == 0:
                     return "-"
-                elif second == 1:
+                elif first == 0:
                     return "+"
                 else:
                     return "/"

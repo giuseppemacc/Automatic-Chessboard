@@ -230,11 +230,11 @@ class Chessboard():
 
         string = "==================\n"
         string += str(np.array(self.chessboard["left"]))
-        string = "\n==================\n"
+        string += "\n==================\n"
         string += str(np.array(self.chessboard["grid"]))
-        string = "\n==================\n"
+        string += "\n==================\n"
         string += str(np.array(self.chessboard["right"]))
-        string = "\n==================\n"
+        string += "\n==================\n"
 
         return string
 

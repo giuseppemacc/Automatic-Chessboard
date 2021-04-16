@@ -1,36 +1,44 @@
+# mi deve indentificare una coordinata 
+# sia tramite la forma stringa che tramite la forma a indici
 class t_cord():
     """
-        type of cord:\n
-            - cord_string: "a1" (grid)
-            - cord_string: "wpna1" (panchina white a1)
-            - cord_string: "bpna1" (panchina black a1)
-            - cord_numeric: ["wpn",[y,x]]
+        string_form = a1,b2... ra1,rb2... la1,lb2...
+        index_form = ["grid",[y,x]]... ["left",[y,x]]... ["right",[y,x]]...
     """
-    def __init__(self, cord_string=None, cord_numeric=None):
-        #TODO: inizializzare cordinata da cord_numeric ["wpn",[y,x]]
-        if cord_numeric == None:
-            self.cord_string = cord_string
-        else:
-            if "pn" in cord_numeric[0]:
-                self.cord_string = cord_numeric[0]+(["a","b","c","d","e","f","g","h"][cord_numeric[1][1]])+str( [i for i in range(2,0,-1)][cord_numeric[1][0]] )
+    def __init__(self, string_form=None, index_form=None):
+        self.string_form = string_form
+        self.index_form = index_form
+    
+    def get_string_form(self):
+        if self.string_form == None:
+            string_type = self.index_form[0]
+            y,x = self.index_form[1]
+
+            self.string_form = ["a","b","c","d","e","f","g","h"][x] + str( [i for i in range(8,0,-1)][y] )
+
+            if string_type == "left":
+                self.string_form = "l" + self.string_form
+            elif string_type == "right":
+                self.string_form = "r" + self.string_form
+                
+        return self.string_form
+    
+    def get_index_form(self):
+        if self.index_form == None:
+            x = ["a","b","c","d","e","f","g","h"].index(self.string_form[-2]) 
+            y = 7-(int(self.string_form[-1])-1)
+            string_type = ""
+            if (self.string_form[0] == "l"):
+                string_type = "left"
+            elif (self.string_form[0] == "r"):
+                string_type = "right"
             else:
-                self.cord_string = (["a","b","c","d","e","f","g","h"][cord_numeric[1][1]])+str( [i for i in range(8,0,-1)][cord_numeric[1][0]] ) 
+                string_type = "grid"
 
+            self.index_form = [string_type,[y,x]]                
 
-    def get_numeric(self):
-        if "pn" in self.cord_string:
-            return [self.cord_string[:3], [ 1-(int(self.cord_string[-1])-1), ["a","b","c","d","e","f","g","h"].index(self.cord_string[-2])]]
-        else:
-            return [self.cord_string[:3], [ 7-(int(self.cord_string[1])-1), ["a","b","c","d","e","f","g","h"].index(self.cord_string[0])]]
-    
-    def get_string(self):
-        return self.cord_string
-
-    def get_spatial(self):
-        pass
-    
-    def get_angles(self):
-        pass
+        return self.index_form
     
     def __str__(self):
-        return f"{self.cord_string}"
+        return f"{self.string_form}"
+

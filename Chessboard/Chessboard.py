@@ -1,45 +1,95 @@
-from Chessboard.type.t_cord import t_cord
-from Chessboard.type.t_move import t_move
+#from Chessboard.type.t_cord import t_cord
+#from Chessboard.type.t_move import t_move
+from type.t_cord import t_cord
+from type.t_move import t_move
+from stockfish import Stockfish
+
 import numpy as np
 
 class Chessboard():
     def __init__(self):
         """
-            la scacchiera si suddivide in 3 parti:\n
-                - panchina nera (bpn)
-                - panchina bianca (wpn)
-                - griglia (grid)
+            la scacchiera si suddivide in 3 parti:
+                - left / blu / bianchi
+                - right / rossi / neri
+                - grid / griglia
             contenute nel dizionario chessboard
         """
+        self.stockfish = Stockfish("stockfish_20090216_x64")
+
+        self.castling = "-"
+        self.en_passant = "-"
+        self.half_move_counter = 0
+        self.move_counter = 0
+
+        self.fen_position = ""
+
+
         self.chessboard = {
             # TODO aggiungere un inizializzazione di wpn e bpn da due file .txt
-            "wpn": [
-                ["wQ","wK","wR","wB","wN","wP","wP","wP"],
-                ["wQ","wQ","wR","wB","wN","wP","wP","wP"]
-            ],
-            "bpn": [
-                ["bQ","bK","bR","bB","bN","bP","bP","bP"],
-                ["bQ","bQ","bR","bB","bN","bP","bP","bP"]
-            ],
             "grid": [
-                ["██","░░","██","░░","██","░░","██","░░" ],
-                ["░░","██","░░","██","░░","██","░░","██" ],
-                ["██","░░","██","░░","██","░░","██","░░" ],
-                ["░░","██","░░","██","░░","██","░░","██" ], #
-                ["██","░░","██","░░","██","░░","██","░░" ],
-                ["░░","██","░░","██","░░","██","░░","██" ],
-                ["██","░░","██","░░","██","░░","██","░░" ],
-                ["░░","██","░░","██","░░","██","░░","██" ],
-            ]                              #
+                [" "," "," "," "," "," "," "," "],
+                [" "," "," "," "," "," "," "," "],
+                [" "," "," "," "," "," "," "," "],
+                [" "," "," "," "," "," "," "," "], 
+                [" "," "," "," "," "," "," "," "],
+                [" "," "," "," "," "," "," "," "],
+                [" "," "," "," "," "," "," "," "],
+                [" "," "," "," "," "," "," "," "],
+            ],
+            "left": [
+                ["N","P"],
+                ["N","P"],
+                ["B","P"],
+                ["B","P"],
+                ["R","P"],
+                ["R","P"],
+                ["Q","P"],
+                ["K","P"],
+            ],
+            "right": [
+                ["p","n"],
+                ["p","n"],
+                ["p","b"],
+                ["p","b"],
+                ["p","r"],
+                ["p","r"],
+                ["p","q"],
+                ["p","k"],
+            ]                             
         }
 
-    def move(self,move):
-        type = move.get_type()
-        piece = move.get_piece()
-        dic_cord = move.get_start_end_cord()
+    def set_piece(self, cord, piece):
+        cord_index_form = cord.get_index_form()
+        string_type = cord_index_form[0]
+        y,x = cord_index_form[1]
 
-        if "castling_short" in type:
-            if "black" in type:
+        if piece == None:
+            piece = " "
+
+        self.chessboard[string_type][y][x] = piece
+
+    def get_piece(self, cord):
+        cord_index_form = cord.get_index_form()
+        string_type = cord_index_form[0]
+        y,x = cord_index_form[1]
+
+        return self.chessboard[string_type][y][x]
+
+    def get_fen_position(self):
+        pass
+
+    def get_best_move(self):
+        pass
+        # get_fen_position
+        # poi in base alla fen position ricavata la mossa migliore
+        # ritorna la mossa
+
+    def move(self, move):
+        piece, start_cord, end_cord, types = move.get_cord_form()
+
+        if "castling_short" in types:
+            if "black" in types:
                 self.set(t_cord("e8"),None)
                 self.set(t_cord("g8"),"bK")
                 self.set(t_cord("h8"),None)
@@ -49,8 +99,8 @@ class Chessboard():
                 self.set(t_cord("g1"),"wK")
                 self.set(t_cord("h1"),None)
                 self.set(t_cord("f1"),"wR")
-        elif "castling_long" in type:
-            if "black" in type:
+        elif "castling_long" in types:
+            if "black" in types:
                 self.set(t_cord("e8"),None)
                 self.set(t_cord("c8"),"bK")
                 self.set(t_cord("a8"),None)
@@ -60,141 +110,99 @@ class Chessboard():
                 self.set(t_cord("c1"),"wK")
                 self.set(t_cord("a1"),None)
                 self.set(t_cord("d1"),"wR")
-
         else:
-            self.set(dic_cord["start"],None)
-            self.set(dic_cord["end"],piece)
-            if "en_passant" in type:
-                cord_end_str = dic_cord["end"].get_string()
-                if "black" in type:
-                    self.set(t_cord( cord_end_str[0] + str(int(cord_end_str[1])+1) ) ,None)
-                else:
-                    self.set(t_cord( cord_end_str[0] + str(int(cord_end_str[1])-1) ) ,None)
+            self.set(start_cord,None)
+            self.set(end_cord,piece)
 
-    def set(self, cord, piece):
-        # TODO aggiungere qui la modifica vera e propria della scacchiera reale quindi una funzione che faccia muovere il braccio robotico
-        str_cord = cord.get_string()
-        y, x = cord.get_numeric()[1]  
-        string = ""
-        if "wpn" in str_cord:      
-            if piece == None:
-               string = "██"
-            else:
-               string = piece
-            self.chessboard["wpn"][y][x] = string
-        elif "bpn" in str_cord:
-            if piece == None:
-               string = "░░"
-            else:
-               string = piece
-            self.chessboard["bpn"][y][x] = string
-        else: 
-            if piece == None:
-                if (x % 2 == 0 and (y+7) % 2 == 0) or ((x-1) % 2 == 0 and ((y+7)-1) % 2 == 0):
-                    string = "░░"
-                else:
-                    string = "██"
-            else:
-                string = piece
+            if "en_passant" in types:
+                x,y = end_cord.get_index_form()[1]
 
-            self.chessboard["grid"][y][x] = string
-    
-    def get(self, cord=None, cord_numeric=None):
-        # cord_numeric è nel formato ["wpn",[y,x]]
-        if cord == None and cord_numeric == None:
-            print("ERRORE parametro cord o cord_numeric mancante")
-        if cord == None:
-            cord = t_cord(cord_numeric=cord_numeric)
-
-        cord_string = cord.get_string()
-        y,x = cord.get_numeric()[1]
-
-
-        if "bpn" in cord_string:
-            return self.chessboard["bpn"][y][x]
-        elif "wpn" in cord_string:
-            return self.chessboard["wpn"][y][x]
-        else:
-            return self.chessboard["grid"][y][x]
+                if "black" in types:
+                    self.set(t_cord(index_form=["grid",[x,y-1]]), None)
+                elif "white" in types:
+                    self.set(t_cord(index_form=["grid",[x,y+1]]), None)
     
     def see_move(self, dicbool):
-
         def is_notEmpty(a):
-            if (a == "░░") or (a == "██"):
-                return False
+            if a == " ":
+                return 0
+            elif a.isupper():
+                return 1
             else:
-                return True
+                return 2
+                
 
         bool_current_chessboard = {
-            "wpn": [ [is_notEmpty(j) for j in i] for i in self.chessboard["wpn"]],
-            "bpn": [ [is_notEmpty(j) for j in i] for i in self.chessboard["bpn"]],
+            "left": [ [is_notEmpty(j) for j in i] for i in self.chessboard["left"]],
+            "right": [ [is_notEmpty(j) for j in i] for i in self.chessboard["right"]],
             "grid": [ [is_notEmpty(j) for j in i] for i in self.chessboard["grid"]],
         }
-        print("Old Chessboard:")
-        print("")
-        print(bool_current_chessboard["grid"])
-        print("")
-        print(bool_current_chessboard["bpn"])
-        print("")
-        print(bool_current_chessboard["wpn"])
 
-        
         def compare(first, second):
             if first == second:
                 return first
-            elif first == True:
-                return "-"
             else:
-                return "+"
-                
+                if second == 0:
+                    return "-"
+                elif second == 1:
+                    return "+"
+                else:
+                    return "/"
+                 
         bool_new_chessboard = {
-            "wpn":  [ [compare(bool_current_chessboard["wpn"][i][j], dicbool["wpn"][i][j]) for j in range(8)] for i in range(2)],
-            "bpn":  [ [compare(bool_current_chessboard["bpn"][i][j], dicbool["bpn"][i][j]) for j in range(8)] for i in range(2)],
+            "left":  [ [compare(bool_current_chessboard["left"][i][j], dicbool["left"][i][j]) for j in range(2)] for i in range(8)],
+            "right":  [ [compare(bool_current_chessboard["right"][i][j], dicbool["right"][i][j]) for j in range(2)] for i in range(8)],
             "grid": [ [compare(bool_current_chessboard["grid"][i][j], dicbool["grid"][i][j]) for j in range(8)] for i in range(8)]
-        } # questo dic contiene il bool della nuova scacchiera CON DEI VALORI CAMBIATI:
-          # dove in bool_current_chessboard vi era un True ed in dicbool vi è un False, ci sarà "-" (significa che la pedina è stata tolta)
-          # dove in bool_current_chessboard vi era un False ed in dicbool vi è un True, ci sarà "+" (significa che la pedina è stata messa)
-        
+        }
+
         changes = {
             "+":[],
-            "-":[]
-        } # questo dic contiene:
-          # "-": una lista delle cordinate sritte in cord_numeric (["type",[y,x]]) dove è stata tolta una pedina
-          # "+": una lista delle cordinate sritte in cord_numeric (["type",[y,x]]) dove è stata messa una pedina
+            "-":[],
+            "/":[]
+        }
 
+        def count_changes(string_type):
+            for y in range(len( bool_new_chessboard[string_type] )):
+                for x in range(len( bool_new_chessboard[string_type][y] )):
 
-        def count_changes(bool_chessboard, chessboard_type):
-            for y in range(len(bool_chessboard)):
-                for x in range(len(bool_chessboard[y])):
-                    if bool_chessboard[y][x] == "-":
-                        changes["-"].append([chessboard_type,[y,x]])
-                    elif bool_chessboard[y][x] == "+":
-                        changes["+"].append([chessboard_type,[y,x]])
+                    if bool_new_chessboard[string_type][y][x] == "-":
+                        changes["-"].append( t_cord(index_form = [string_type,[y,x]]) )
+
+                    elif bool_new_chessboard[string_type][y][x] == "+":
+                        changes["+"].append( t_cord(index_form = [string_type,[y,x]]) )
+
+                    elif bool_new_chessboard[string_type][y][x] == "/":
+                        changes["/"].append( t_cord(index_form = [string_type,[y,x]]) )
         
-        count_changes(bool_new_chessboard["wpn"],"wpn")
-        count_changes(bool_new_chessboard["bpn"],"bpn")
-        count_changes(bool_new_chessboard["grid"],"grid")
+        count_changes("left")
+        count_changes("right")
+        count_changes("grid") 
 
-        move = None
-        start_piece = ""
-        end_piece = ""
+        # caso di una mossa normale
+        if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["-"])==0 ):
+            piece = self.get_piece( changes["-"][0] )
+            self.set_piece( changes["-"][0], None )
+            self.set_piece( changes["+"][0], piece )
 
-        if (len(changes["+"])==1 and len(changes["-"])==1):
-
-            start_piece = self.get(cord_numeric=changes["-"][0])
-            end_piece = self.get(cord_numeric=changes["+"][0])
-
-            start_cord = t_cord(cord_numeric=changes["-"][0])
-            end_cord = t_cord(cord_numeric=changes["+"][0])
-
-            #TODO: in base al tipo di mossa: taking, promotion modificare la mossa aggiungendo "x" o "="
-            move = t_move(start_piece+"-"+start_cord.get_string()+"-"+end_cord.get_string())
+        elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["-"])==1 ):
             
-        return move
+            pusher_piece = self.get_piece( changes["-"][0] )
+            pushed_piece = self.get_piece( changes["/"][0] )
+
+            self.set_piece( changes["-"][0], None )
+            self.set_piece( changes["/"][0], pusher_piece )
+            self.set_piece( changes["+"][0], pushed_piece )
+
+        print(np.array(bool_new_chessboard["left"]))
+        print(np.array(bool_new_chessboard["grid"]))
+        print(np.array(bool_new_chessboard["right"]))
+
+        print(changes)
+
         
     def __str__(self):
         string = "==================\n"
-        for i in self.chessboard["bpn"]:
+        for i in self.chessboard["left"]:
             for j in i:
                 string += j
             string += "\n"
@@ -210,7 +218,7 @@ class Chessboard():
 
         string += " a b c d e f g h\n"
         string += "==================\n"
-        for i in self.chessboard["wpn"]:
+        for i in self.chessboard["right"]:
             for j in i:
                 string += j
             string += "\n"
@@ -225,16 +233,31 @@ if __name__ == '__main__':
     chessboard = Chessboard()
 
     dicbool = {
-        "wpn" : np.full((2,8), True),
-        "bpn" : np.full((2,8), True),
-        "grid" : np.full((8,8), False)
+        "left" : np.full((8,2), 1),
+        "right" : np.full((8,2), 2),
+        "grid" : np.full((8,8), 0)
     }
-    dicbool["wpn"][0][4] = False
-    dicbool["grid"][3][5] = True
 
-    print(chessboard)
+    dicbool["left"][0][0] = 2
+    dicbool["right"][0][0] = 0
+    dicbool["grid"][0][0] = 1
+
     chessboard.see_move(dicbool)
-    print(chessboard)
+
+    #chessboard.move(t_move(string_form="wK-la1-e4"))
+    #print(chessboard)
+
+    # dicbool = {
+    #     "wpn" : np.full((2,8), True),
+    #     "bpn" : np.full((2,8), True),
+    #     "grid" : np.full((8,8), False)
+    # }
+    # dicbool["wpn"][0][4] = False
+    # dicbool["grid"][3][5] = True
+
+    # print(chessboard)
+    # chessboard.see_move(dicbool)
+    # print(chessboard)
     #print(chessboard)
     #chessboard.see_move(dicbool)
     #chessboard.move(t_move("bK-bpnb2-e8"))

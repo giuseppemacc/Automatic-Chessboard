@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from ImageProcessing.PieceRecognition.isPiece import isPiece
-#from PieceRecognition.isPiece import isPiece
+#from PieceRecognition.isPiece import isPiece, getColour
 
 WIDTH, HEIGHT = 1024,652
 
@@ -109,9 +109,9 @@ def cropImage(img):
 
 def binarizes(dic_images):
     return{
-        "bpn": [ [isPiece(x_img) for x_img in y_img] for y_img in dic_images["right"]],
-        "wpn":  [ [isPiece(x_img) for x_img in y_img] for y_img in dic_images["left" ]],
-        "grid":  [ [isPiece(x_img) for x_img in y_img] for y_img in dic_images["grid" ]]
+        "right": [ [getColour(x_img) for x_img in y_img] for y_img in dic_images["right"]],
+        "left":  [ [getColour(x_img) for x_img in y_img] for y_img in dic_images["left" ]],
+        "grid":  [ [getColour(x_img) for x_img in y_img] for y_img in dic_images["grid" ]]
     }
 
 def see_Chessboard():
@@ -123,9 +123,9 @@ def see_Chessboard():
 
 
 
-# if __name__ == "__main__":
-#     warped_img = warpChessboard("images\shoot.jpg")
-#     crop_img = cropImage(warped_img)
-#     dic_bin_chessboard = binarizes(crop_img)
-#     cv2.waitKey()
-#     print(dic_bin_chessboard)
+if __name__ == "__main__":
+    warped_img = warpChessboard("images\shoot.jpg")
+    crop_img = cropImage(warped_img)
+    dic_bin_chessboard = binarizes(crop_img)
+    cv2.waitKey()
+    print(dic_bin_chessboard)

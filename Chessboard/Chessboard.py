@@ -197,7 +197,9 @@ class Chessboard():
         print(np.array(bool_new_chessboard["grid"]))
         print(np.array(bool_new_chessboard["right"]))
 
-        print(changes)
+        print(changes["+"][0].get_index_form())
+        print(changes["-"][0].get_index_form())
+        print(changes["/"][0].get_index_form())
 
         
     def __str__(self):

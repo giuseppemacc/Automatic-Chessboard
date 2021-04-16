@@ -15,7 +15,7 @@ class Chessboard():
                 - grid / griglia
             contenute nel dizionario chessboard
         """
-        self.stockfish = Stockfish("Chessboard/stockfish_20090216_x64")
+        #self.stockfish = Stockfish("Chessboard/stockfish_20090216_x64")
 
         self.castling = "-"
         self.en_passant = "-"

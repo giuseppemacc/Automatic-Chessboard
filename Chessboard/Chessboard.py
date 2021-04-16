@@ -197,36 +197,44 @@ class Chessboard():
         print(np.array(bool_new_chessboard["grid"]))
         print(np.array(bool_new_chessboard["right"]))
 
-        print(changes["+"][0].get_index_form())
-        print(changes["-"][0].get_index_form())
-        print(changes["/"][0].get_index_form())
+        #print(changes["+"][0].get_index_form())
+        #print(changes["-"][0].get_index_form())
+        #print(changes["/"][0].get_index_form())
 
         
     def __str__(self):
-        string = "==================\n"
-        for i in self.chessboard["left"]:
-            for j in i:
-                string += j
-            string += "\n"
-        string += "==================\n"
+        # string = "==================\n"
+        # for i in self.chessboard["left"]:
+        #     for j in i:
+        #         string += j
+        #     string += "\n"
+        # string += "==================\n"
 
-        count = 8
-        for i in self.chessboard["grid"]:
-            string += str(count)
-            for j in i:
-                string += j
-            string += "\n"
-            count -= 1
+        # count = 8
+        # for i in self.chessboard["grid"]:
+        #     string += str(count)
+        #     for j in i:
+        #         string += j
+        #     string += "\n"
+        #     count -= 1
 
-        string += " a b c d e f g h\n"
-        string += "==================\n"
-        for i in self.chessboard["right"]:
-            for j in i:
-                string += j
-            string += "\n"
-        string += "==================\n"
+        # string += " a b c d e f g h\n"
+        # string += "==================\n"
+        # for i in self.chessboard["right"]:
+        #     for j in i:
+        #         string += j
+        #     string += "\n"
+        # string += "==================\n"
         
-        return string
+        #return string
+
+        string = "==================\n"
+        string += str(np.array(self.chessboard["left"]))
+        string = "\n==================\n"
+        string += str(np.array(self.chessboard["grid"]))
+        string = "\n==================\n"
+        string += str(np.array(self.chessboard["right"]))
+        string = "\n==================\n"
 
 if __name__ == '__main__':
     """

@@ -55,7 +55,7 @@ def getColour(img):
         count_blue = notEmpty_pixel(blueMask_img)
         count_red = notEmpty_pixel(redMask_img)
 
-        #print("blue: ", count_blue, "  red:", count_red)
+        print("blue: ", count_blue, "  red:", count_red)
 
         if count_blue >= count_red:
             return 1

@@ -1,5 +1,5 @@
 from Chessboard.type.t_cord import t_cord
-from Chessboard.type.t_move import t_move
+#from Chessboard.type.t_move import t_move
 #from type.t_cord import t_cord
 #from type.t_move import t_move
 from stockfish import Stockfish
@@ -15,7 +15,7 @@ class Chessboard():
                 - grid / griglia
             contenute nel dizionario chessboard
         """
-        self.stockfish = Stockfish("stockfish_20090216_x64")
+        self.stockfish = Stockfish("Chessboard/stockfish_20090216_x64")
 
         self.castling = "-"
         self.en_passant = "-"

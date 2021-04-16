@@ -236,6 +236,8 @@ class Chessboard():
         string += str(np.array(self.chessboard["right"]))
         string = "\n==================\n"
 
+        return string
+
 if __name__ == '__main__':
     """
     esempio di utilizzo

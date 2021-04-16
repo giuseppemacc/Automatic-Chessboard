@@ -1,7 +1,7 @@
-#from Chessboard.type.t_cord import t_cord
-#from Chessboard.type.t_move import t_move
-from type.t_cord import t_cord
-from type.t_move import t_move
+from Chessboard.type.t_cord import t_cord
+from Chessboard.type.t_move import t_move
+#from type.t_cord import t_cord
+#from type.t_move import t_move
 from stockfish import Stockfish
 
 import numpy as np

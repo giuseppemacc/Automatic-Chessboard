@@ -48,7 +48,8 @@ class Game(Connection):
     # Game functions
     
     def initGame(self):
-        self.send_ble_Chessboard(all_chessboard=True)
+        pass
+        #self.send_ble_Chessboard(all_chessboard=True)
     
     def PosizionamentoLibero(self):
         
@@ -61,14 +62,14 @@ class Game(Connection):
         shoot()
         dicbool_chessboard = self.see_Chessboard()
 
-        print("----New Chessboard----")
-        
-        print("GRID:")
-        print(np.array(dicbool_chessboard["grid"]))
-        print("BPN (RIGHT):")
-        print(np.array(dicbool_chessboard["bpn"]))
-        print("WPN (LEFT):")
-        print(np.array(dicbool_chessboard["wpn"]))
+        #print("----New Chessboard----")
+        #
+        #print("GRID:")
+        #print(np.array(dicbool_chessboard["grid"]))
+        #print("BPN (RIGHT):")
+        #print(np.array(dicbool_chessboard["bpn"]))
+        #print("WPN (LEFT):")
+        #print(np.array(dicbool_chessboard["wpn"]))
 
         time.sleep(0.5)
 

@@ -1,8 +1,9 @@
-from Chessboard.type.t_cord import t_cord
+#from Chessboard.type.t_cord import t_cord
 #from Chessboard.type.t_move import t_move
-#from type.t_cord import t_cord
+from type.t_cord import t_cord
 #from type.t_move import t_move
-from stockfish import Stockfish
+import chess
+import chess.engine
 
 import numpy as np
 
@@ -17,13 +18,19 @@ class Chessboard():
         """
         #self.stockfish = Stockfish("Chessboard/stockfish_20090216_x64")
 
+        self.player = "w"
         self.castling = "-"
         self.en_passant = "-"
         self.half_move_counter = 0
-        self.move_counter = 0
+        self.move_counter = 1
 
         self.fen_position = ""
 
+        self.engine = chess.engine.SimpleEngine.popen_uci("stockfish_20090216_x64.exe")
+        self.board = chess.Board()
+
+
+        
 
         self.chessboard = {
             # TODO aggiungere un inizializzazione di wpn e bpn da due file .txt
@@ -76,51 +83,63 @@ class Chessboard():
 
         return self.chessboard[string_type][y][x]
 
-    def get_fen_position(self):
-        pass
+    def refresh_fen_position(self):
+        # 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1'
+        string = ""
+        for y in range(8):
+            count = 0
+            for x in range(8):
+                square = self.chessboard["grid"][y][x]
+                if square == " ":
+                    count += 1
+                    if x == 7:
+                        string += str(count)
+                else:
+                    if count !=0:
+                        string += str(count) + square
+                        count = 0
+                    else:
+                        string += square
+            if y != 7:
+                string += "/"
 
+        string += f" {self.player} {self.castling} {self.en_passant} {self.half_move_counter} {self.move_counter}"
+
+        self.fen_position = string
+        self.board = chess.Board(self.fen_position)
+
+    def board_byfen_postion(self, fen_position):
+        fen_list = fen_position.split("/")
+        temp = fen_list[-1].split(" ")
+        fen_list[-1] = temp[0]
+
+        self.player = temp[1]
+        self.castling = temp[2]
+        self.en_passant = temp[3]
+        self.half_move_counter = int(temp[4])
+        self.move = int(temp[5])
+
+        print(fen_list)
+
+        for y in range(8):
+            count = 0
+            for x in range(len(fen_list[y])):
+                char = fen_list[y][x]
+                if char.isnumeric():
+                    for i in range(int(char)):
+                        self.chessboard["grid"][y][x+i] = " "
+                else:
+                    self.chessboard["grid"][y][x] = char
+                
     def get_best_move(self):
-        pass
-        # get_fen_position
-        # poi in base alla fen position ricavata la mossa migliore
-        # ritorna la mossa
+        self.refresh_fen_position()
+        
+        move = str(engine.play(self.board, chess.engine.Limit(time=2.0)).move)
+        print(move)
+
 
     def move(self, move):
-        piece, start_cord, end_cord, types = move.get_cord_form()
-
-        if "castling_short" in types:
-            if "black" in types:
-                self.set(t_cord("e8"),None)
-                self.set(t_cord("g8"),"bK")
-                self.set(t_cord("h8"),None)
-                self.set(t_cord("f8"),"bR")
-            else:
-                self.set(t_cord("e1"),None)
-                self.set(t_cord("g1"),"wK")
-                self.set(t_cord("h1"),None)
-                self.set(t_cord("f1"),"wR")
-        elif "castling_long" in types:
-            if "black" in types:
-                self.set(t_cord("e8"),None)
-                self.set(t_cord("c8"),"bK")
-                self.set(t_cord("a8"),None)
-                self.set(t_cord("d8"),"bR")
-            else:
-                self.set(t_cord("e1"),None)
-                self.set(t_cord("c1"),"wK")
-                self.set(t_cord("a1"),None)
-                self.set(t_cord("d1"),"wR")
-        else:
-            self.set(start_cord,None)
-            self.set(end_cord,piece)
-
-            if "en_passant" in types:
-                x,y = end_cord.get_index_form()[1]
-
-                if "black" in types:
-                    self.set(t_cord(index_form=["grid",[x,y-1]]), None)
-                elif "white" in types:
-                    self.set(t_cord(index_form=["grid",[x,y+1]]), None)
+        pass
     
     def see_move(self, dicbool):
         def is_notEmpty(a):
@@ -203,31 +222,6 @@ class Chessboard():
 
         
     def __str__(self):
-        # string = "==================\n"
-        # for i in self.chessboard["left"]:
-        #     for j in i:
-        #         string += j
-        #     string += "\n"
-        # string += "==================\n"
-
-        # count = 8
-        # for i in self.chessboard["grid"]:
-        #     string += str(count)
-        #     for j in i:
-        #         string += j
-        #     string += "\n"
-        #     count -= 1
-
-        # string += " a b c d e f g h\n"
-        # string += "==================\n"
-        # for i in self.chessboard["right"]:
-        #     for j in i:
-        #         string += j
-        #     string += "\n"
-        # string += "==================\n"
-        
-        #return string
-
         string = "==================\n"
         string += str(np.array(self.chessboard["left"]))
         string += "\n==================\n"
@@ -244,17 +238,25 @@ if __name__ == '__main__':
     """
     chessboard = Chessboard()
 
-    dicbool = {
-        "left" : np.full((8,2), 1),
-        "right" : np.full((8,2), 2),
-        "grid" : np.full((8,8), 0)
-    }
+    # dicbool = {
+        # "left" : np.full((8,2), 1),
+        # "right" : np.full((8,2), 2),
+        # "grid" : np.full((8,8), 0)
+    # }
+# 
+    # dicbool["left"][0][0] = 2
+    # dicbool["right"][0][0] = 0
+    # dicbool["grid"][0][0] = 1
+# 
+    # chessboard.see_move(dicbool)
+# 
+    # chessboard.refresh_fen_position()
+# 
+    #print(chessboard)
+    # print(chessboard.fen_position)
 
-    dicbool["left"][0][0] = 2
-    dicbool["right"][0][0] = 0
-    dicbool["grid"][0][0] = 1
-
-    chessboard.see_move(dicbool)
+    chessboard.board_byfen_postion('rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1')
+    print(chessboard)
 
     #chessboard.move(t_move(string_form="wK-la1-e4"))
     #print(chessboard)

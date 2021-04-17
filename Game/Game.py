@@ -77,6 +77,8 @@ class Game(Connection):
         print(self.chessboard)
         move = self.chessboard.get_best_move()
         self.chessboard.move(move)
+        print("\n\n")
+        print(self.chessboard)
 
         #self.send_ble_Chessboard()
 

@@ -13,22 +13,22 @@ BLUE_UPPER = [255,255,49]
 BLUE_LOWER = [88,0,0]
 
 
-def isPiece(img, neural_net):
+def isPiece(img):
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # cv2.imshow("",img)
     # cv2.waitKey()
 
-    # neural_net = PieceRecognition()
-    # neural_net.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
+    neural_net = PieceRecognition()
+    neural_net.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
     #neural_net.load_state_dict(torch.load("PieceRecognition/models/model50.pt"))
 
     pattern = getPattern(img, neural_net)
     print(pattern)
     return pattern
 
-def getColour(img, neural_net):
-    value = isPiece(img, neural_net)
+def getColour(img):
+    value = isPiece(img)
 
     if value == 1:
         def colourMask(lower, upper):

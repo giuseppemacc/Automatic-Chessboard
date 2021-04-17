@@ -115,9 +115,9 @@ def cropImage(img):
 
 def binarizes(dic_images):
     return{
-        "right": [ [getColour(x_img, PIECE_RECOGNITION) for x_img in y_img] for y_img in dic_images["right"]],
-        "left":  [ [getColour(x_img, PIECE_RECOGNITION) for x_img in y_img] for y_img in dic_images["left" ]],
-        "grid":  [ [getColour(x_img, PIECE_RECOGNITION) for x_img in y_img] for y_img in dic_images["grid" ]]
+        "right": [ [getColour(x_img ) for x_img in y_img] for y_img in dic_images["right"]],
+        "left":  [ [getColour(x_img ) for x_img in y_img] for y_img in dic_images["left" ]],
+        "grid":  [ [getColour(x_img ) for x_img in y_img] for y_img in dic_images["grid" ]]
     }
 
 def see_Chessboard():

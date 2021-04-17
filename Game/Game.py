@@ -1,6 +1,6 @@
 from Game.Connection import Connection
 from Chessboard.Chessboard import Chessboard
-from ImageProcessing.ImageProcessing import binarizes, warpChessboard, cropImage
+from ImageProcessing.ImageProcessing import binarizes, warpChessboard, cropImage, see_Chessboard
 from PIL import Image
 import time
 from os import system
@@ -60,7 +60,7 @@ class Game(Connection):
         # inviare la scacchiera tramite ble
         
         shoot()
-        dicbool_chessboard = self.see_Chessboard()
+        dicbool_chessboard = see_Chessboard()
 
         #print("----New Chessboard----")
         #
@@ -110,11 +110,4 @@ class Game(Connection):
         else:
             self.send_ble(f"CB-{string_type}-{y}-{x}-{piece}")
             time.sleep(0.01)
-
-    def see_Chessboard(self):
-        warped_img = warpChessboard("shoot.jpg")
-        crop_img = cropImage(warped_img)
-        dic_bin_chessboard = binarizes(crop_img)
-
-        return dic_bin_chessboard
 

@@ -1,9 +1,9 @@
-#from Chessboard.type.t_cord import t_cord
+from Chessboard.type.t_cord import t_cord
 #from Chessboard.type.t_move import t_move
-from type.t_cord import t_cord
+#from type.t_cord import t_cord
 #from type.t_move import t_move
-import chess
-import chess.engine
+import stockfish
+
 
 import numpy as np
 
@@ -16,7 +16,7 @@ class Chessboard():
                 - grid / griglia
             contenute nel dizionario chessboard
         """
-        #self.stockfish = Stockfish("Chessboard/stockfish_20090216_x64")
+        self.stockfish = stockfish.Stockfish("./Chessboard/stockfish")
 
         self.player = "w"
         self.castling = "-"
@@ -26,8 +26,8 @@ class Chessboard():
 
         self.fen_position = ""
 
-        self.engine = chess.engine.SimpleEngine.popen_uci("stockfish_20090216_x64.exe")
-        self.board = chess.Board()
+        #self.engine = chess.engine.SimpleEngine.popen_uci("stockfish_20090216_x64.exe")
+        #self.board = chess.Board()
 
 
         
@@ -106,7 +106,7 @@ class Chessboard():
         string += f" {self.player} {self.castling} {self.en_passant} {self.half_move_counter} {self.move_counter}"
 
         self.fen_position = string
-        self.board = chess.Board(self.fen_position)
+        self.stockfish.set_fen_position(self.fen_position)
 
     def board_byfen_postion(self, fen_position):
         fen_list = fen_position.split("/")
@@ -134,7 +134,7 @@ class Chessboard():
     def get_best_move(self):
         self.refresh_fen_position()
         
-        move = str(engine.play(self.board, chess.engine.Limit(time=2.0)).move)
+        move = self.stockfish.get_best_move_time(1000) #str(engine.play(self.board, chess.engine.Limit(time=2.0)).move)
         print(move)
 
 

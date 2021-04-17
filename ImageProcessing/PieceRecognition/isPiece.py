@@ -1,12 +1,10 @@
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
-from .PieceRecognition import PieceRecognition, getPattern
 from ImageProcessing.PieceRecognition.PieceRecognition import PieceRecognition, getPattern
 #from PieceRecognition.PieceRecognition import PieceRecognition, getPattern
 import cv2
 
-from ImageProcessing.ImageProcessing import PIECE_RECOGNITION
 
 RED_UPPER = [251,69,255]
 RED_LOWER = [0,0,81]
@@ -15,7 +13,7 @@ BLUE_UPPER = [255,255,49]
 BLUE_LOWER = [88,0,0]
 
 
-def isPiece(img):
+def isPiece(img, neural_net):
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # cv2.imshow("",img)
@@ -25,12 +23,12 @@ def isPiece(img):
     # neural_net.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
     #neural_net.load_state_dict(torch.load("PieceRecognition/models/model50.pt"))
 
-    pattern = getPattern(img, PIECE_RECOGNITION)
+    pattern = getPattern(img, neural_net)
     print(pattern)
     return pattern
 
-def getColour(img):
-    value = isPiece(img)
+def getColour(img, neural_net):
+    value = isPiece(img, neural_net)
 
     if value == 1:
         def colourMask(lower, upper):

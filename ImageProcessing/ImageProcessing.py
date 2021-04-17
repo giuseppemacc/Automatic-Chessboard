@@ -7,7 +7,7 @@ import torch
 #from PieceRecognition.isPiece import isPiece, getColour
 
 PIECE_RECOGNITION = PieceRecognition()
-PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
+
 
 WIDTH, HEIGHT = 1024,652
 
@@ -115,12 +115,13 @@ def cropImage(img):
 
 def binarizes(dic_images):
     return{
-        "right": [ [getColour(x_img) for x_img in y_img] for y_img in dic_images["right"]],
-        "left":  [ [getColour(x_img) for x_img in y_img] for y_img in dic_images["left" ]],
-        "grid":  [ [getColour(x_img) for x_img in y_img] for y_img in dic_images["grid" ]]
+        "right": [ [getColour(x_img, PIECE_RECOGNITION) for x_img in y_img] for y_img in dic_images["right"]],
+        "left":  [ [getColour(x_img, PIECE_RECOGNITION) for x_img in y_img] for y_img in dic_images["left" ]],
+        "grid":  [ [getColour(x_img, PIECE_RECOGNITION) for x_img in y_img] for y_img in dic_images["grid" ]]
     }
 
 def see_Chessboard():
+    PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
     warped_img = warpChessboard("shoot.jpg")
     crop_img = cropImage(warped_img)
     dic_bin_chessboard = binarizes(crop_img)

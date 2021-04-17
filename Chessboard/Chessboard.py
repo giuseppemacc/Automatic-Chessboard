@@ -171,6 +171,11 @@ class Chessboard():
         move = self.stockfish.get_best_move_time(1000) #str(engine.play(self.board, chess.engine.Limit(time=2.0)).move)
         print(move)
 
+    def change_player(self):
+        if self.player == "w":
+            self.player = "b"
+        elif self.player == "b":
+            self.player = "w"
 
     def move(self, move):
         pass
@@ -237,6 +242,8 @@ class Chessboard():
             self.set_piece( changes["-"][0], None )
             self.set_piece( changes["+"][0], piece )
 
+            self.change_player()
+
         elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==1 ):
             
             pusher_piece = self.get_piece( changes["-"][0] )
@@ -246,13 +253,12 @@ class Chessboard():
             self.set_piece( changes["/"][0], pusher_piece )
             self.set_piece( changes["+"][0], pushed_piece )
 
+            self.change_player()
+
         print(np.array(bool_new_chessboard["left"]))
         print(np.array(bool_new_chessboard["grid"]))
         print(np.array(bool_new_chessboard["right"]))
 
-        #print(changes["+"][0].get_index_form())
-        #print(changes["-"][0].get_index_form())
-        #print(changes["/"][0].get_index_form())
 
         
     def __str__(self):
@@ -294,32 +300,3 @@ if __name__ == '__main__':
 
     #chessboard.move(t_move(string_form="wK-la1-e4"))
     #print(chessboard)
-
-    # dicbool = {
-    #     "wpn" : np.full((2,8), True),
-    #     "bpn" : np.full((2,8), True),
-    #     "grid" : np.full((8,8), False)
-    # }
-    # dicbool["wpn"][0][4] = False
-    # dicbool["grid"][3][5] = True
-
-    # print(chessboard)
-    # chessboard.see_move(dicbool)
-    # print(chessboard)
-    #print(chessboard)
-    #chessboard.see_move(dicbool)
-    #chessboard.move(t_move("bK-bpnb2-e8"))
-    #chessboard.move(t_move("bR-bpnc1-a8"))
-    #chessboard.move(t_move("wK-wpnb2-e1"))
-    #chessboard.move(t_move("wR-wpnc1-h1"))
-    #chessboard.move(t_move("bR-bpnc2-h8"))
-    #chessboard.move(t_move("wR-bpnc2-a1"))
-    #chessboard.move(t_move("bO-O"))
-    #chessboard.move(t_move("wO-O-O"))
-    #cord = t_cord(cord_numeric=["wpn",[0,4]])
-    #print(cord)
-    #print(cord.get_numeric())
-    #chessboard.set(cord, "wV")
-    #print(chessboard)
-    #print(chessboard.get(cord_numeric=["wpn",[0,4]]))
-    #print(chessboard.get(cord=cord))

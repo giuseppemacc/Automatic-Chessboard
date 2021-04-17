@@ -168,8 +168,68 @@ class Chessboard():
     def get_best_move(self):
         self.refresh_fen_position()
         
-        move = self.stockfish.get_best_move_time(1000) #str(engine.play(self.board, chess.engine.Limit(time=2.0)).move)
+        move = self.stockfish.get_best_move_time(1000)
+        
         print(move)
+        return move
+
+    def cord_piece_default(self, piece):
+        cord = t_cord()
+
+        if piece.isupper():
+            if piece == "P":
+                y = 0
+                while self.get_piece(t_cord(index_form=["left",[y,1]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["left",[y,1]])
+            elif piece == "N":
+                y = 0
+                while self.get_piece(t_cord(index_form=["left",[y,0]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["left",[y,0]])
+            elif piece == "B":
+                y = 2
+                while self.get_piece(t_cord(index_form=["left",[y,0]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["left",[y,0]])
+            elif piece == "R":
+                y = 4
+                while self.get_piece(t_cord(index_form=["left",[y,0]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["left",[y,0]])
+            elif piece == "Q":
+                cord = t_cord(index_form=["left",[6,0]])
+            elif piece == "K":
+                cord = t_cord(index_form=["left",[7,0]])
+
+        else:
+            if piece == "p":
+                y = 0
+                while self.get_piece(t_cord(index_form=["right",[y,0]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["right",[y,0]])
+            elif piece == "n":
+                y = 0
+                while self.get_piece(t_cord(index_form=["right",[y,1]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["right",[y,1]])
+            elif piece == "b":
+                y = 2
+                while self.get_piece(t_cord(index_form=["right",[y,1]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["right",[y,1]])
+            elif piece == "r":
+                y = 4
+                while self.get_piece(t_cord(index_form=["right",[y,1]])) == " ":
+                    y+=1
+                cord = t_cord(index_form=["right",[y,1]])
+            elif piece == "q":
+                cord = t_cord(index_form=["right",[6,1]])
+            elif piece == "k":
+                cord = t_cord(index_form=["right",[7,1]])
+
+        return cord
+        
 
     def change_player(self):
         if self.player == "w":
@@ -178,7 +238,24 @@ class Chessboard():
             self.player = "w"
 
     def move(self, move):
-        pass
+        self.change_player()
+
+        start_cord = t_cord(string_form = move[:2])
+        end_cord = t_cord(string_form = move[2:])
+
+        start_piece = self.get_piece(start_cord)
+        end_piece = self.get_piece(end_cord)
+
+        if end_piece == " ":
+            self.set_piece(start_cord, None)
+            self.set_piece(end_cord, start_piece)
+        else:
+            self.set_piece(start_cord, None)
+            self.set_piece(end_cord, start_piece)
+            self.set_piece(self.cord_piece_default(end_piece), end_piece)
+
+
+
     
     def see_move(self, dicbool):
         def is_notEmpty(a):

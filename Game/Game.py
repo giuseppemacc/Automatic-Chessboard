@@ -75,7 +75,8 @@ class Game(Connection):
 
         self.chessboard.see_move(dicbool_chessboard)
         print(self.chessboard)
-        self.chessboard.get_best_move()
+        move = self.chessboard.get_best_move()
+        self.chessboard.move(move)
 
         #self.send_ble_Chessboard()
 

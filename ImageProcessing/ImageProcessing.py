@@ -1,7 +1,13 @@
 import cv2
 import numpy as np
 from ImageProcessing.PieceRecognition.isPiece import isPiece, getColour
+from ImageProcessing.PieceRecognition.PieceRecognition import PieceRecognition
+import torch
+
 #from PieceRecognition.isPiece import isPiece, getColour
+
+PIECE_RECOGNITION = PieceRecognition()
+PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
 
 WIDTH, HEIGHT = 1024,652
 

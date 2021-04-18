@@ -1,13 +1,11 @@
 import cv2
 import numpy as np
-from ImageProcessing.PieceRecognition.isPiece import isPiece, getColour
 from ImageProcessing.PieceRecognition.PieceRecognition import PieceRecognition, getPattern
 import torch
 
 #from PieceRecognition.isPiece import isPiece, getColour
 
 PIECE_RECOGNITION = PieceRecognition()
-#PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
 
 RED_UPPER = [251,69,255]
 RED_LOWER = [0,0,81]
@@ -175,7 +173,6 @@ def see_Chessboard():
     dic_bin_chessboard = binarizes(crop_img)
 
     return dic_bin_chessboard
-
 
 
 if __name__ == "__main__":

@@ -1,10 +1,9 @@
 from Game.Connection import Connection
 from Chessboard.Chessboard import Chessboard
-from ImageProcessing.ImageProcessing import binarizes, warpChessboard, cropImage, see_Chessboard
-from PIL import Image
+from ImageProcessing.ImageProcessing import see_Chessboard
+from ImageProcessing.shoot import shoot
 import time
 from os import system
-from ImageProcessing.shoot import shoot
 import numpy as np
 
 class Game(Connection):

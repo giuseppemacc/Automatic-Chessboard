@@ -1,7 +1,4 @@
-from Chessboard.type.t_cord import t_cord
-#from Chessboard.type.t_move import t_move
-#from type.t_cord import t_cord
-#from type.t_move import t_move
+from Chessboard.t_cord import t_cord
 import stockfish
 
 
@@ -26,14 +23,9 @@ class Chessboard():
 
         self.fen_position = ""
 
-        #self.engine = chess.engine.SimpleEngine.popen_uci("stockfish_20090216_x64.exe")
-        #self.board = chess.Board()
-
-
         
 
         # self.chessboard = {
-        #     # TODO aggiungere un inizializzazione di wpn e bpn da due file .txt
         #     "grid": [
         #         [" "," "," "," "," "," "," "," "],
         #         [" "," "," "," "," "," "," "," "],
@@ -237,6 +229,7 @@ class Chessboard():
         elif self.player == "b":
             self.player = "w"
 
+    # partendo dalla mossa (calcolata da stockfish) modifica la scacchiera
     def move(self, move):
         self.change_player()
 
@@ -256,7 +249,7 @@ class Chessboard():
 
 
 
-    
+    # partendo dall'immagine binarizzati modifica la scacchiera
     def see_move(self, dicbool):
         def is_notEmpty(a):
             if a == " ":
@@ -313,7 +306,6 @@ class Chessboard():
         count_changes("right")
         count_changes("grid") 
 
-        # caso di una mossa normale
         if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==0 ):
             piece = self.get_piece( changes["-"][0] )
             self.set_piece( changes["-"][0], None )
@@ -340,11 +332,11 @@ class Chessboard():
         
     def __str__(self):
         string = "==================\n"
-        string += str(np.array(self.chessboard["left"]))
+        string += str(np.array(self.chessboard["right"]))
         string += "\n==================\n"
         string += str(np.array(self.chessboard["grid"]))
         string += "\n==================\n"
-        string += str(np.array(self.chessboard["right"]))
+        string += str(np.array(self.chessboard["left"]))
         string += "\n==================\n"
 
         return string
@@ -376,5 +368,3 @@ if __name__ == '__main__':
     chessboard.board_byfen_postion('rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1')
     print(chessboard)
 
-    #chessboard.move(t_move(string_form="wK-la1-e4"))
-    #print(chessboard)

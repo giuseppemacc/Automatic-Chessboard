@@ -4,7 +4,6 @@ import asyncio
 import concurrent
 import time
 from os import system
-from ImageProcessing.shoot import shoot
 
 
 class Connection():

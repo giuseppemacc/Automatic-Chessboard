@@ -51,37 +51,20 @@ class Game(Connection):
         #self.send_ble_Chessboard(all_chessboard=True)
     
     def PosizionamentoLibero(self):
-        
-        # scatta l'immagine
-        # binarizza
-        # fa see_move
-        # modificare scacchiera
-        # inviare la scacchiera tramite ble
-        
         shoot()
         dicbool_chessboard = see_Chessboard()
 
-        #print("----New Chessboard----")
-        #
-        #print("GRID:")
-        #print(np.array(dicbool_chessboard["grid"]))
-        #print("BPN (RIGHT):")
-        #print(np.array(dicbool_chessboard["bpn"]))
-        #print("WPN (LEFT):")
-        #print(np.array(dicbool_chessboard["wpn"]))
-
-        time.sleep(0.5)
-
         move = self.chessboard.see_move(dicbool_chessboard)
+        print(f"MOSSA fatta dal giocatore = {move}")
         self.chessboard.move(move)
-
         print(self.chessboard)
 
         move = self.chessboard.get_best_move()
+        print(f"MOSSA fatta da Stockfish = {move}")
         self.chessboard.move(move)
-        
-        print("\n\n")
         print(self.chessboard)
+        
+
 
         #self.send_ble_Chessboard()
 

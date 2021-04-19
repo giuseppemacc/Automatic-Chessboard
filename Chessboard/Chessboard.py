@@ -138,8 +138,7 @@ class Chessboard():
         self.refresh_fen_position()
         
         move = self.stockfish.get_best_move_time(1000)
-        
-        print(move)
+
         return move
 
     def cord_piece_default(self, piece):
@@ -208,7 +207,8 @@ class Chessboard():
 
     # partendo dalla mossa modifica la scacchiera
     def move(self, move):
-        print(self.stockfish.is_move_correct(move))
+        print(f"mossa {move}: {self.stockfish.is_move_correct(move)}")
+
         self.change_player()
 
         start_cord = t_cord(string_form = move[:2])
@@ -219,18 +219,26 @@ class Chessboard():
 
         # arrocco corto bianco
         if move == "e1g1":
+            self.set_piece(t_cord(string_form="e1"),None)
+            self.set_piece(t_cord(string_form="h1"),None)
             self.set_piece( t_cord(string_form="g1"), "K" )
             self.set_piece( t_cord(string_form="f1"), "R" )
         # arrocco lungo bianco
         elif move == "e1c1":
+            self.set_piece(t_cord(string_form="e1"),None)
+            self.set_piece(t_cord(string_form="a1"),None)
             self.set_piece( t_cord(string_form="c1"), "K" )
             self.set_piece( t_cord(string_form="d1"), "R" )
         # arrocco corto nero
         elif move == "e8g8":
+            self.set_piece(t_cord(string_form="e8"),None)
+            self.set_piece(t_cord(string_form="h8"),None)
             self.set_piece( t_cord(string_form="g8"), "k" )
             self.set_piece( t_cord(string_form="f8"), "r" )
         # arrocco lungo nero
         elif move == "e8c8":
+            self.set_piece(t_cord(string_form="e8"),None)
+            self.set_piece(t_cord(string_form="a8"),None)
             self.set_piece( t_cord(string_form="c8"), "k" )
             self.set_piece( t_cord(string_form="d8"), "r" )
         # spostamento standard
@@ -243,8 +251,6 @@ class Chessboard():
             self.set_piece(end_cord, start_piece)
             self.set_piece(self.cord_piece_default(end_piece), end_piece)
         
-
-
 
     # partendo dall'immagine binarizzati modifica la scacchiera
     def see_move(self, dicbool):
@@ -305,63 +311,39 @@ class Chessboard():
 
         move = ""
 
-        # spostamento normale
+        # spostamento standard
         if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==0 ):
             move = str(changes["-"][0].get_string_form()) + str(changes["+"][0].get_string_form())
 
-            # piece = self.get_piece( changes["-"][0] )
-            # self.set_piece( changes["-"][0], None )
-            # self.set_piece( changes["+"][0], piece )
-
-            # self.change_player()
         # cattura
         elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==1 ):
             move = str(changes["-"][0].get_string_form()) + str(changes["/"][0].get_string_form())
-            
-            # pusher_piece = self.get_piece( changes["-"][0] )
-            # pushed_piece = self.get_piece( changes["/"][0] )
 
-            # self.set_piece( changes["-"][0], None )
-            # self.set_piece( changes["/"][0], pusher_piece )
-            # self.set_piece( changes["+"][0], pushed_piece )
-
-            # self.change_player()
     
         elif (len(changes["+"])==2 and len(changes["-"])==2 and len(changes["/"])==0 ):
             cord_1, cord_2 = changes["+"]
-            
-            # self.set_piece( changes["-"][0], None )
-            # self.set_piece( changes["-"][1], None )
-
-            # self.change_player()
 
             # arrocco corto bianco
             if ([cord_1.get_string_form(),cord_2.get_string_form()] == ["f1","g1"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["g1","f1"] ):
                 move = "e1g1"   
-                # self.set_piece( t_cord(string_form="g1"), "K" )
-                # self.set_piece( t_cord(string_form="f1"), "R" )
+
             # arrocco lungo bianco
             elif ([cord_1.get_string_form(),cord_2.get_string_form()] == ["c1","d1"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["d1","c1"] ):
                 move = "e1c1"
-                # self.set_piece( t_cord(string_form="c1"), "K" )
-                # self.set_piece( t_cord(string_form="d1"), "R" )
+
             # arrocco corto nero
             elif ([cord_1.get_string_form(),cord_2.get_string_form()] == ["f8","g8"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["g8","f8"] ):
                 move = "e8g8"
-                # self.set_piece( t_cord(string_form="g8"), "k" )
-                # self.set_piece( t_cord(string_form="f8"), "r" )
+
             # arrocco lungo nero
             elif ([cord_1.get_string_form(),cord_2.get_string_form()] == ["c8","d8"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["d8","c8"] ):
                 move = "e8c8"
-                # self.set_piece( t_cord(string_form="c8"), "k" )
-                # self.set_piece( t_cord(string_form="d8"), "r" )
-            # en_passant
-            # non c'è per ora
 
+        print("-----CAMBIAMENTI----")
         print(np.array(bool_new_chessboard["left"]))
         print(np.array(bool_new_chessboard["grid"]))
         print(np.array(bool_new_chessboard["right"]))
-        print(move)
+        print("\n")
 
         return move
 

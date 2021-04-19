@@ -47,8 +47,7 @@ class Game(Connection):
     # Game functions
     
     def initGame(self):
-        pass
-        #self.send_ble_Chessboard(all_chessboard=True)
+        self.send_ble_Chessboard()
     
     def PosizionamentoLibero(self):
         shoot()
@@ -64,37 +63,44 @@ class Game(Connection):
         self.chessboard.move(move)
         print(self.chessboard)
         
+        self.send_ble_Chessboard()
 
+    def move_arm(self):
+        pass
 
-        #self.send_ble_Chessboard()
+    def send_ble_Chessboard(self):
+        #CB-LEFT-00P-001R...-RIGHT-O1K...-GRID-80N
+        string = "CB"
 
-    def send_ble_Chessboard(self, string_type="", x=0, y=0, piece="", all_chessboard = False):
-        if all_chessboard == True:
-            for _y in range(8):
-                for _x in range(8):
-                    piece = self.chessboard.chessboard["grid"][_y][_x]
-                    if piece == "░░" or piece == "██":
-                        piece = "xx"
-                    self.send_ble(f"CB-grid-{_y}-{_x}-{piece}")
-                    time.sleep(0.01)
+        string += "-LEFT"
+        for y in range(8):
+            for x in range(2):
+                piece = self.chessboard.chessboard["left"][y][x]
+                if piece.isupper():
+                    piece = "w"+piece
+                else:
+                    piece = "b"+piece
+                string += "-" + f"{y}{x}" + piece
 
-            for _y in range(2):
-                for _x in range(8):
-                    piece = self.chessboard.chessboard["bpn"][_y][_x]
-                    if piece == "░░" or piece == "██":
-                        piece = "xx"
-                    self.send_ble(f"CB-bpn-{_y}-{_x}-{piece}")
-                    time.sleep(0.01)
+        string += "-RIGHT"
+        for y in range(8):
+            for x in range(2):
+                piece = self.chessboard.chessboard["right"][y][x]
+                if piece.isupper():
+                    piece = "w"+piece
+                else:
+                    piece = "b"+piece
+                string += "-" + f"{y}{x}" + piece
 
-            for _y in range(2):
-                for _x in range(8):
-                    piece = self.chessboard.chessboard["wpn"][_y][_x]
-                    if piece == "░░" or piece == "██":
-                        piece = "xx"
-                    self.send_ble(f"CB-wpn-{_y}-{_x}-{piece}")
-                    time.sleep(0.01)
+        string += "-GRID"
+        for y in range(8):
+            for x in range(8):
+                piece = self.chessboard.chessboard["grid"][y][x]
+                if piece.isupper():
+                    piece = "w"+piece
+                else:
+                    piece = "b"+piece
+                string += "-" + f"{y}{x}" + piece
 
-        else:
-            self.send_ble(f"CB-{string_type}-{y}-{x}-{piece}")
-            time.sleep(0.01)
+        self.send_ble(string)
 

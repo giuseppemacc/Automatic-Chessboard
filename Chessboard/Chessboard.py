@@ -168,8 +168,9 @@ class Chessboard():
 
     # partendo dalla mossa modifica la scacchiera
     def move(self, move):
-        # aggiungere perdita dell'arrocco in caso di mossa di re o di torre
-        # aggiungere controllo dell arrocco disponibile prima di arroccare
+        #TODO: aggiungere perdita dell'arrocco in caso di mossa di re o di torre
+        #TODO: far ritornare a move anche le cordinate in cui muovere le pedine che poi verranno passate a move_arm (in Game) e che muoverà il braccio
+
         is_validMove = self.stockfish.is_move_correct(move)
         print(f"mossa {move}: {is_validMove}")
 
@@ -182,7 +183,7 @@ class Chessboard():
             end_piece = self.get_piece(end_cord)
 
             # arrocco corto bianco
-            if move == "e1g1":
+            if (move == "e1g1") and ("K" in self.castling):
                 self.set_piece(t_cord(string_form="e1"),None)
                 self.set_piece(t_cord(string_form="h1"),None)
                 self.set_piece( t_cord(string_form="g1"), "K" )
@@ -190,7 +191,7 @@ class Chessboard():
 
                 self.castling = self.castling.replace("K","")
             # arrocco lungo bianco
-            elif move == "e1c1":
+            elif move == "e1c1" and ("Q" in self.castling):
                 self.set_piece(t_cord(string_form="e1"),None)
                 self.set_piece(t_cord(string_form="a1"),None)
                 self.set_piece( t_cord(string_form="c1"), "K" )
@@ -198,7 +199,7 @@ class Chessboard():
 
                 self.castling = self.castling.replace("Q","")
             # arrocco corto nero
-            elif move == "e8g8":
+            elif move == "e8g8" and ("k" in self.castling):
                 self.set_piece(t_cord(string_form="e8"),None)
                 self.set_piece(t_cord(string_form="h8"),None)
                 self.set_piece( t_cord(string_form="g8"), "k" )
@@ -206,7 +207,7 @@ class Chessboard():
 
                 self.castling = self.castling.replace("k","")
             # arrocco lungo nero
-            elif move == "e8c8":
+            elif move == "e8c8" and ("q" in self.castling):
                 self.set_piece(t_cord(string_form="e8"),None)
                 self.set_piece(t_cord(string_form="a8"),None)
                 self.set_piece( t_cord(string_form="c8"), "k" )
@@ -321,11 +322,6 @@ class Chessboard():
         print("\n")
 
         return move
-
-
-
-
-
 
 
     def __str__(self):

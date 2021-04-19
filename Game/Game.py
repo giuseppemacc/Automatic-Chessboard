@@ -76,7 +76,9 @@ class Game(Connection):
         for y in range(8):
             for x in range(2):
                 piece = self.chessboard.chessboard["left"][y][x]
-                if piece.isupper():
+                if piece == " ":
+                    piece = "xx"
+                elif piece.isupper():
                     piece = "w"+piece
                 else:
                     piece = "b"+piece
@@ -86,7 +88,9 @@ class Game(Connection):
         for y in range(8):
             for x in range(2):
                 piece = self.chessboard.chessboard["right"][y][x]
-                if piece.isupper():
+                if piece == " ":
+                    piece = "xx"
+                elif piece.isupper():
                     piece = "w"+piece
                 else:
                     piece = "b"+piece
@@ -96,11 +100,15 @@ class Game(Connection):
         for y in range(8):
             for x in range(8):
                 piece = self.chessboard.chessboard["grid"][y][x]
-                if piece.isupper():
+                if piece == " ":
+                    piece = "xx"
+                elif piece.isupper():
                     piece = "w"+piece
                 else:
                     piece = "b"+piece
                 string += "-" + f"{y}{x}" + piece
 
+        print("bluetooth string chessboard:")
+        print(string)
         self.send_ble(string)
 

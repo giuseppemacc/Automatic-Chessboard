@@ -23,41 +23,6 @@ class Chessboard():
 
         self.fen_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
-        
-
-        # self.chessboard = {
-        #     "grid": [
-        #         [" "," "," "," "," "," "," "," "],
-        #         [" "," "," "," "," "," "," "," "],
-        #         [" "," "," "," "," "," "," "," "],
-        #         [" "," "," "," "," "," "," "," "], 
-        #         [" "," "," "," "," "," "," "," "],
-        #         [" "," "," "," "," "," "," "," "],
-        #         [" "," "," "," "," "," "," "," "],
-        #         [" "," "," "," "," "," "," "," "],
-        #     ],
-        #     "left": [
-        #         ["N","P"],
-        #         ["N","P"],
-        #         ["B","P"],
-        #         ["B","P"],
-        #         ["R","P"],
-        #         ["R","P"],
-        #         ["Q","P"],
-        #         ["K","P"],
-        #     ],
-        #     "right": [
-        #         ["p","n"],
-        #         ["p","n"],
-        #         ["p","b"],
-        #         ["p","b"],
-        #         ["p","r"],
-        #         ["p","r"],
-        #         ["p","q"],
-        #         ["p","k"],
-        #     ]                             
-        # }
-
         self.chessboard = {
             # TODO aggiungere un inizializzazione di wpn e bpn da due file .txt
             "grid": [
@@ -207,52 +172,57 @@ class Chessboard():
 
     # partendo dalla mossa modifica la scacchiera
     def move(self, move):
-        print(f"mossa {move}: {self.stockfish.is_move_correct(move)}")
+        # aggiungere perdita dell'arrocco in caso di mossa di re o di torre
+        # aggiungere controllo dell arrocco disponibile prima di arroccare
+        is_validMove = self.stockfish.is_move_correct(move)
+        print(f"mossa {move}: {is_validMove}")
 
-        self.change_player()
+        if is_validMove:
 
-        start_cord = t_cord(string_form = move[:2])
-        end_cord = t_cord(string_form = move[2:])
+            self.change_player()
 
-        start_piece = self.get_piece(start_cord)
-        end_piece = self.get_piece(end_cord)
+            start_cord = t_cord(string_form = move[:2])
+            end_cord = t_cord(string_form = move[2:])
 
-        # arrocco corto bianco
-        if move == "e1g1":
-            self.set_piece(t_cord(string_form="e1"),None)
-            self.set_piece(t_cord(string_form="h1"),None)
-            self.set_piece( t_cord(string_form="g1"), "K" )
-            self.set_piece( t_cord(string_form="f1"), "R" )
-        # arrocco lungo bianco
-        elif move == "e1c1":
-            self.set_piece(t_cord(string_form="e1"),None)
-            self.set_piece(t_cord(string_form="a1"),None)
-            self.set_piece( t_cord(string_form="c1"), "K" )
-            self.set_piece( t_cord(string_form="d1"), "R" )
-        # arrocco corto nero
-        elif move == "e8g8":
-            self.set_piece(t_cord(string_form="e8"),None)
-            self.set_piece(t_cord(string_form="h8"),None)
-            self.set_piece( t_cord(string_form="g8"), "k" )
-            self.set_piece( t_cord(string_form="f8"), "r" )
-        # arrocco lungo nero
-        elif move == "e8c8":
-            self.set_piece(t_cord(string_form="e8"),None)
-            self.set_piece(t_cord(string_form="a8"),None)
-            self.set_piece( t_cord(string_form="c8"), "k" )
-            self.set_piece( t_cord(string_form="d8"), "r" )
-        # spostamento standard
-        elif end_piece == " ":
-            self.set_piece(start_cord, None)
-            self.set_piece(end_cord, start_piece)
-        # cattura
-        else:
-            self.set_piece(start_cord, None)
-            self.set_piece(end_cord, start_piece)
-            self.set_piece(self.cord_piece_default(end_piece), end_piece)
-        
+            start_piece = self.get_piece(start_cord)
+            end_piece = self.get_piece(end_cord)
 
-    # partendo dall'immagine binarizzati modifica la scacchiera
+            # arrocco corto bianco
+            if move == "e1g1":
+                self.set_piece(t_cord(string_form="e1"),None)
+                self.set_piece(t_cord(string_form="h1"),None)
+                self.set_piece( t_cord(string_form="g1"), "K" )
+                self.set_piece( t_cord(string_form="f1"), "R" )
+            # arrocco lungo bianco
+            elif move == "e1c1":
+                self.set_piece(t_cord(string_form="e1"),None)
+                self.set_piece(t_cord(string_form="a1"),None)
+                self.set_piece( t_cord(string_form="c1"), "K" )
+                self.set_piece( t_cord(string_form="d1"), "R" )
+            # arrocco corto nero
+            elif move == "e8g8":
+                self.set_piece(t_cord(string_form="e8"),None)
+                self.set_piece(t_cord(string_form="h8"),None)
+                self.set_piece( t_cord(string_form="g8"), "k" )
+                self.set_piece( t_cord(string_form="f8"), "r" )
+            # arrocco lungo nero
+            elif move == "e8c8":
+                self.set_piece(t_cord(string_form="e8"),None)
+                self.set_piece(t_cord(string_form="a8"),None)
+                self.set_piece( t_cord(string_form="c8"), "k" )
+                self.set_piece( t_cord(string_form="d8"), "r" )
+            # spostamento standard
+            elif end_piece == " ":
+                self.set_piece(start_cord, None)
+                self.set_piece(end_cord, start_piece)
+            # cattura
+            else:
+                self.set_piece(start_cord, None)
+                self.set_piece(end_cord, start_piece)
+                self.set_piece(self.cord_piece_default(end_piece), end_piece)
+            
+
+    # partendo dall'immagine binarizzati ricava la mossa
     def see_move(self, dicbool):
         def is_notEmpty(a):
             if a == " ":
@@ -348,7 +318,11 @@ class Chessboard():
         return move
 
 
-        
+
+
+
+
+
     def __str__(self):
         string = "==================\n"
         string += str(np.array(self.chessboard["right"]))

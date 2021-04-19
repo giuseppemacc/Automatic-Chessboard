@@ -100,11 +100,7 @@ class Chessboard():
         self.stockfish.set_fen_position(self.fen_position)
                 
     def get_best_move(self):
-        self.refresh_fen_position()
-        
-        move = self.stockfish.get_best_move_time(1000)
-
-        return move
+        return self.stockfish.get_best_move_time(1000)
 
     def cord_piece_default(self, piece):
         cord = t_cord()
@@ -179,9 +175,6 @@ class Chessboard():
 
         if is_validMove:
 
-            self.change_player()
-            self.refresh_fen_position()
-
             start_cord = t_cord(string_form = move[:2])
             end_cord = t_cord(string_form = move[2:])
 
@@ -223,6 +216,9 @@ class Chessboard():
                 self.set_piece(start_cord, None)
                 self.set_piece(end_cord, start_piece)
                 self.set_piece(self.cord_piece_default(end_piece), end_piece)
+
+            self.change_player()
+            self.refresh_fen_position()
             
 
     # partendo dall'immagine binarizzati ricava la mossa

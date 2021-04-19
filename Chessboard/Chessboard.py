@@ -180,6 +180,7 @@ class Chessboard():
         if is_validMove:
 
             self.change_player()
+            self.refresh_fen_position()
 
             start_cord = t_cord(string_form = move[:2])
             end_cord = t_cord(string_form = move[2:])
@@ -193,6 +194,8 @@ class Chessboard():
                 self.set_piece(t_cord(string_form="h1"),None)
                 self.set_piece( t_cord(string_form="g1"), "K" )
                 self.set_piece( t_cord(string_form="f1"), "R" )
+
+                self.castling = self.castling.replace()
             # arrocco lungo bianco
             elif move == "e1c1":
                 self.set_piece(t_cord(string_form="e1"),None)

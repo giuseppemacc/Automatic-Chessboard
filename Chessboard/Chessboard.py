@@ -188,25 +188,31 @@ class Chessboard():
                 self.set_piece( t_cord(string_form="g1"), "K" )
                 self.set_piece( t_cord(string_form="f1"), "R" )
 
-                self.castling = self.castling.replace()
+                self.castling = self.castling.replace("K","")
             # arrocco lungo bianco
             elif move == "e1c1":
                 self.set_piece(t_cord(string_form="e1"),None)
                 self.set_piece(t_cord(string_form="a1"),None)
                 self.set_piece( t_cord(string_form="c1"), "K" )
                 self.set_piece( t_cord(string_form="d1"), "R" )
+
+                self.castling = self.castling.replace("Q","")
             # arrocco corto nero
             elif move == "e8g8":
                 self.set_piece(t_cord(string_form="e8"),None)
                 self.set_piece(t_cord(string_form="h8"),None)
                 self.set_piece( t_cord(string_form="g8"), "k" )
                 self.set_piece( t_cord(string_form="f8"), "r" )
+
+                self.castling = self.castling.replace("k","")
             # arrocco lungo nero
             elif move == "e8c8":
                 self.set_piece(t_cord(string_form="e8"),None)
                 self.set_piece(t_cord(string_form="a8"),None)
                 self.set_piece( t_cord(string_form="c8"), "k" )
                 self.set_piece( t_cord(string_form="d8"), "r" )
+
+                self.castling = self.castling.replace("q","")
             # spostamento standard
             elif end_piece == " ":
                 self.set_piece(start_cord, None)

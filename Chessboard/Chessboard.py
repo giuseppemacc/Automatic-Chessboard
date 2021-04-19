@@ -287,7 +287,7 @@ class Chessboard():
 
         # spostamento normale
         if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==0 ):
-            move = str(changes["-"].get_string_form()) + str(changes["+"].get_string_form())
+            move = str(changes["-"][0].get_string_form()) + str(changes["+"][0].get_string_form())
 
             piece = self.get_piece( changes["-"][0] )
             self.set_piece( changes["-"][0], None )
@@ -296,7 +296,7 @@ class Chessboard():
             self.change_player()
         # cattura
         elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==1 ):
-            move = str(changes["-"].get_string_form()) + str(changes["/"].get_string_form())
+            move = str(changes["-"][0].get_string_form()) + str(changes["/"][0].get_string_form())
             
             pusher_piece = self.get_piece( changes["-"][0] )
             pushed_piece = self.get_piece( changes["/"][0] )

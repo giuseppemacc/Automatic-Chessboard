@@ -21,7 +21,7 @@ class Chessboard():
         self.half_move_counter = 0
         self.move_counter = 1
 
-        self.fen_position = ""
+        self.fen_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
         
 
@@ -133,29 +133,6 @@ class Chessboard():
 
         self.fen_position = string
         self.stockfish.set_fen_position(self.fen_position)
-
-    def board_byfen_postion(self, fen_position):
-        fen_list = fen_position.split("/")
-        temp = fen_list[-1].split(" ")
-        fen_list[-1] = temp[0]
-
-        self.player = temp[1]
-        self.castling = temp[2]
-        self.en_passant = temp[3]
-        self.half_move_counter = int(temp[4])
-        self.move = int(temp[5])
-
-        print(fen_list)
-
-        for y in range(8):
-            count = 0
-            for x in range(len(fen_list[y])):
-                char = fen_list[y][x]
-                if char.isnumeric():
-                    for i in range(int(char)):
-                        self.chessboard["grid"][y][x+i] = " "
-                else:
-                    self.chessboard["grid"][y][x] = char
                 
     def get_best_move(self):
         self.refresh_fen_position()
@@ -306,14 +283,20 @@ class Chessboard():
         count_changes("right")
         count_changes("grid") 
 
+        move = ""
+
+        # spostamento normale
         if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==0 ):
+            move = str(changes["-"].get_string_form()) + str(changes["+"].get_string_form())
+
             piece = self.get_piece( changes["-"][0] )
             self.set_piece( changes["-"][0], None )
             self.set_piece( changes["+"][0], piece )
 
             self.change_player()
-
+        # cattura
         elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==1 ):
+            move = str(changes["-"].get_string_form()) + str(changes["/"].get_string_form())
             
             pusher_piece = self.get_piece( changes["-"][0] )
             pushed_piece = self.get_piece( changes["/"][0] )
@@ -323,10 +306,40 @@ class Chessboard():
             self.set_piece( changes["+"][0], pushed_piece )
 
             self.change_player()
+    
+        elif (len(changes["+"])==2 and len(changes["-"])==2 and len(changes["/"])==0 ):
+            cord_1, cord_2 = changes["+"]
+            
+            self.set_piece( changes["-"][0], None )
+            self.set_piece( changes["-"][1], None )
+
+            # arrocco corto bianco
+            if ([cord_1.get_string_form(),cord_2.get_string_form()] == ["f1","g1"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["g1","f1"] ):
+                move = "e1g1"
+                self.set_piece( t_cord(string_form="g1"), "K" )
+                self.set_piece( t_cord(string_form="f1"), "R" )
+            # arrocco lungo bianco
+            elif ([cord_1.get_string_form(),cord_2.get_string_form()] == ["c1","d1"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["d1","c1"] ):
+                move = "e1c1"
+                self.set_piece( t_cord(string_form="c1"), "K" )
+                self.set_piece( t_cord(string_form="d1"), "R" )
+            # arrocco corto nero
+            elif ([cord_1.get_string_form(),cord_2.get_string_form()] == ["f8","g8"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["g8","f8"] ):
+                move = "e8g8"
+                self.set_piece( t_cord(string_form="g8"), "k" )
+                self.set_piece( t_cord(string_form="f8"), "r" )
+            # arrocco lungo nero
+            elif ([cord_1.get_string_form(),cord_2.get_string_form()] == ["c8","d8"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["d8","c8"] ):
+                move = "e8c8"
+                self.set_piece( t_cord(string_form="c8"), "k" )
+                self.set_piece( t_cord(string_form="d8"), "r" )
+            # en_passant
+            # non c'è per ora
 
         print(np.array(bool_new_chessboard["left"]))
         print(np.array(bool_new_chessboard["grid"]))
         print(np.array(bool_new_chessboard["right"]))
+        print(move)
 
 
         

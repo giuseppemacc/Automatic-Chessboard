@@ -159,7 +159,6 @@ class Chessboard():
 
         return cord
         
-
     def change_player(self):
         if self.player == "w":
             self.player = "b"
@@ -167,7 +166,7 @@ class Chessboard():
             self.player = "w"
 
     # partendo dalla mossa modifica la scacchiera
-    def move(self, move):
+    def move(self, move, arm_move=False):
         #TODO: aggiungere perdita dell'arrocco in caso di mossa di re o di torre
         #TODO: far ritornare a move anche le cordinate in cui muovere le pedine che poi verranno passate a move_arm (in Game) e che muoverà il braccio
 
@@ -176,8 +175,13 @@ class Chessboard():
 
         if is_validMove:
 
+            moves_cord = []
+
             start_cord = t_cord(string_form = move[:2])
             end_cord = t_cord(string_form = move[2:])
+
+            index_start_cord = start_cord.get_index_form()
+            index_end_cord = end_cord.get_index_form()
 
             start_piece = self.get_piece(start_cord)
             end_piece = self.get_piece(end_cord)
@@ -218,14 +222,32 @@ class Chessboard():
             elif end_piece == " ":
                 self.set_piece(start_cord, None)
                 self.set_piece(end_cord, start_piece)
+
+                moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
             # cattura
             else:
                 self.set_piece(start_cord, None)
                 self.set_piece(end_cord, start_piece)
                 self.set_piece(self.cord_piece_default(end_piece), end_piece)
 
+                end_piece_defaul = self.cord_piece_default(end_piece).get_index_form()
+
+                string_type = end_piece_defaul[0]
+                y,x = end_piece_defaul[1]
+
+                index_type = 0
+                if string_type == "left":
+                    index_type = 1
+
+                moves_cord.append(f"M-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{index_type}{y}{x}-{end_piece}")
+                moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
+                
+
             self.change_player()
             self.refresh_fen_position()
+
+            if arm_move:
+                return moves_cord
             
 
     # partendo dall'immagine binarizzati ricava la mossa

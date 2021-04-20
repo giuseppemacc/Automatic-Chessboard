@@ -60,13 +60,14 @@ class Game(Connection):
 
         move = self.chessboard.get_best_move()
         print(f"MOSSA fatta da Stockfish = {move}")
-        self.chessboard.move(move)
+        arm_move = self.chessboard.move(move, arm_move=True)
         print(self.chessboard)
         
         self.send_ble_Chessboard()
 
-    def move_arm(self):
-        pass
+    def moveArm(self, arm_move):
+        for move in arm_move:
+            self.send_ser(move)
 
     def send_ble_Chessboard(self):
         #CB-LEFT-00P-001R...-RIGHT-O1K...-GRID-80N

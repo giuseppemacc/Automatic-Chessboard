@@ -81,7 +81,7 @@ class Connection():
 
     def send_ser(self,value):
         try:
-            self.ser_arduino.write(value)
+            self.ser_arduino.write(value.encode())
         except:
             self.reload()
     # ====================================================

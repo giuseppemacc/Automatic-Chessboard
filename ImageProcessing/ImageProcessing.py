@@ -124,11 +124,11 @@ def binarizes(dic_images):
     }
 
 def getColour(img):
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    value = getPattern(gray_img, PIECE_RECOGNITION)
-    print(value)
+    # gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # value = getPattern(gray_img, PIECE_RECOGNITION)
+    # print(value)
 
-    if value == 1:
+    if True:#value == 1:
         def colourMask(lower, upper):
             lower = np.array(lower, dtype = "uint8")
             upper = np.array(upper, dtype = "uint8")
@@ -155,14 +155,17 @@ def getColour(img):
 
         print("blue: ", count_blue, "  red:", count_red)
 
-        if count_blue >= count_red:
-            return 1
+        if count_blue>500 or count_red>500:
+            if count_blue >= count_red:
+                return 1
+            else:
+                return 2
         else:
-            return 2
+            return 0
         #cv2.imshow("images", np.hstack([img ,redMask_img, blueMask_img]))
         #cv2.waitKey(0)
-    else:
-        return value
+    #else:
+    #    return value
 
 def see_Chessboard(flip=False):
     PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))

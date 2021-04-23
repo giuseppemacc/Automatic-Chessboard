@@ -166,7 +166,7 @@ class Chessboard():
             self.player = "w"
 
     # partendo dalla mossa modifica la scacchiera
-    def move(self, move, player_move=False, arm_move=False):
+    def move(self, move, arm_move=False):
         #TODO: aggiungere perdita dell'arrocco in caso di mossa di re o di torre
         #TODO: far ritornare a move anche le cordinate in cui muovere le pedine che poi verranno passate a move_arm (in Game) e che muoverà il braccio
 

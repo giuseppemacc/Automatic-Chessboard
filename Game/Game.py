@@ -78,7 +78,7 @@ class Game(Connection):
 
         move = self.chessboard.see_move(dicbool_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")
-        self.chessboard.move(move, player_move=True)
+        self.chessboard.move(move)
         print(self.chessboard)
         self.send_ble_Chessboard()
 

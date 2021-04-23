@@ -7,14 +7,15 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import cv2
+from PIL import Image, ImageOps
 
 
 BUILD_DATA = False
 TRAIN = False
-TEST = False
+TEST = True
 
 IMG_SIZE = 77
-EPOCHS = 50
+EPOCHS = 200
 BATCH_SIZE = 100
 LR = 0.001
 
@@ -39,12 +40,11 @@ class DataSet():
             for f in tqdm(os.listdir(label)):
                 if "jpg" in f:
                     try:
-                        #path = os.path.join(label, f)
-                        #img = ImageOps.grayscale(Image.open(path).resize((IMG_SIZE,IMG_SIZE)))
-
                         path = os.path.join(label, f)
+                        # img = ImageOps.grayscale(Image.open(path).resize((IMG_SIZE,IMG_SIZE)))
+
                         img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-                        img = cv2.resize(img, (self.IMG_SIZE, self.IMG_SIZE))
+                        img = cv2.resize(img, (IMG_SIZE, IMG_SIZE), interpolation=cv2.INTER_AREA)
 
                         self.training_data.append([np.array(img), np.eye(2)[self.LABELS[label]]])
 
@@ -165,14 +165,15 @@ if __name__ == "__main__":
             
             train_dataset = np.load("DataSet/TRAIN/dataset.npy", allow_pickle=True)
             np.random.shuffle(train_dataset)
+            print(train_dataset)
 
             train(image_recognition, train_dataset)
 
         if TEST:
 
-            test_dataset = np.load("DataSet/TEST/dataset.npy", allow_pickle=True)
+            test_dataset = np.load("DataSet/TRAIN/dataset.npy", allow_pickle=True)
             np.random.shuffle(test_dataset)
 
-            image_recognition.load_state_dict(torch.load("models/model300.pt"))
+            image_recognition.load_state_dict(torch.load("models/model55.pt"))
             test(image_recognition, test_dataset)
     

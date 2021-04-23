@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 from ImageProcessing.PieceRecognition.PieceRecognition import PieceRecognition, getPattern
 import torch
+#from PieceRecognition.PieceRecognition import PieceRecognition, getPattern
 
-#from PieceRecognition.isPiece import isPiece, getColour
 
 PIECE_RECOGNITION = PieceRecognition()
 
@@ -177,8 +177,26 @@ def see_Chessboard(flip=False):
 
 
 if __name__ == "__main__":
-    warped_img = warpChessboard("images\shoot.jpg")
+    PIECE_RECOGNITION.load_state_dict(torch.load("PieceRecognition/models/model200.pt"))
+
+    img = cv2.imread("images/shoot7.jpg")
+
+    warped_img = warpChessboard(img)
     crop_img = cropImage(warped_img)
-    dic_bin_chessboard = binarizes(crop_img)
-    cv2.waitKey()
-    print(dic_bin_chessboard)
+    c = 672
+    for i in crop_img["left"]:
+        for j in i:
+            cv2.imwrite(f"images/data/{c}.jpg",j)
+            c+=1
+    for i in crop_img["right"]:
+        for j in i:
+            cv2.imwrite(f"images/data/{c}.jpg",j)
+            c+=1
+    for i in crop_img["grid"]:
+        for j in i:
+            cv2.imwrite(f"images/data/{c}.jpg",j)
+            c+=1
+
+    # dic_bin_chessboard = binarizes(crop_img)
+    # cv2.waitKey()
+    # print(dic_bin_chessboard)

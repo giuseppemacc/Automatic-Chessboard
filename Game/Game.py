@@ -42,11 +42,34 @@ class Game(Connection):
 
         if ble_val == "GPFREE":
             self.shoot_OnServal = self.PosizionamentoLibero
+        elif ble_val == "NG-W":
+            self.StandardGame("W")
+        elif ble_val == "NG-B":
+            self.StandardGame("B")
+
 
 
     # Game functions
     
     def initGame(self):
+        self.send_ble_Chessboard()
+
+    def StandardGame(self, pieces):
+        shoot()
+        dicbool_chessboard = see_Chessboard()
+
+        move = self.chessboard.see_move(dicbool_chessboard)
+        print(f"MOSSA fatta dal giocatore = {move}")
+        self.chessboard.move(move, player_move=True)
+        print(self.chessboard)
+        self.send_ble_Chessboard()
+
+        move = self.chessboard.get_best_move()
+        print(f"MOSSA fatta da Stockfish = {move}")
+        arm_move = self.chessboard.move(move, arm_move=True)
+        self.moveArm(arm_move)
+        print(self.chessboard)
+        
         self.send_ble_Chessboard()
     
     def PosizionamentoLibero(self):

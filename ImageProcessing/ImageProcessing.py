@@ -31,8 +31,7 @@ RIGHT_EXT_BORDER = 837
 
 SQUARE_SIZE = (77,77)
 
-def warpChessboard(path):
-    img = cv2.imread(path)
+def warpChessboard(img):
 
     pts1 = np.float32( [LEFT_TOP, RIGH_TOP, LEFT_BOTTOM, RIGH_BOTTOM] )
     pts2 = np.float32( [[0,0], [WIDTH,0], [0,HEIGHT], [WIDTH,HEIGHT]] )
@@ -165,10 +164,12 @@ def getColour(img):
     else:
         return value
 
-def see_Chessboard():
+def see_Chessboard(flip=False):
     PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
-
-    warped_img = warpChessboard("shoot.jpg")
+    img = cv2.imread("shoot.jpg")
+    if flip:
+        img = cv2.flip(img, 0)
+    warped_img = warpChessboard(img)
     crop_img = cropImage(warped_img)
     dic_bin_chessboard = binarizes(crop_img)
 

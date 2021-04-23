@@ -226,9 +226,10 @@ class Chessboard():
                 else:
                     self.set_piece(start_cord, None)
                     self.set_piece(end_cord, start_piece)
-                    self.set_piece(self.cord_piece_default(end_piece), end_piece)
 
                     if arm_move:
+                        self.set_piece(self.cord_piece_default(end_piece), end_piece)
+
                         end_piece_defaul = self.cord_piece_default(end_piece).get_index_form()
 
                         string_type = end_piece_defaul[0]

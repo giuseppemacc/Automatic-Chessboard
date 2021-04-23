@@ -100,7 +100,7 @@ class Chessboard():
         self.stockfish.set_fen_position(self.fen_position)
                 
     def get_best_move(self):
-        return self.stockfish.get_best_move_time(1000)
+        return self.stockfish.get_best_move_time(5000)
 
     def cord_piece_default(self, piece):
         cord = t_cord()
@@ -166,7 +166,7 @@ class Chessboard():
             self.player = "w"
 
     # partendo dalla mossa modifica la scacchiera
-    def move(self, move, arm_move=False):
+    def move(self, move, player_move=False, arm_move=False):
         #TODO: aggiungere perdita dell'arrocco in caso di mossa di re o di torre
         #TODO: far ritornare a move anche le cordinate in cui muovere le pedine che poi verranno passate a move_arm (in Game) e che muoverà il braccio
 
@@ -230,17 +230,18 @@ class Chessboard():
                 self.set_piece(end_cord, start_piece)
                 self.set_piece(self.cord_piece_default(end_piece), end_piece)
 
-                end_piece_defaul = self.cord_piece_default(end_piece).get_index_form()
+                if arm_move:
+                    end_piece_defaul = self.cord_piece_default(end_piece).get_index_form()
 
-                string_type = end_piece_defaul[0]
-                y,x = end_piece_defaul[1]
+                    string_type = end_piece_defaul[0]
+                    y,x = end_piece_defaul[1]
 
-                index_type = 0
-                if string_type == "left":
                     index_type = 1
+                    if string_type == "left":
+                        index_type = 0
 
-                moves_cord.append(f"M-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{index_type}{y}{x}-{end_piece}")
-                moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
+                    moves_cord.append(f"M-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{index_type}{y}{x}-{end_piece}")
+                    moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
                 
 
             self.change_player()
@@ -316,6 +317,8 @@ class Chessboard():
         # cattura
         elif (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==1 ):
             move = str(changes["-"][0].get_string_form()) + str(changes["/"][0].get_string_form())
+            # setta qua il pezzo che va in panchina
+            self.set_piece(changes["+"][0], self.get_piece(changes["/"][0]))
 
     
         elif (len(changes["+"])==2 and len(changes["-"])==2 and len(changes["/"])==0 ):

@@ -81,14 +81,17 @@ class Game(Connection):
         self.chessboard.move(move)
         print(self.chessboard)
         self.send_ble_Chessboard()
-
-        move = self.chessboard.get_best_move()
-        print(f"MOSSA fatta da Stockfish = {move}")
-        arm_move = self.chessboard.move(move, arm_move=True)
-        self.moveArm(arm_move)
-        print(self.chessboard)
         
-        self.send_ble_Chessboard()
+        if move != None:
+            move = self.chessboard.get_best_move()
+            print(f"MOSSA fatta da Stockfish = {move}")
+            arm_move = self.chessboard.move(move, arm_move=True)
+            self.moveArm(arm_move)
+            print(self.chessboard)
+            
+            self.send_ble_Chessboard()
+        else:
+            print("Mossa Nulla")
 
     def moveArm(self, arm_move):
         for move in arm_move:

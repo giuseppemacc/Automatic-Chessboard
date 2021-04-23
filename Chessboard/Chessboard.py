@@ -167,88 +167,88 @@ class Chessboard():
 
     # partendo dalla mossa modifica la scacchiera
     def move(self, move, arm_move=False):
-        #TODO: aggiungere perdita dell'arrocco in caso di mossa di re o di torre
-        #TODO: far ritornare a move anche le cordinate in cui muovere le pedine che poi verranno passate a move_arm (in Game) e che muoverà il braccio
+        if move != None:
+            is_validMove = self.stockfish.is_move_correct(move)
+            print(f"mossa {move}: {is_validMove}")
 
-        is_validMove = self.stockfish.is_move_correct(move)
-        print(f"mossa {move}: {is_validMove}")
+            if is_validMove:
 
-        if is_validMove:
+                moves_cord = []
 
-            moves_cord = []
+                start_cord = t_cord(string_form = move[:2])
+                end_cord = t_cord(string_form = move[2:])
 
-            start_cord = t_cord(string_form = move[:2])
-            end_cord = t_cord(string_form = move[2:])
+                index_start_cord = start_cord.get_index_form()
+                index_end_cord = end_cord.get_index_form()
 
-            index_start_cord = start_cord.get_index_form()
-            index_end_cord = end_cord.get_index_form()
+                start_piece = self.get_piece(start_cord)
+                end_piece = self.get_piece(end_cord)
 
-            start_piece = self.get_piece(start_cord)
-            end_piece = self.get_piece(end_cord)
+                # arrocco corto bianco
+                if (move == "e1g1") and ("K" in self.castling):
+                    self.set_piece(t_cord(string_form="e1"),None)
+                    self.set_piece(t_cord(string_form="h1"),None)
+                    self.set_piece( t_cord(string_form="g1"), "K" )
+                    self.set_piece( t_cord(string_form="f1"), "R" )
 
-            # arrocco corto bianco
-            if (move == "e1g1") and ("K" in self.castling):
-                self.set_piece(t_cord(string_form="e1"),None)
-                self.set_piece(t_cord(string_form="h1"),None)
-                self.set_piece( t_cord(string_form="g1"), "K" )
-                self.set_piece( t_cord(string_form="f1"), "R" )
+                    self.castling = self.castling.replace("K","")
+                # arrocco lungo bianco
+                elif move == "e1c1" and ("Q" in self.castling):
+                    self.set_piece(t_cord(string_form="e1"),None)
+                    self.set_piece(t_cord(string_form="a1"),None)
+                    self.set_piece( t_cord(string_form="c1"), "K" )
+                    self.set_piece( t_cord(string_form="d1"), "R" )
 
-                self.castling = self.castling.replace("K","")
-            # arrocco lungo bianco
-            elif move == "e1c1" and ("Q" in self.castling):
-                self.set_piece(t_cord(string_form="e1"),None)
-                self.set_piece(t_cord(string_form="a1"),None)
-                self.set_piece( t_cord(string_form="c1"), "K" )
-                self.set_piece( t_cord(string_form="d1"), "R" )
+                    self.castling = self.castling.replace("Q","")
+                # arrocco corto nero
+                elif move == "e8g8" and ("k" in self.castling):
+                    self.set_piece(t_cord(string_form="e8"),None)
+                    self.set_piece(t_cord(string_form="h8"),None)
+                    self.set_piece( t_cord(string_form="g8"), "k" )
+                    self.set_piece( t_cord(string_form="f8"), "r" )
 
-                self.castling = self.castling.replace("Q","")
-            # arrocco corto nero
-            elif move == "e8g8" and ("k" in self.castling):
-                self.set_piece(t_cord(string_form="e8"),None)
-                self.set_piece(t_cord(string_form="h8"),None)
-                self.set_piece( t_cord(string_form="g8"), "k" )
-                self.set_piece( t_cord(string_form="f8"), "r" )
+                    self.castling = self.castling.replace("k","")
+                # arrocco lungo nero
+                elif move == "e8c8" and ("q" in self.castling):
+                    self.set_piece(t_cord(string_form="e8"),None)
+                    self.set_piece(t_cord(string_form="a8"),None)
+                    self.set_piece( t_cord(string_form="c8"), "k" )
+                    self.set_piece( t_cord(string_form="d8"), "r" )
 
-                self.castling = self.castling.replace("k","")
-            # arrocco lungo nero
-            elif move == "e8c8" and ("q" in self.castling):
-                self.set_piece(t_cord(string_form="e8"),None)
-                self.set_piece(t_cord(string_form="a8"),None)
-                self.set_piece( t_cord(string_form="c8"), "k" )
-                self.set_piece( t_cord(string_form="d8"), "r" )
+                    self.castling = self.castling.replace("q","")
+                # spostamento standard
+                elif end_piece == " ":
+                    self.set_piece(start_cord, None)
+                    self.set_piece(end_cord, start_piece)
 
-                self.castling = self.castling.replace("q","")
-            # spostamento standard
-            elif end_piece == " ":
-                self.set_piece(start_cord, None)
-                self.set_piece(end_cord, start_piece)
+                    moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
+                # cattura
+                else:
+                    self.set_piece(start_cord, None)
+                    self.set_piece(end_cord, start_piece)
+                    self.set_piece(self.cord_piece_default(end_piece), end_piece)
 
-                moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
-            # cattura
-            else:
-                self.set_piece(start_cord, None)
-                self.set_piece(end_cord, start_piece)
-                self.set_piece(self.cord_piece_default(end_piece), end_piece)
+                    if arm_move:
+                        end_piece_defaul = self.cord_piece_default(end_piece).get_index_form()
+
+                        string_type = end_piece_defaul[0]
+                        y,x = end_piece_defaul[1]
+
+                        index_type = 1
+                        if string_type == "left":
+                            index_type = 0
+
+                        moves_cord.append(f"M-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{index_type}{y}{x}-{end_piece}")
+                        moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
+                    
+
+                self.change_player()
+                self.refresh_fen_position()
 
                 if arm_move:
-                    end_piece_defaul = self.cord_piece_default(end_piece).get_index_form()
-
-                    string_type = end_piece_defaul[0]
-                    y,x = end_piece_defaul[1]
-
-                    index_type = 1
-                    if string_type == "left":
-                        index_type = 0
-
-                    moves_cord.append(f"M-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{index_type}{y}{x}-{end_piece}")
-                    moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
-                
-
-            self.change_player()
-            self.refresh_fen_position()
-
-            if arm_move:
-                return moves_cord
+                    return moves_cord
+        else:
+            print("Mossa Nulla")
             
 
     # partendo dall'immagine binarizzati ricava la mossa

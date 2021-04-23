@@ -155,7 +155,7 @@ def getColour(img):
 
         print("blue: ", count_blue, "  red:", count_red)
 
-        if count_blue>500 or count_red>500:
+        if count_blue>200 or count_red>200:
             if count_blue >= count_red:
                 return 1
             else:

@@ -1,7 +1,17 @@
 from Game.Game import Game
 import asyncio
+import os
+from os import system
+import time
+
+
 
 if __name__ == "__main__":
+    system("./home/pi/Utility/bluetooth_adv")
+    os.chdir("/home/pi/Automatic-Chessboard")
+    
+    time.sleep(2)
+    
     loop = asyncio.get_event_loop()
     game = Game()
 

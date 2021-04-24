@@ -309,7 +309,7 @@ class Chessboard():
         count_changes("right")
         count_changes("grid") 
 
-        move = ""
+        move = None
 
         # spostamento standard
         if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==0 ):

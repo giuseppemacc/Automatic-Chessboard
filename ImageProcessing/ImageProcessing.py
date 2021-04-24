@@ -169,7 +169,7 @@ def getColour(img):
 
 def see_Chessboard(flip=False):
     PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
-    img = cv2.imread("shoot.jpg")
+    img = cv2.imread("/home/pi/Automatic-Chessboard/shoot.jpg")
     if flip:
         img = cv2.flip(img, 0)
     warped_img = warpChessboard(img)

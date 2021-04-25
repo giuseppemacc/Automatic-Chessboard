@@ -78,11 +78,11 @@ class Game(Connection):
 
         move = self.chessboard.see_move(dicbool_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")
-        self.chessboard.move(move)
-        print(self.chessboard)
-        self.send_ble_Chessboard()
-        
         if move != None:
+            self.chessboard.move(move)
+            print(self.chessboard)
+            self.send_ble_Chessboard()
+        
             move = self.chessboard.get_best_move()
             print(f"MOSSA fatta da Stockfish = {move}")
             arm_move = self.chessboard.move(move, arm_move=True)

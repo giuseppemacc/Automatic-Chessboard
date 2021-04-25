@@ -192,6 +192,9 @@ class Chessboard():
                     self.set_piece( t_cord(string_form="f1"), "R" )
 
                     self.castling = self.castling.replace("K","")
+                    
+                    moves_cord.append("M-174-176-K")
+                    moves_cord.append("M-177-175-R")
                 # arrocco lungo bianco
                 elif move == "e1c1" and ("Q" in self.castling):
                     self.set_piece(t_cord(string_form="e1"),None)
@@ -200,6 +203,9 @@ class Chessboard():
                     self.set_piece( t_cord(string_form="d1"), "R" )
 
                     self.castling = self.castling.replace("Q","")
+
+                    moves_cord.append("M-174-172-K")
+                    moves_cord.append("M-170-173-R")
                 # arrocco corto nero
                 elif move == "e8g8" and ("k" in self.castling):
                     self.set_piece(t_cord(string_form="e8"),None)
@@ -208,6 +214,9 @@ class Chessboard():
                     self.set_piece( t_cord(string_form="f8"), "r" )
 
                     self.castling = self.castling.replace("k","")
+
+                    moves_cord.append("M-104-106-K")
+                    moves_cord.append("M-107-105-R")
                 # arrocco lungo nero
                 elif move == "e8c8" and ("q" in self.castling):
                     self.set_piece(t_cord(string_form="e8"),None)
@@ -216,6 +225,9 @@ class Chessboard():
                     self.set_piece( t_cord(string_form="d8"), "r" )
 
                     self.castling = self.castling.replace("q","")
+
+                    moves_cord.append("M-104-102-K")
+                    moves_cord.append("M-100-103-R")
                 # spostamento standard
                 elif end_piece == " ":
                     self.set_piece(start_cord, None)

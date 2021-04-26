@@ -43,9 +43,9 @@ class Game(Connection):
         if ble_val == "PPFREE":
             self.shoot_OnServal = self.PosizionamentoLibero
         elif ble_val == "NG-W":
-            self.shoot_OnServal = self.StandardGame("W")
+            self.shoot_OnServal = self.StandardGame
         elif ble_val == "NG-B":
-            self.shoot_OnServal = self.StandardGame("B")
+            self.shoot_OnServal = self.StandardGame
 
 
 

@@ -82,6 +82,9 @@ class Game(Connection):
         shoot()
         dicbin_chessboard = see_Chessboard()
         self.chessboard.see_move(dicbin_chessboard, free_pos=True)
+        
+        print(self.chessboard)
+        self.send_ble_Chessboard()
     
 
     def moveArm(self, arm_move):

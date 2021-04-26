@@ -40,12 +40,12 @@ class Game(Connection):
     def do_on_bleval(self, ble_val):
         print(ble_val)
 
-        if ble_val == "GPFREE":
+        if ble_val == "PPFREE":
             self.shoot_OnServal = self.PosizionamentoLibero
         elif ble_val == "NG-W":
-            self.StandardGame("W")
+            self.shoot_OnServal = self.StandardGame("W")
         elif ble_val == "NG-B":
-            self.StandardGame("B")
+            self.shoot_OnServal = self.StandardGame("B")
 
 
 
@@ -60,25 +60,7 @@ class Game(Connection):
 
         move = self.chessboard.see_move(dicbool_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")
-        self.chessboard.move(move, player_move=True)
-        print(self.chessboard)
-        self.send_ble_Chessboard()
-
-        move = self.chessboard.get_best_move()
-        print(f"MOSSA fatta da Stockfish = {move}")
-        arm_move = self.chessboard.move(move, arm_move=True)
-        self.moveArm(arm_move)
-        print(self.chessboard)
-        
-        self.send_ble_Chessboard()
-    
-    def PosizionamentoLibero(self):
-        shoot()
-        dicbool_chessboard = see_Chessboard()
-
-        move = self.chessboard.see_move(dicbool_chessboard)
-        print(f"MOSSA fatta dal giocatore = {move}")
-        if move != None:
+        if (move != None) and (self.chessboard.stockfish.is_move_correct(move)):
             self.chessboard.move(move)
             print(self.chessboard)
             self.send_ble_Chessboard()
@@ -91,7 +73,16 @@ class Game(Connection):
             
             self.send_ble_Chessboard()
         else:
-            print("Mossa Nulla")
+            print("Mossa Non Valida")
+            #self.send_ser("")
+        
+        self.send_ble_Chessboard()
+
+    def PosizionamentoLibero(self):
+        shoot()
+        dicbin_chessboard = see_Chessboard()
+        self.chessboard.see_move(dicbin_chessboard, free_pos=True)
+    
 
     def moveArm(self, arm_move):
         for move in arm_move:

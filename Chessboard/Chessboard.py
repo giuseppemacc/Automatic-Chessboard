@@ -228,7 +228,7 @@ class Chessboard():
             self.set_piece(start_cord, None)
             self.set_piece(end_cord, start_piece)
 
-            moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
+            moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece.upper()}")
         # cattura
         else:
             self.set_piece(start_cord, None)
@@ -246,8 +246,8 @@ class Chessboard():
                 if string_type == "left":
                     index_type = 0
 
-                moves_cord.append(f"M-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{index_type}{y}{x}-{end_piece}")
-                moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece}")
+                moves_cord.append(f"M-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{index_type}{y}{x}-{end_piece.upper()}")
+                moves_cord.append(f"M-1{index_start_cord[1][0]}{index_start_cord[1][1]}-1{index_end_cord[1][0]}{index_end_cord[1][1]}-{start_piece.upper()}")
 
         self.change_player()
         self.refresh_fen_position()

@@ -54,7 +54,7 @@ class Game(Connection):
     def initGame(self):
         self.send_ble_Chessboard()
 
-    def StandardGame(self, pieces):
+    def StandardGame(self):
         shoot()
         dicbool_chessboard = see_Chessboard()
 

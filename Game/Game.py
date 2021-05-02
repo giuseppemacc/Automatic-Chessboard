@@ -89,6 +89,7 @@ class Game(Connection):
 
     def moveArm(self, arm_move):
         for move in arm_move:
+            print(move)
             self.send_ser(move)
 
     def send_ble_Chessboard(self):
@@ -131,7 +132,7 @@ class Game(Connection):
                     piece = "b"+piece
                 string += "-" + f"{y}{x}" + piece
 
-        print("bluetooth string chessboard:")
-        print(string)
+        #print("bluetooth string chessboard:")
+        #print(string)
         self.send_ble(string)
 

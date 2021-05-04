@@ -159,8 +159,9 @@ class Game(Connection):
         }
         if self.flip_chessboard:
             board["grid"] = np.rot90(board["grid"], 2)
-            board["left"] = np.rot90(board["right"], 2)
+            temp = np.rot90(board["right"], 2)
             board["right"] = np.rot90(board["left"], 2)
+            board["left"] = temp
         
         print(self.chessboard)
 

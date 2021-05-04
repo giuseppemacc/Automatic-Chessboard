@@ -11,10 +11,11 @@ class Game(Connection):
         super().__init__()
         self.init_connection()
         self.chessboard = Chessboard()
-        self.initGame()
+        
         self.shoot_OnServal = None # function
-        self.reverse_color = False # serve per indicare quando bisogna invertire i colori nella visione
+        self.flip_chessboard = False
 
+        self.initGame()
 
     # @Override
     def reload(self):
@@ -45,10 +46,15 @@ class Game(Connection):
             self.shoot_OnServal = self.PosizionamentoLibero
         elif ble_val == "NG-W":
             self.shoot_OnServal = self.StandardGame
+            self.flip_chessboard = False
         elif ble_val == "NG-B":
             # stockfish fa la prima mossa
-            self.chessboard.player = "b"
-            self.chessboard.refresh_fen_position()
+            # viene ruotata fisicamente la scacchiera
+            # bisogna ruotare la matrice della scacchiera già binarizzata
+            # in questo modo è come se fosse tutto normale
+            # poi quando bisogna far muovere il braccio bisogna calcolare la mossa invertendo la scacchiera
+            self.flip_chessboard = True
+
             move = self.chessboard.get_best_move()
             print(f"MOSSA fatta da Stockfish = {move}")
             arm_move = self.chessboard.move(move, arm_move=True)
@@ -56,7 +62,6 @@ class Game(Connection):
             print(self.chessboard)
             self.send_ble_Chessboard()
 
-            self.reverse_color = True
             self.shoot_OnServal = self.StandardGame
 
 
@@ -69,7 +74,14 @@ class Game(Connection):
 
     def StandardGame(self):
         shoot()
-        dicbool_chessboard = see_Chessboard(reverse_color=self.reverse_color)
+        dicbool_chessboard = see_Chessboard()
+        if self.flip_chessboard:
+            # inverto grid
+            # inverto lef e right
+            # e poi left diventa right, e right diventa left
+            dicbool_chessboard["grid"] = np.rot90(dicbool_chessboard["grid"], 2)
+            dicbool_chessboard["left"] = np.rot90(dicbool_chessboard["right"], 2)
+            dicbool_chessboard["right"] = np.rot90(dicbool_chessboard["left"], 2)
 
         move = self.chessboard.see_move(dicbool_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")
@@ -121,7 +133,7 @@ class Game(Connection):
                 piece = self.chessboard.chessboard["left"][y][x]
                 if piece == " ":
                     piece = "xx"
-                elif piece.isupper() != self.reverse_color:
+                elif piece.isupper():
                     piece = "w"+piece
                 else:
                     piece = "b"+piece
@@ -133,7 +145,7 @@ class Game(Connection):
                 piece = self.chessboard.chessboard["right"][y][x]
                 if piece == " ":
                     piece = "xx"
-                elif piece.isupper() != self.reverse_color:
+                elif piece.isupper():
                     piece = "w"+piece
                 else:
                     piece = "b"+piece
@@ -145,7 +157,7 @@ class Game(Connection):
                 piece = self.chessboard.chessboard["grid"][y][x]
                 if piece == " ":
                     piece = "xx"
-                elif piece.isupper() != self.reverse_color:
+                elif piece.isupper():
                     piece = "w"+piece
                 else:
                     piece = "b"+piece

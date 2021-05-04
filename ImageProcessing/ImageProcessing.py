@@ -116,14 +116,14 @@ def cropImage(img):
         "grid":  [ [cv2.resize(img_grid_x, SQUARE_SIZE) for img_grid_x in img_grid_y] for img_grid_y in list_img_grid],
     }
 
-def binarizes(dic_images, reverse_color=False):
+def binarizes(dic_images):
     return{
-        "right": [ [getColour(x_img, reverse_color ) for x_img in y_img] for y_img in dic_images["right"]],
-        "left":  [ [getColour(x_img, reverse_color ) for x_img in y_img] for y_img in dic_images["left" ]],
-        "grid":  [ [getColour(x_img, reverse_color ) for x_img in y_img] for y_img in dic_images["grid" ]]
+        "right": [ [getColour(x_img, ) for x_img in y_img] for y_img in dic_images["right"]],
+        "left":  [ [getColour(x_img, ) for x_img in y_img] for y_img in dic_images["left" ]],
+        "grid":  [ [getColour(x_img, ) for x_img in y_img] for y_img in dic_images["grid" ]]
     }
 
-def getColour(img, reverse_color=False):
+def getColour(img):
     # gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # value = getPattern(gray_img, PIECE_RECOGNITION)
     # print(value)
@@ -157,15 +157,9 @@ def getColour(img, reverse_color=False):
 
         if count_blue>200 or count_red>200:
             if count_blue >= count_red:
-                if reverse_color:
-                    return 2
-                else:
-                    return 1
+                return 1
             else:
-                if reverse_color:
-                    return 1
-                else:
-                    return 2
+                return 2
         else:
             return 0
 
@@ -175,12 +169,12 @@ def getColour(img, reverse_color=False):
     #else:
     #    return value
 
-def see_Chessboard(reverse_color=False):
+def see_Chessboard():
     PIECE_RECOGNITION.load_state_dict(torch.load("ImageProcessing/PieceRecognition/models/model50.pt"))
     img = cv2.imread("/home/pi/Automatic-Chessboard/shoot.jpg")
     warped_img = warpChessboard(img)
     crop_img = cropImage(warped_img)
-    dic_bin_chessboard = binarizes(crop_img, reverse_color)
+    dic_bin_chessboard = binarizes(crop_img)
 
     return dic_bin_chessboard
 

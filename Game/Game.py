@@ -114,11 +114,40 @@ class Game(Connection):
     
 
     def moveArm(self, arm_move):
-        if self.flip_chessboard:
-            pass
 
         for move in arm_move:
             print(move)
+            if self.flip_chessboard:
+                #M-100-100-P
+                start_cord, end_cord, piece = move.split("-")[1:]
+                type1,y1,x1 = start_cord
+                type2,y2,x2 = end_cord
+                type1 = int(type1)
+                type2 = int(type2)
+                y1 = 7 - int(y1)
+                y2 = 7 - int(y2)
+                x1 = int(x1)
+                x2 = int(x2)
+
+
+                if type1==1:
+                    x1 = 7-x1
+                else:
+                    x1 = 2-x1
+
+                if type2==1:
+                    x2 = 7-x2
+                else:
+                    x2 = 2-x2
+
+                if type1 == 0:
+                    type1 = 2
+                if type2 == 2:
+                    type2 = 0
+
+                move = f"M-{type1}{y1}{x1}-{type2}{y2}{x2}-{piece}"
+                print(move)
+
             self.send_ser(move)
 
     def send_ble_Chessboard(self):

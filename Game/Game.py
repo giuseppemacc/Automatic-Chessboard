@@ -80,9 +80,10 @@ class Game(Connection):
             # inverto lef e right
             # e poi left diventa right, e right diventa left
             dicbool_chessboard["grid"] = np.rot90(dicbool_chessboard["grid"], 2)
-            dicbool_chessboard["left"] = np.rot90(dicbool_chessboard["right"], 2)
+            temp = np.rot90(dicbool_chessboard["right"], 2)
             dicbool_chessboard["right"] = np.rot90(dicbool_chessboard["left"], 2)
-            print(dicbool_chessboard["grid"])
+            dicbool_chessboard["left"] = temp
+            print(dicbool_chessboard)
 
         move = self.chessboard.see_move(dicbool_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")

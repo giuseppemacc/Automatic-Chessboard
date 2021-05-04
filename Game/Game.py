@@ -13,6 +13,7 @@ class Game(Connection):
         self.chessboard = Chessboard()
         self.initGame()
         self.shoot_OnServal = None # function
+        self.reverse_color = False # serve per indicare quando bisogna invertire i colori nella visione
 
 
     # @Override
@@ -45,6 +46,17 @@ class Game(Connection):
         elif ble_val == "NG-W":
             self.shoot_OnServal = self.StandardGame
         elif ble_val == "NG-B":
+            # stockfish fa la prima mossa
+            self.chessboard.player = "b"
+            self.chessboard.refresh_fen_position()
+            move = self.chessboard.get_best_move()
+            print(f"MOSSA fatta da Stockfish = {move}")
+            arm_move = self.chessboard.move(move, arm_move=True)
+            self.moveArm(arm_move)
+            print(self.chessboard)
+            self.send_ble_Chessboard()
+
+            self.reverse_color = True
             self.shoot_OnServal = self.StandardGame
 
 
@@ -54,9 +66,10 @@ class Game(Connection):
     def initGame(self):
         self.send_ble_Chessboard()
 
+
     def StandardGame(self):
         shoot()
-        dicbool_chessboard = see_Chessboard()
+        dicbool_chessboard = see_Chessboard(reverse_color=self.reverse_color)
 
         move = self.chessboard.see_move(dicbool_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")

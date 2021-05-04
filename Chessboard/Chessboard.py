@@ -74,6 +74,9 @@ class Chessboard():
 
         return self.chessboard[string_type][y][x]
 
+    def isValid_move(self,move):
+        return (move != None) and (move != "") and (self.stockfish.is_move_correct(move))
+
     def refresh_fen_position(self):
         # 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1'
         string = ""

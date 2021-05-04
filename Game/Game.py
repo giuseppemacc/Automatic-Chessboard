@@ -82,6 +82,7 @@ class Game(Connection):
             dicbool_chessboard["grid"] = np.rot90(dicbool_chessboard["grid"], 2)
             dicbool_chessboard["left"] = np.rot90(dicbool_chessboard["right"], 2)
             dicbool_chessboard["right"] = np.rot90(dicbool_chessboard["left"], 2)
+            print(dicbool_chessboard["grid"])
 
         move = self.chessboard.see_move(dicbool_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")
@@ -113,16 +114,21 @@ class Game(Connection):
     
 
     def moveArm(self, arm_move):
+        if self.flip_chessboard:
+            pass
+
         for move in arm_move:
             print(move)
             self.send_ser(move)
 
     def send_ble_Chessboard(self):
-        chessboard = self.chessboard.chessboard
+        board = self.chessboard.chessboard
         if self.flip_chessboard:
-            chessboard["grid"] = np.rot90(chessboard["grid"], 2)
-            chessboard["left"] = np.rot90(chessboard["right"], 2)
-            chessboard["right"] = np.rot90(chessboard["left"], 2)
+            board["grid"] = np.rot90(board["grid"], 2)
+            board["left"] = np.rot90(board["right"], 2)
+            board["right"] = np.rot90(board["left"], 2)
+        
+        print(self.chessboard)
 
         #CB-LEFT-00P-001R...-RIGHT-O1K...-GRID-80N
         string = "CB"
@@ -130,7 +136,7 @@ class Game(Connection):
         string += "-LEFT"
         for y in range(8):
             for x in range(2):
-                piece = chessboard["left"][y][x]
+                piece = board["left"][y][x]
                 if piece == " ":
                     piece = "xx"
                 elif piece.isupper():
@@ -142,7 +148,7 @@ class Game(Connection):
         string += "-RIGHT"
         for y in range(8):
             for x in range(2):
-                piece = chessboard["right"][y][x]
+                piece = board["right"][y][x]
                 if piece == " ":
                     piece = "xx"
                 elif piece.isupper():
@@ -154,7 +160,7 @@ class Game(Connection):
         string += "-GRID"
         for y in range(8):
             for x in range(8):
-                piece = chessboard["grid"][y][x]
+                piece = board["grid"][y][x]
                 if piece == " ":
                     piece = "xx"
                 elif piece.isupper():

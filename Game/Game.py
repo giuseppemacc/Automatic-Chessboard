@@ -106,6 +106,12 @@ class Game(Connection):
             self.send_ser(move)
 
     def send_ble_Chessboard(self):
+        # isUpper - reverse_color -> 
+        # True  - True  -> False
+        # False - True  -> True
+        # True  - False -> True
+        # False - False -> False
+
         #CB-LEFT-00P-001R...-RIGHT-O1K...-GRID-80N
         string = "CB"
 
@@ -115,7 +121,7 @@ class Game(Connection):
                 piece = self.chessboard.chessboard["left"][y][x]
                 if piece == " ":
                     piece = "xx"
-                elif piece.isupper():
+                elif piece.isupper() != self.reverse_color:
                     piece = "w"+piece
                 else:
                     piece = "b"+piece
@@ -127,7 +133,7 @@ class Game(Connection):
                 piece = self.chessboard.chessboard["right"][y][x]
                 if piece == " ":
                     piece = "xx"
-                elif piece.isupper():
+                elif piece.isupper() != self.reverse_color:
                     piece = "w"+piece
                 else:
                     piece = "b"+piece
@@ -139,7 +145,7 @@ class Game(Connection):
                 piece = self.chessboard.chessboard["grid"][y][x]
                 if piece == " ":
                     piece = "xx"
-                elif piece.isupper():
+                elif piece.isupper() != self.reverse_color:
                     piece = "w"+piece
                 else:
                     piece = "b"+piece

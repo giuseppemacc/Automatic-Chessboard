@@ -122,7 +122,11 @@ class Game(Connection):
             self.send_ser(move)
 
     def send_ble_Chessboard(self):
-        board = self.chessboard.chessboard
+        board = {
+            "left":self.chessboard.chessboard["left"],
+            "grid":self.chessboard.chessboard["grid"],
+            "right":self.chessboard.chessboard["right"]
+        }
         if self.flip_chessboard:
             board["grid"] = np.rot90(board["grid"], 2)
             board["left"] = np.rot90(board["right"], 2)

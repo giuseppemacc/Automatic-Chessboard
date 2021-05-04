@@ -118,11 +118,11 @@ class Game(Connection):
             self.send_ser(move)
 
     def send_ble_Chessboard(self):
-        # isUpper - reverse_color -> 
-        # True  - True  -> False
-        # False - True  -> True
-        # True  - False -> True
-        # False - False -> False
+        chessboard = self.chessboard.chessboard
+        if self.flip_chessboard:
+            chessboard["grid"] = np.rot90(chessboard["grid"], 2)
+            chessboard["left"] = np.rot90(chessboard["right"], 2)
+            chessboard["right"] = np.rot90(chessboard["left"], 2)
 
         #CB-LEFT-00P-001R...-RIGHT-O1K...-GRID-80N
         string = "CB"
@@ -130,7 +130,7 @@ class Game(Connection):
         string += "-LEFT"
         for y in range(8):
             for x in range(2):
-                piece = self.chessboard.chessboard["left"][y][x]
+                piece = chessboard["left"][y][x]
                 if piece == " ":
                     piece = "xx"
                 elif piece.isupper():
@@ -142,7 +142,7 @@ class Game(Connection):
         string += "-RIGHT"
         for y in range(8):
             for x in range(2):
-                piece = self.chessboard.chessboard["right"][y][x]
+                piece = chessboard["right"][y][x]
                 if piece == " ":
                     piece = "xx"
                 elif piece.isupper():
@@ -154,7 +154,7 @@ class Game(Connection):
         string += "-GRID"
         for y in range(8):
             for x in range(8):
-                piece = self.chessboard.chessboard["grid"][y][x]
+                piece = chessboard["grid"][y][x]
                 if piece == " ":
                     piece = "xx"
                 elif piece.isupper():

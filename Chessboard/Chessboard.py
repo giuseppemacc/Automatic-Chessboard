@@ -173,16 +173,28 @@ class Chessboard():
     # partendo dalla mossa modifica la scacchiera
     def move(self, move=None, arm_move=False):
 
+        # se termina con una lettera vuol dire che c'è la promozione
+        # quindi bisogna cambiare start_piece
+
         moves_cord = []
 
         start_cord = t_cord(string_form = move[:2])
-        end_cord = t_cord(string_form = move[2:])
+        end_cord = t_cord(string_form = move[2:4])
 
         index_start_cord = start_cord.get_index_form()
         index_end_cord = end_cord.get_index_form()
 
-        start_piece = self.get_piece(start_cord)
+        start_piece = ""
         end_piece = self.get_piece(end_cord)
+        
+        # in caso di promozione
+        if move[-1].isalpha():
+            if self.player == "w":
+                start_piece = move[-1].upper()
+            else:    
+                start_piece = move[-1]
+        else:
+            start_piece = self.get_piece(start_cord)
 
         # arrocco corto bianco
         if (move == "e1g1") and ("K" in self.castling):
@@ -351,6 +363,14 @@ class Chessboard():
             # arrocco lungo nero
             elif ([cord_1.get_string_form(),cord_2.get_string_form()] == ["c8","d8"]) or ([cord_1.get_string_form(),cord_2.get_string_form()] == ["d8","c8"] ):
                 move = "e8c8"
+
+        if not free_pos:
+            start_piece = self.get_piece(t_cord(string_form=move[:2]))
+            end_y = t_cord(string_form=move[2:]).get_index_form()[1][0]
+            if start_piece == "P" and end_y == 0:
+                move+="q" 
+            elif start_piece == "p" and end_y == 7:
+                move+="q" 
 
         print("-----CAMBIAMENTI----")
         print(np.array(bool_new_chessboard["left"]))

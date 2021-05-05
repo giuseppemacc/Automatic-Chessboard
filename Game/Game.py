@@ -14,6 +14,7 @@ class Game(Connection):
         
         self.shoot_OnServal = None # function
         self.flip_chessboard = False
+        self.play_position = False
 
         self.initGame()
 
@@ -42,9 +43,20 @@ class Game(Connection):
     def do_on_bleval(self, ble_val):
         print(ble_val)
 
-        if ble_val == "PPFREE":
+        if ble_val == "PPFREE-W":
+            # setta la scacchiera con la grid vuota o grid piena
+            self.play_position = True
+            self.shoot_OnServal = self.PosizionamentoLibero
+        elif ble_val == "PPFREE-B":
+            # setta la scacchiera con la grid vuota o grid piena
+            self.play_position = True
+            self.flip_chessboard = True
             self.shoot_OnServal = self.PosizionamentoLibero
         elif ble_val == "NG-W":
+            if self.play_position:
+                self.play_position = False
+            else:
+                self.chessboard.__init__()
             self.shoot_OnServal = self.StandardGame
             self.flip_chessboard = False
         elif ble_val == "NG-B":
@@ -53,6 +65,11 @@ class Game(Connection):
             # bisogna ruotare la matrice della scacchiera già binarizzata
             # in questo modo è come se fosse tutto normale
             # poi quando bisogna far muovere il braccio bisogna calcolare la mossa invertendo la scacchiera
+            if self.play_position:
+                self.play_position = False
+            else:
+                self.chessboard.__init__()
+
             self.flip_chessboard = True
             self.send_ble_Chessboard()
 
@@ -75,18 +92,18 @@ class Game(Connection):
 
     def StandardGame(self):
         shoot()
-        dicbool_chessboard = see_Chessboard()
+        dicbin_chessboard = see_Chessboard()
         if self.flip_chessboard:
             # inverto grid
             # inverto lef e right
             # e poi left diventa right, e right diventa left
-            dicbool_chessboard["grid"] = np.rot90(dicbool_chessboard["grid"], 2)
-            temp = np.rot90(dicbool_chessboard["right"], 2)
-            dicbool_chessboard["right"] = np.rot90(dicbool_chessboard["left"], 2)
-            dicbool_chessboard["left"] = temp
-            print(dicbool_chessboard)
+            dicbin_chessboard["grid"] = np.rot90(dicbin_chessboard["grid"], 2)
+            temp = np.rot90(dicbin_chessboard["right"], 2)
+            dicbin_chessboard["right"] = np.rot90(dicbin_chessboard["left"], 2)
+            dicbin_chessboard["left"] = temp
+            print(dicbin_chessboard)
 
-        move = self.chessboard.see_move(dicbool_chessboard)
+        move = self.chessboard.see_move(dicbin_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")
         if (move != None) and (self.chessboard.stockfish.is_move_correct(move)):
             self.chessboard.move(move)
@@ -109,6 +126,13 @@ class Game(Connection):
     def PosizionamentoLibero(self):
         shoot()
         dicbin_chessboard = see_Chessboard()
+        if self.flip_chessboard:
+            dicbin_chessboard["grid"] = np.rot90(dicbin_chessboard["grid"], 2)
+            temp = np.rot90(dicbin_chessboard["right"], 2)
+            dicbin_chessboard["right"] = np.rot90(dicbin_chessboard["left"], 2)
+            dicbin_chessboard["left"] = temp
+            print(dicbin_chessboard)
+
         self.chessboard.see_move(dicbin_chessboard, free_pos=True)
         
         print(self.chessboard)
@@ -118,7 +142,6 @@ class Game(Connection):
     def moveArm(self, arm_move):
 
         for move in arm_move:
-            print(move)
             if self.flip_chessboard:
                 #M-100-100-P
                 start_cord, end_cord, piece = move.split("-")[1:]
@@ -148,8 +171,8 @@ class Game(Connection):
                     type2 = 0
 
                 move = f"M-{type1}{y1}{x1}-{type2}{y2}{x2}-{piece}"
-                print(move)
-
+            
+            print(move)
             self.send_ser(move)
 
     def send_ble_Chessboard(self):

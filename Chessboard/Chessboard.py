@@ -114,6 +114,7 @@ class Chessboard():
                 while self.get_piece(t_cord(index_form=["left",[y,1]])) != " ":
                     y+=1
                 cord = t_cord(index_form=["left",[y,1]])
+
             elif piece == "N":
                 y = 0
                 while self.get_piece(t_cord(index_form=["left",[y,0]])) != " ":
@@ -136,29 +137,30 @@ class Chessboard():
 
         else:
             if piece == "p":
-                y = 0
+                y = 7
                 while self.get_piece(t_cord(index_form=["right",[y,0]])) != " ":
-                    y+=1
+                    y-=1
                 cord = t_cord(index_form=["right",[y,0]])
+
             elif piece == "n":
-                y = 0
+                y = 7
                 while self.get_piece(t_cord(index_form=["right",[y,1]])) != " ":
-                    y+=1
+                    y-=1
                 cord = t_cord(index_form=["right",[y,1]])
             elif piece == "b":
-                y = 2
+                y = 5
                 while self.get_piece(t_cord(index_form=["right",[y,1]])) != " ":
-                    y+=1
+                    y-=1
                 cord = t_cord(index_form=["right",[y,1]])
             elif piece == "r":
-                y = 4
+                y = 3
                 while self.get_piece(t_cord(index_form=["right",[y,1]])) != " ":
-                    y+=1
+                    y-=1
                 cord = t_cord(index_form=["right",[y,1]])
             elif piece == "q":
-                cord = t_cord(index_form=["right",[6,1]])
+                cord = t_cord(index_form=["right",[1,1]])
             elif piece == "k":
-                cord = t_cord(index_form=["right",[7,1]])
+                cord = t_cord(index_form=["right",[0,1]])
 
         return cord
         

@@ -54,6 +54,7 @@ class Game(Connection):
             # in questo modo è come se fosse tutto normale
             # poi quando bisogna far muovere il braccio bisogna calcolare la mossa invertendo la scacchiera
             self.flip_chessboard = True
+            self.send_ble_Chessboard()
 
             move = self.chessboard.get_best_move()
             print(f"MOSSA fatta da Stockfish = {move}")
@@ -134,12 +135,12 @@ class Game(Connection):
                 if type1==1:
                     x1 = 7-x1
                 else:
-                    x1 = 2-x1
+                    x1 = 1-x1
 
                 if type2==1:
                     x2 = 7-x2
                 else:
-                    x2 = 2-x2
+                    x2 = 1-x2
 
                 if type1 == 0:
                     type1 = 2

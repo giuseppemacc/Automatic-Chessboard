@@ -18,7 +18,6 @@ class Connection():
         print("In attesa di una connessione")
         self.client_sock,self.address = self.server_sock.accept()
 
-        self.ser_arduino.write(b"BT")
         print("Connessione accetata da: ",self.address)
     
     def close_connection(self):

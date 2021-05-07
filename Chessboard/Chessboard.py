@@ -1,5 +1,6 @@
 from Chessboard.t_cord import t_cord
 import stockfish
+import chess
 
 
 import numpy as np
@@ -13,7 +14,6 @@ class Chessboard():
                 - grid / griglia
             contenute nel dizionario chessboard
         """
-        self.stockfish = stockfish.Stockfish("./Chessboard/stockfish")
 
         self.player = "w"
         self.castling = "KQkq"
@@ -22,6 +22,9 @@ class Chessboard():
         self.move_counter = 1
 
         self.fen_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+        self.stockfish = stockfish.Stockfish("./Chessboard/stockfish")
+        self.board = chess.Board(self.fen_position)
 
         self.chessboard = {
             # TODO aggiungere un inizializzazione di wpn e bpn da due file .txt
@@ -56,6 +59,11 @@ class Chessboard():
                 [" "," "],
             ]                             
         }
+    def is_checkmate(self):
+        self.refresh_fen_position()
+        self.board.set_board_fen(self.fen_position)
+
+        return (self.board.is_stalemate() or self.board.is_checkmate() or self.board.is_insufficient_material())
 
     def set_piece(self, cord, piece):
         cord_index_form = cord.get_index_form()

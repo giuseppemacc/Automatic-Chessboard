@@ -7,7 +7,7 @@ import time
 
 
 if __name__ == "__main__":
-    system("/home/pi/Utility/bluetooth_adv")
+    #system("/home/pi/Utility/bluetooth_adv")
     os.chdir("/home/pi/Automatic-Chessboard")
     
     time.sleep(2)

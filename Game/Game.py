@@ -43,69 +43,122 @@ class Game(Connection):
     def do_on_bleval(self, ble_val):
         print(ble_val)
 
-        if ble_val == "PPFREE-W":
-            # setta la scacchiera con la grid vuota o grid piena
-            self.play_position = True
-            self.shoot_OnServal = self.PosizionamentoLibero
-        elif ble_val == "PPFREE-B":
-            # setta la scacchiera con la grid vuota o grid piena
-            self.play_position = True
-            self.flip_chessboard = True
-            self.shoot_OnServal = self.PosizionamentoLibero
-        elif ble_val == "NG-W":
-            if self.play_position:
-                self.play_position = False
-            else:
-                self.chessboard.__init__()
-            self.shoot_OnServal = self.StandardGame
-            self.flip_chessboard = False
-        elif ble_val == "NG-B":
-            # stockfish fa la prima mossa
-            # viene ruotata fisicamente la scacchiera
-            # bisogna ruotare la matrice della scacchiera già binarizzata
-            # in questo modo è come se fosse tutto normale
-            # poi quando bisogna far muovere il braccio bisogna calcolare la mossa invertendo la scacchiera
+        if ble_val.startswith("NEWGAME"):
             if self.play_position:
                 self.play_position = False
             else:
                 self.chessboard.__init__()
 
-            self.flip_chessboard = True
-            self.send_ble_Chessboard()
+            pieces = ble_val.split("-")[1]
+            if pieces == "BLACK":
+                self.flip_chessboard = True
+                self.send_ble_Chessboard()
 
-            move = self.chessboard.get_best_move()
-            print(f"MOSSA fatta da Stockfish = {move}")
-            arm_move = self.chessboard.move(move, arm_move=True)
-            self.moveArm(arm_move)
-            print(self.chessboard)
-            self.send_ble_Chessboard()
+                # stockfish fa la prima mossa
+                move = self.chessboard.get_best_move()
+                print(f"MOSSA fatta da Stockfish = {move}")
+                arm_move = self.chessboard.move(move, arm_move=True)
+                self.moveArm(arm_move)
+                print(self.chessboard)
+                self.send_ble_Chessboard()
 
-            self.shoot_OnServal = self.StandardGame
+                self.shoot_OnServal = self.StandardGame
+
+            elif pieces == "WHITE":
+                self.flip_chessboard = False
+                self.shoot_OnServal = self.StandardGame
+        
+        elif ble_val.startswith("FREEPOSITIONING"):
+            self.play_position = True
+            pieces = ble_val.split("-")[1]
+            if pieces == "BLACK":
+                self.flip_chessboard = True
+            self.shoot_OnServal = self.PosizionamentoLibero
 
 
+        elif ble_val.startswith("DIFFICULTY"):
+            self.chessboard.stockfish.set_skill_level(int(ble_val.split("-")[1]))
+
+        elif ble_val == "SURRENDER":
+            self.end_Match()
+            
+
+        # elif ble_val == "NG-W":
+        #     if self.play_position:
+        #         self.play_position = False
+        #     else:
+        #         self.chessboard.__init__()
+        #     self.shoot_OnServal = self.StandardGame
+        #     self.flip_chessboard = False
+        # elif ble_val == "NG-B":
+        #     # stockfish fa la prima mossa
+        #     # viene ruotata fisicamente la scacchiera
+        #     # bisogna ruotare la matrice della scacchiera già binarizzata
+        #     # in questo modo è come se fosse tutto normale
+        #     # poi quando bisogna far muovere il braccio bisogna calcolare la mossa invertendo la scacchiera
+        #     if self.play_position:
+        #         self.play_position = False
+        #     else:
+        #         self.chessboard.__init__()
+
+        #     self.flip_chessboard = True
+        #     self.send_ble_Chessboard()
+
+        #     move = self.chessboard.get_best_move()
+        #     print(f"MOSSA fatta da Stockfish = {move}")
+        #     arm_move = self.chessboard.move(move, arm_move=True)
+        #     self.moveArm(arm_move)
+        #     print(self.chessboard)
+        #     self.send_ble_Chessboard()
+        #     self.shoot_OnServal = self.StandardGame
+        # elif ble_val == "-W":
+        #     # setta la scacchiera con la grid vuota o grid piena
+        #     self.play_position = True
+        #     self.shoot_OnServal = self.PosizionamentoLibero
+        # elif ble_val == "PPFREE-B":
+        #     # setta la scacchiera con la grid vuota o grid piena
+        #     self.play_position = True
+        #     self.flip_chessboard = True
+        #     self.shoot_OnServal = self.PosizionamentoLibero
 
     # Game functions
     
+    def end_Match(self):
+        self.send_ser("BB")
+        self.shoot_OnServal = None
+        self.chessboard.__init__()
+
+
     def initGame(self):
         self.send_ble_Chessboard()
 
+    def flip(self, dic_chessboard):
+        # inverto grid
+        # inverto lef e right
+        # e poi left diventa right, e right diventa left
+        board = {
+            "left":dic_chessboard["left"],
+            "grid":dic_chessboard["grid"],
+            "right":dic_chessboard["right"]
+        }
+
+        board["grid"] = np.rot90(board["grid"], 2)
+        temp = np.rot90(board["right"], 2)
+        board["right"] = np.rot90(board["left"], 2)
+        board["left"] = temp
+        
+        return board
 
     def StandardGame(self):
         shoot()
         dicbin_chessboard = see_Chessboard()
         if self.flip_chessboard:
-            # inverto grid
-            # inverto lef e right
-            # e poi left diventa right, e right diventa left
-            dicbin_chessboard["grid"] = np.rot90(dicbin_chessboard["grid"], 2)
-            temp = np.rot90(dicbin_chessboard["right"], 2)
-            dicbin_chessboard["right"] = np.rot90(dicbin_chessboard["left"], 2)
-            dicbin_chessboard["left"] = temp
-            print(dicbin_chessboard)
+            dicbin_chessboard = self.flip(dicbin_chessboard)
 
         move = self.chessboard.see_move(dicbin_chessboard)
         print(f"MOSSA fatta dal giocatore = {move}")
-        if (move != None) and (self.chessboard.stockfish.is_move_correct(move)):
+        if self.chessboard.isValid_move(move):
+            self.send_ser("B")
             self.chessboard.move(move)
             print(self.chessboard)
             self.send_ble_Chessboard()
@@ -117,21 +170,20 @@ class Game(Connection):
             print(self.chessboard)
             
             self.send_ble_Chessboard()
+            if self.chessboard.is_checkmate():
+                self.end_Match()
         else:
             print("Mossa Non Valida")
-            #self.send_ser("")
+            self.send_ser("Z")
         
         self.send_ble_Chessboard()
+    
 
     def PosizionamentoLibero(self):
         shoot()
         dicbin_chessboard = see_Chessboard()
         if self.flip_chessboard:
-            dicbin_chessboard["grid"] = np.rot90(dicbin_chessboard["grid"], 2)
-            temp = np.rot90(dicbin_chessboard["right"], 2)
-            dicbin_chessboard["right"] = np.rot90(dicbin_chessboard["left"], 2)
-            dicbin_chessboard["left"] = temp
-            print(dicbin_chessboard)
+            dicbin_chessboard = self.flip(dicbin_chessboard)
 
         self.chessboard.see_move(dicbin_chessboard, free_pos=True)
         

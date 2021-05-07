@@ -61,7 +61,7 @@ class Chessboard():
         }
     def is_checkmate(self):
         self.refresh_fen_position()
-        self.board.set_board_fen(self.fen_position)
+        self.board.set_fen(self.fen_position)
 
         return (self.board.is_stalemate() or self.board.is_checkmate() or self.board.is_insufficient_material())
 

@@ -124,6 +124,9 @@ class Game(Connection):
             self.chessboard.move(move)
             print(self.chessboard)
             self.send_ble_Chessboard()
+            if self.chessboard.is_checkmate():
+                self.end_Match()
+                return None
         
             move = self.chessboard.get_best_move()
             print(f"MOSSA fatta da Stockfish = {move}")

@@ -83,44 +83,6 @@ class Game(Connection):
             self.end_Match()
             
 
-        # elif ble_val == "NG-W":
-        #     if self.play_position:
-        #         self.play_position = False
-        #     else:
-        #         self.chessboard.__init__()
-        #     self.shoot_OnServal = self.StandardGame
-        #     self.flip_chessboard = False
-        # elif ble_val == "NG-B":
-        #     # stockfish fa la prima mossa
-        #     # viene ruotata fisicamente la scacchiera
-        #     # bisogna ruotare la matrice della scacchiera già binarizzata
-        #     # in questo modo è come se fosse tutto normale
-        #     # poi quando bisogna far muovere il braccio bisogna calcolare la mossa invertendo la scacchiera
-        #     if self.play_position:
-        #         self.play_position = False
-        #     else:
-        #         self.chessboard.__init__()
-
-        #     self.flip_chessboard = True
-        #     self.send_ble_Chessboard()
-
-        #     move = self.chessboard.get_best_move()
-        #     print(f"MOSSA fatta da Stockfish = {move}")
-        #     arm_move = self.chessboard.move(move, arm_move=True)
-        #     self.moveArm(arm_move)
-        #     print(self.chessboard)
-        #     self.send_ble_Chessboard()
-        #     self.shoot_OnServal = self.StandardGame
-        # elif ble_val == "-W":
-        #     # setta la scacchiera con la grid vuota o grid piena
-        #     self.play_position = True
-        #     self.shoot_OnServal = self.PosizionamentoLibero
-        # elif ble_val == "PPFREE-B":
-        #     # setta la scacchiera con la grid vuota o grid piena
-        #     self.play_position = True
-        #     self.flip_chessboard = True
-        #     self.shoot_OnServal = self.PosizionamentoLibero
-
     # Game functions
     
     def end_Match(self):
@@ -175,8 +137,6 @@ class Game(Connection):
         else:
             print("Mossa Non Valida")
             self.send_ser("Z")
-        
-        self.send_ble_Chessboard()
     
 
     def PosizionamentoLibero(self):

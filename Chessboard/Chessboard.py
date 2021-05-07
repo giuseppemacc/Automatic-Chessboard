@@ -24,6 +24,7 @@ class Chessboard():
         self.fen_position = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
         self.stockfish = stockfish.Stockfish("./Chessboard/stockfish")
+        self.stockfish.set_skill_level(1)
         self.board = chess.Board(self.fen_position)
 
         self.chessboard = {

@@ -14,7 +14,7 @@ class Chessboard():
                 - grid / griglia
             contenute nel dizionario chessboard
         """
-
+        self.vatange = 0.5
         self.player = "w"
         self.castling = "KQkq"
         self.en_passant = "-"
@@ -60,6 +60,28 @@ class Chessboard():
                 [" "," "],
             ]                             
         }
+
+    def get_vantage(self):
+        # dove c'è il - è il vantaggio del nero
+        # tipi:
+        # "type": "cp", "value": -num/num
+        # "type": "mate", "value": -1/1
+        vantage = 0
+        info = self.stockfish.get_evaluation()
+        value = info["value"]
+        if info["type"] == "mate":
+            if value<0:
+                vantage = 0
+            else:
+                vantage = 100
+        elif info["type"] == "cp":
+            vantage = (5+(value/100))*10
+            if vantage>100:
+                vantage = 100
+            elif vantage<0:
+                vantage = 0
+        return int(vantage)
+
     def is_checkmate(self):
         self.refresh_fen_position()
         self.board.set_fen(self.fen_position)

@@ -60,7 +60,9 @@ class Game(Connection):
                 arm_move = self.chessboard.move(move, arm_move=True)
                 self.moveArm(arm_move)
                 print(self.chessboard)
+
                 self.send_ble_Chessboard()
+                self.send_vantage()
 
                 self.shoot_OnServal = self.StandardGame
 
@@ -111,6 +113,10 @@ class Game(Connection):
         
         return board
 
+    def send_vantage(self):
+        vantage = self.chessboard.get_vantage()
+        self.send_ble(f"VANTAGE-{vantage}")
+
     def StandardGame(self):
         shoot()
         dicbin_chessboard = see_Chessboard()
@@ -123,7 +129,10 @@ class Game(Connection):
             self.send_ser("B")
             self.chessboard.move(move)
             print(self.chessboard)
+
             self.send_ble_Chessboard()
+            self.send_vantage()
+
             if self.chessboard.is_checkmate():
                 self.end_Match()
                 return None
@@ -135,6 +144,8 @@ class Game(Connection):
             print(self.chessboard)
             
             self.send_ble_Chessboard()
+            self.send_vantage()
+            
             if self.chessboard.is_checkmate():
                 self.end_Match()
         else:
@@ -191,16 +202,20 @@ class Game(Connection):
             self.send_ser(move)
 
     def send_ble_Chessboard(self):
-        board = {
-            "left":self.chessboard.chessboard["left"],
-            "grid":self.chessboard.chessboard["grid"],
-            "right":self.chessboard.chessboard["right"]
-        }
+        # board = {
+        #     "left":self.chessboard.chessboard["left"],
+        #     "grid":self.chessboard.chessboard["grid"],
+        #     "right":self.chessboard.chessboard["right"]
+        # }
+        # if self.flip_chessboard:
+        #     board["grid"] = np.rot90(board["grid"], 2)
+        #     temp = np.rot90(board["right"], 2)
+        #     board["right"] = np.rot90(board["left"], 2)
+        #     board["left"] = temp
+
+        board = self.chessboard.chessboard
         if self.flip_chessboard:
-            board["grid"] = np.rot90(board["grid"], 2)
-            temp = np.rot90(board["right"], 2)
-            board["right"] = np.rot90(board["left"], 2)
-            board["left"] = temp
+            board = self.flip(board)
         
         print(self.chessboard)
 

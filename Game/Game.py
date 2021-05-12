@@ -83,7 +83,7 @@ class Game(Connection):
                 self.chessboard.stockfish.set_skill_level(int(ble_val.split("-")[1]))
             except:
                 pass
-            
+
         elif ble_val == "SURRENDER":
             self.end_Match()
             

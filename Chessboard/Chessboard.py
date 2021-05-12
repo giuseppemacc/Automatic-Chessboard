@@ -361,6 +361,11 @@ class Chessboard():
         count_changes("grid") 
 
         move = None
+        print("-----CAMBIAMENTI----")
+        print(np.array(bool_new_chessboard["left"]))
+        print(np.array(bool_new_chessboard["grid"]))
+        print(np.array(bool_new_chessboard["right"]))
+        print("\n")
 
         # spostamento standard
         if (len(changes["+"])==1 and len(changes["-"])==1 and len(changes["/"])==0 ):
@@ -402,12 +407,6 @@ class Chessboard():
                 move+="q" 
             elif start_piece == "p" and end_y == 7:
                 move+="q" 
-
-        print("-----CAMBIAMENTI----")
-        print(np.array(bool_new_chessboard["left"]))
-        print(np.array(bool_new_chessboard["grid"]))
-        print(np.array(bool_new_chessboard["right"]))
-        print("\n")
 
         return move
 

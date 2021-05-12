@@ -9,7 +9,7 @@ from os import system
 class Connection():
     def __init__(self):
         # variabili di connessione
-        self.ser_arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+        self.ser_arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
         self.server_sock = bluetooth.BluetoothSocket( bluetooth.RFCOMM )
         self.server_sock.bind(("",1))
         self.server_sock.listen(1)

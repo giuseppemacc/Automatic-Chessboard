@@ -33,8 +33,8 @@ class Game(Connection):
         if ser_val == "SHUTDOWN":
             print("Spegnimento...")
             time.sleep(5)
-            quit()
-            #system("shutdown now")
+            self.close_connection()
+            system("shutdown now")
         elif ser_val == "SHOOT":
             if not(self.shoot_OnServal == None):
                 self.shoot_OnServal()
@@ -68,6 +68,10 @@ class Game(Connection):
 
             elif pieces == "WHITE":
                 self.flip_chessboard = False
+
+                self.send_ble_Chessboard()
+                self.send_vantage()
+
                 self.shoot_OnServal = self.StandardGame
         
         elif ble_val.startswith("FREEPOSITIONING"):

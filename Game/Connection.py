@@ -19,8 +19,13 @@ class Connection():
         self.client_sock,self.address = self.server_sock.accept()
 
         print("Connessione accetata da: ",self.address)
+        self.send_ser("T")
     
     def close_connection(self):
+        try:
+            self.send_ser("F")
+        except:
+            pass
         try:
             self.ser_arduino.close()
         except:

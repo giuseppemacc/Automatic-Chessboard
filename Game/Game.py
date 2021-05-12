@@ -79,8 +79,11 @@ class Game(Connection):
 
 
         elif ble_val.startswith("DIFFICULTY"):
-            self.chessboard.stockfish.set_skill_level(int(ble_val.split("-")[1]))
-
+            try:
+                self.chessboard.stockfish.set_skill_level(int(ble_val.split("-")[1]))
+            except:
+                pass
+            
         elif ble_val == "SURRENDER":
             self.end_Match()
             

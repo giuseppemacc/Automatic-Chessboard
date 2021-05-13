@@ -44,6 +44,7 @@ class Game(Connection):
         print(ble_val)
 
         if ble_val.startswith("NEWGAME"):
+            self.send_ser("BB")
             if self.play_position:
                 self.play_position = False
             else:
@@ -102,6 +103,7 @@ class Game(Connection):
 
     def initGame(self):
         self.send_ble_Chessboard()
+        self.send_ser("BB")
 
     def flip(self, dic_chessboard):
         # inverto grid

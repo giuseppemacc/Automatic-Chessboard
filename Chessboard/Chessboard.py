@@ -106,7 +106,7 @@ class Chessboard():
         return self.chessboard[string_type][y][x]
 
     def isValid_move(self,move):
-        return (move != None) and (move != "") and (self.stockfish.is_move_correct(move))
+        return (move != None) and (self.stockfish.is_move_correct(move))
 
     def refresh_fen_position(self):
         # 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1'
@@ -283,9 +283,10 @@ class Chessboard():
             self.set_piece(end_cord, start_piece)
 
             if arm_move:
-                self.set_piece(self.cord_piece_default(end_piece), end_piece)
+                cord_default = self.cord_piece_default(end_piece)
+                self.set_piece(cord_default, end_piece)
 
-                end_piece_defaul = self.cord_piece_default(end_piece).get_index_form()
+                end_piece_defaul = cord_default.get_index_form()
 
                 string_type = end_piece_defaul[0]
                 y,x = end_piece_defaul[1]

@@ -127,39 +127,43 @@ class Game(Connection):
         self.send_ble(f"VANTAGE-{vantage}")
 
     def StandardGame(self):
-        shoot()
-        dicbin_chessboard = see_Chessboard()
-        if self.flip_chessboard:
-            dicbin_chessboard = self.flip(dicbin_chessboard)
+        try:
+            shoot()
+            dicbin_chessboard = see_Chessboard()
+            if self.flip_chessboard:
+                dicbin_chessboard = self.flip(dicbin_chessboard)
 
-        move = self.chessboard.see_move(dicbin_chessboard)
-        print(f"MOSSA fatta dal giocatore = {move}")
-        if self.chessboard.isValid_move(move):
-            self.send_ser("B")
-            self.chessboard.move(move)
-            print(self.chessboard)
+            move = self.chessboard.see_move(dicbin_chessboard)
+            print(f"MOSSA fatta dal giocatore = {move}")
+            if self.chessboard.isValid_move(move):
+                self.send_ser("B")
+                self.chessboard.move(move)
+                print(self.chessboard)
 
-            self.send_ble_Chessboard()
-            self.send_vantage()
+                self.send_ble_Chessboard()
+                self.send_vantage()
 
-            if self.chessboard.is_checkmate():
-                self.end_Match()
-                return None
-        
-            move = self.chessboard.get_best_move()
-            print(f"MOSSA fatta da Stockfish = {move}")
-            arm_move = self.chessboard.move(move, arm_move=True)
-            self.moveArm(arm_move)
-            print(self.chessboard)
+                if self.chessboard.is_checkmate():
+                    self.end_Match()
+                    return None
             
-            self.send_ble_Chessboard()
-            self.send_vantage()
-            
-            if self.chessboard.is_checkmate():
-                self.end_Match()
-        else:
-            print("Mossa Non Valida")
+                move = self.chessboard.get_best_move()
+                print(f"MOSSA fatta da Stockfish = {move}")
+                arm_move = self.chessboard.move(move, arm_move=True)
+                self.moveArm(arm_move)
+                print(self.chessboard)
+                
+                self.send_ble_Chessboard()
+                self.send_vantage()
+                
+                if self.chessboard.is_checkmate():
+                    self.end_Match()
+            else:
+                print("Mossa Non Valida")
+                self.send_ser("Z")
+        except:
             self.send_ser("Z")
+            self.send_ble_Chessboard()
     
 
     def PosizionamentoLibero(self):

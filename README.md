@@ -6,4 +6,3 @@
 ![plot](./readme_images/example2.jpeg)
 
 
-* **Work in progress . . .**
